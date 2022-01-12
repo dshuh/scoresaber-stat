@@ -1,0 +1,155 @@
+﻿body {
+    font-family:'나눔고딕',NanumGothic,'돋움',Dotum,Helvetica,'Apple SD Gothic Neo',Sans-serif; 
+    font-size:12px; 
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ui-grid-a {
+    width: 100%;
+    height: auto;
+}
+
+.box{
+    position:fixed;
+    bottom:-100%;
+    left:0%;
+    height:100%; 
+    width: 100%;
+    overflow-y: auto;
+    background-color: #72bcf5;
+    z-index:1001;
+}
+
+.box_left{
+    position:fixed;
+    right:-100%;
+    bottom:0%;
+    height:100%; 
+    width: 100%;
+    overflow-y: auto;
+    background-color: #f8f7f7;
+    z-index:1001;
+}
+
+.box_top{
+    position:fixed;
+    bottom:-100%;
+    width: 100%;
+    overflow-y: auto;
+    background-color: #f8f7f7;
+    z-index:1001;
+}
+
+.btn_important{
+    position:fixed;
+    top:70%;
+    left:80%;
+    height:50px; 
+    width: 50px;
+    background-image: url(/images/board_write.png);
+    display: block;
+    z-index:9999;
+    border-radius:50%;
+    background-size:100% 100%;
+    -webkit-transition:all 3s;
+    transition: all 0.5s ease;
+}
+
+.stop-scrolling {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html {
+	-ms-touch-action: none;
+}
+
+#viewport {
+	position: relative;
+	width: 330px;
+	height: 340px;
+	margin: 0 auto;
+	background: #444;
+	overflow-x: hidden;
+}
+
+#wrapper {
+	width: 310px;
+	height: 280px;
+	margin: 0 auto;
+}
+
+#scroller {
+	position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 930px;
+	height: 340px;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	/*-o-text-size-adjust: none;*/
+	text-size-adjust: none;
+	background-color: #444;
+}
+
+.slide {
+	width: 310px;
+	height: 300px;
+	float: left;
+}
+
+.painting {
+	width: 290px;
+	height: 300px;
+	border-radius: 10px;
+	margin: 20px auto;
+	border: 1px solid #000;
+	box-shadow:
+		inset 2px 2px 6px rgba(255,255,255,0.6),
+		inset -2px -2px 6px rgba(0,0,0,0.6),
+		0 1px 8px rgba(0,0,0,0.8);
+}
+
+#indicator {
+	position: relative;
+	width: 110px;
+	height: 20px;
+	margin: 10px auto;
+}
+
+#dotty {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	background: #777;
+}
+
+.ui-mobile label, div.ui-controlgroup-label {
+    font-weight: 400;
+    font-size: 11px;
+}
+
+.FormElement {
+	width: 95%;
+}

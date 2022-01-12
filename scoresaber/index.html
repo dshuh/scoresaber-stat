@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <title>ScoreSaber App</title>
+    <meta charset="utf-8" />
+    <meta id="viewport" name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <!-- 안드로이드 홈화면추가시 상단 주소창 제거 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" href="../favicon.ico">
+    <!-- ios홈화면추가시 상단 주소창 제거 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" href="../css/jquery-ui.smoothness.min.css">
+    <link rel="stylesheet" href="../css/ui.jqgrid.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+
+    <script src="../js/plugin/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery-ui-1.11.4.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.touchSwipe.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.jqGrid.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/grid.locale-kr.js" type="text/javascript"></script>
+
+    <script src="../js/common.js"></script>
+    <script src="../js/config.js"></script>
+	<script src="../scoresaber/util.js"></script>
+	<script src="../scoresaber/index.js"></script>
+	<script src="../scoresaber/ranking.js"></script>
+	<script src="../scoresaber/player.js"></script>
+	<script src="../scoresaber/compare.js"></script>
+
+    <script type="text/javascript">
+        var __n = (navigator.userAgent || '');
+        if (__n.match(/Android\s*4\.[0123]\./)) {
+            var __z = screen.availWidth / 480, __c;
+            __c = 'width=device-width, user-scalable=no';
+            document.documentElement.style.zoom = 0.8;
+            document.getElementById('viewport').setAttribute('content', __c);
+        } else {
+            __c = 'width=480, initial-scale=' + __z + ', minimum-scale=' + __z + ', maximum-scale=' + __z + ', user-scalable=no';
+            if (__n.match(/iPad|iPhone OS/i)) __c += ', minimal-ui';
+        }
+    </script>
+</head>
+<body>
+    <div id="home" data-role="page">
+        <div id="panelAlertLayer" class="box_top"></div>
+        <!-- Layer Template Panel -->
+        <div id="navpanel_left" data-role="panel" data-theme="a" data-display="push" data-position="left"></div>
+        <div id="dvHeader" data-role="header" data-position="fixed" data-tap-toggle="false" style="background-color:green;height:50px;"></div>
+        <div id="dvMenu" data-role="navbar"></div>
+        <div id="dvMainContent" data-role="content">
+            <!-- Layer Contents -->
+			<div id="pagePlayerLayer"></div>
+			<div id="pageRankingLayer"></div>
+			<div id="pageCompareLayer"></div>
+
+            <!-- Layer Popup -->
+            <div data-role="popup" id="popupInfo" data-overlay-theme="b"></div>
+            <div data-role="popup" id="popupMenuLayer" data-overlay-theme="b" style="position:fixed; z-index:1100;"></div>
+        </div>
+        <div id="dvFooter" data-role="footer" data-position="fixed" data-tap-toggle="false">
+        </div>
+    </div>
+    <script>
+        var config;
+        var root;
+
+        $.getJSON("../config/config.scoresaber.json", function(data) {
+            config = data;
+            root = new TemplateLayer({
+                dvHeader: "#dvHeader",
+                dvFooter: "#dvFooter",
+                dvMenu: "#dvMenu",
+                dvMainContent: "#dvMainContent",
+				pagePlayerLayer: "#pagePlayerLayer",
+                pageRankingLayer: "#pageRankingLayer",
+				pageCompareLayer: "#pageCompareLayer",
+
+                navpanel_left: "#navpanel_left"
+            });
+            root.init();
+        });
+
+    </script>
+</body>
+</html>

@@ -62,8 +62,8 @@ function Map(controlData) {
         obj.selStartStar.append(optionHtml).trigger("create");
         obj.selEndStar.append(optionHtml).trigger("create");
 
-        obj.selStartStar.val("8").prop("selected", true).change();
-        obj.selEndStar.val("9").prop("selected", true).change();
+        obj.selStartStar.val("0").prop("selected", true).change();
+        obj.selEndStar.val("15").prop("selected", true).change();
 
 		obj.btnSearch.click(function () {
 			obj.setGrid(); //Grid 조회 시 주석 해제

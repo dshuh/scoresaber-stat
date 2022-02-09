@@ -170,10 +170,10 @@ function Map(controlData) {
 			return ConvertToString("stars", options);
         };
         $.fn.fmatter.convertMapTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.uid + "' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://scoresaber.com/leaderboard/" + options.uid + "?page=1&countries=KR' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertSongTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=KR' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
 			return ConvertToString("pp", options);

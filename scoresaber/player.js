@@ -203,7 +203,7 @@ function Player(controlData) {
 			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=" + page + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertSongTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=KR' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
 			return ConvertToString("pp", options);

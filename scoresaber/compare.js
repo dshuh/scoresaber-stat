@@ -17,6 +17,7 @@ function Compare(controlData) {
     obj.total_count = 0;
     obj.statusAllSearch1 = "none";
     obj.statusAllSearch2 = "none";
+    obj.getPages = 10;
 
     obj.p1Data = [];
     obj.p2Data = [];
@@ -311,6 +312,14 @@ function Compare(controlData) {
                 }
             }
             if (!isDuplicate) {
+                                
+                var mapInfo = mapList.find(x => x.uid === obj.p2Data[i].leaderboardId);
+                if(mapInfo != undefined && mapInfo != null) {
+                    resultData["stars"] = mapInfo.stars + "★";
+                } else {
+                    resultData["stars"] = 0 + "★";
+                }
+
                 resultData["leaderboardId"] = obj.p2Data[i].leaderboardId;
                 resultData["songName"] = obj.p2Data[i].songName;
                 resultData["songAuthorName"] = obj.p2Data[i].songAuthorName;
@@ -459,7 +468,7 @@ function Compare(controlData) {
             obj.statusAllSearch1 = "ready";
             obj.p1Nickname = data.playerInfo.playerName;
             obj.max_page1 = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
-            obj.max_page1 = (obj.max_page1 > 30) ? 30 : obj.max_page1;
+            obj.max_page1 = (obj.max_page1 > obj.getPages) ? obj.getPages : obj.max_page1;
             obj.total_count = data.scoreStats.totalPlayCount
             obj.displayData(1, data);
             
@@ -482,7 +491,7 @@ function Compare(controlData) {
             obj.statusAllSearch2 = "ready";
             obj.p2Nickname = data.playerInfo.playerName;
             obj.max_page2 = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
-            obj.max_page2 = (obj.max_page2 > 30) ? 30 : obj.max_page2;
+            obj.max_page2 = (obj.max_page2 > obj.getPages) ? obj.getPages : obj.max_page2;
             obj.total_count = data.scoreStats.totalPlayCount
             obj.displayData(2, data);
             
@@ -580,8 +589,8 @@ function Compare(controlData) {
                 return null
             }
 
-            var processCount = (obj.pageIndex2 > 30) ? 30 : obj.pageIndex2;
-            var gridCaption = "Searched <font color='red'><b>" + processCount + " / 30</b></font> Completed.";
+            var processCount = (obj.pageIndex2 > obj.getPages) ? obj.getPages : obj.pageIndex2;
+            var gridCaption = "Searched <font color='red'><b>" + processCount + " / " + obj.getPages + "</b></font> Completed.";
             obj.compareContainer.jqGrid("setCaption", gridCaption);
 
             if (obj.statusAllSearch2 == "ready" || obj.statusAllSearch2 == "process" || obj.statusAllSearch2 == "resume") {

@@ -46,6 +46,7 @@ function Map(controlData) {
     obj.defineElements = function() {
 		obj.selStartStar = $("#selStartStar");
 		obj.selEndStar = $("#selEndStar");
+        obj.txtCountry = $("#txtCountry");
 		obj.btnSearch = $("#btnSearch");
 		obj.mapContainer = $("#mapContainer");
 		obj.mapPager = $("#mapPager");
@@ -170,10 +171,10 @@ function Map(controlData) {
 			return ConvertToString("stars", options);
         };
         $.fn.fmatter.convertMapTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.uid + "?page=1&countries=KR' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://scoresaber.com/leaderboard/" + options.uid + "?page=1&countries=" + obj.txtCountry.val() + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertSongTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=KR' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=" + obj.txtCountry.val() + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
 			return ConvertToString("pp", options);

@@ -393,6 +393,12 @@
             "options": [
             ]
         },{
+            "id": "txtCountry",
+            "name": "txtCountry",
+            "tag": "text",
+            "title": "Country",
+            "value": "KR"
+        },{
             "id": "btnMapSearch",
             "name": "btnMapSearch",
             "tag": "button",
@@ -464,6 +470,13 @@
             "placeholder": "Steam User ID",
             "title": "Steam User ID"
         },{
+            "id": "txtGetPages",
+            "name": "txtGetPages",
+            "tag": "text",
+            "value": "30",
+            "placeholder": "Get User Rank Pages",
+            "title": "Get User Rank Pages"
+        },{
             "id": "btnCompareSearch",
             "name": "btnCompareSearch",
             "tag": "button",
@@ -481,6 +494,7 @@
                 "controls": [
                     "selStartStar",
                     "selEndStar",
+                    "txtCountry",
                     "btnSearch"
                 ]
             },
@@ -668,13 +682,6 @@
                                 "buttonicon": "ui-icon-disk",
                                 "position": "last",
                                 "callback": "callback_navButton_download"
-                            },{
-                                "id": "more",
-                                "caption": "more",
-                                "title": "more",
-                                "buttonicon": "ui-icon-seek-next",
-                                "position": "last",
-                                "callback": "callback_navButton_more"
                             }
                         ]
                     }
@@ -1023,6 +1030,7 @@
                 "controls": [
                     "txtUserID1",
                     "txtUserID2",
+                    "txtGetPages",
                     "btnCompareSearch"
                 ]
             },

@@ -14,6 +14,7 @@ function Player(controlData) {
     obj.dataCount = 0; // list 조회 시 전체 카운트 제공 시 사용.
     obj.total_count = 0;
     obj.statusAllSearch = "none";
+    obj.country = "KR";
     // #endregion
 
     // 서비스 활성화를 위한 초기화 설정을 담당한다.
@@ -66,9 +67,9 @@ function Player(controlData) {
 		obj.btnSearch.click(function () {
             obj.pageIndex = 1;
 
-            if (obj.statusAllSearch == "none") {
-			    obj.playerApiCall("get_full");
-            }
+            // if (obj.statusAllSearch == "none") {
+                obj.playerApiCall("get_full"); 
+            // }
 			
             obj.setGrid(); //Grid 조회 시 주석 해제
             obj.playerApiCall(config.controls.find(x => x.id === this.id).api);
@@ -203,7 +204,7 @@ function Player(controlData) {
 			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=" + page + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertSongTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=KR' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
 			return ConvertToString("pp", options);
@@ -361,8 +362,8 @@ function Player(controlData) {
         var globalRankPage = parseInt((data.playerInfo.rank - 1) / 50) + 1;
         var countryRankPage = parseInt((data.playerInfo.countryRank - 1) / 50) + 1;
         html = '<hr>';
-        html += '<h4><b>Nickname : <a href="https://scoresaber.com/u/' + data.playerInfo.playerId + '" target="_blank"><font color="green">' + data.playerInfo.playerName + '</font></a> <a href="https://scoresaber.com/global?country=' + data.playerInfo.country + '" target="_blank"><font color="blue">(' + data.playerInfo.country + ')</font></a></b></h4>';
-        html += '<h4><b>Global Rank : <a href="https://scoresaber.com/global/' + globalRankPage + '" target="_blank"><font color="red">' + data.playerInfo.rank + '</font></a>' + ' (<a href="https://scoresaber.com/global/' + countryRankPage + '&country=' + data.playerInfo.country + '" target="_blank"><font color="orange">' + data.playerInfo.countryRank + '</font></a>)</b></h4>';
+        html += '<h4><b>Nickname : <a href="https://scoresaber.com/u/' + data.playerInfo.playerId + '" target="_blank"><font color="green">' + data.playerInfo.playerName + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.playerInfo.country + '" target="_blank"><font color="blue">(' + data.playerInfo.country + ')</font></a></b></h4>';
+        html += '<h4><b>Global Rank : <a href="https://scoresaber.com/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.playerInfo.rank + '</font></a>' + ' (<a href="https://scoresaber.com/rankings?page=' + countryRankPage + '&countries=' + data.playerInfo.country + '" target="_blank"><font color="orange">' + data.playerInfo.countryRank + '</font></a>)</b></h4>';
         html += '<h4><b>PP : ' + data.playerInfo.pp + ', Avg Accuracy : ' + data.scoreStats.averageRankedAccuracy.toFixed(2) + '</b></h4>';
         html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';
         $("#dvtitleArea").empty().append(html).trigger("create");
@@ -405,6 +406,7 @@ function Player(controlData) {
             // obj.max_page = (data.scoreStats.totalPlayCount / 8).toFixed(0); 
             obj.max_page = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
             obj.total_count = data.scoreStats.totalPlayCount
+            obj.country = data.playerInfo.country;
             obj.displayData(data);
 		};
 

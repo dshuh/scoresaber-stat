@@ -17,6 +17,7 @@ function Compare(controlData) {
     obj.total_count = 0;
     obj.statusAllSearch1 = "none";
     obj.statusAllSearch2 = "none";
+    obj.country = "KR";
 
     obj.p1Data = [];
     obj.p2Data = [];
@@ -62,6 +63,7 @@ function Compare(controlData) {
     obj.defineElements = function() {
 		obj.txtUserID1 = $("#txtUserID1");
 		obj.txtUserID2 = $("#txtUserID2");
+        obj.txtGetPages = $("#txtGetPages");
 		obj.btnCompareSearch = $("#btnCompareSearch");
 		obj.compareContainer = $("#compareContainer");
 		obj.comparePager = $("#comparePager");
@@ -177,7 +179,7 @@ function Compare(controlData) {
 			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=" + page + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertSongTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
 			return ConvertToString("pp", options);
@@ -311,6 +313,14 @@ function Compare(controlData) {
                 }
             }
             if (!isDuplicate) {
+                                
+                var mapInfo = mapList.find(x => x.uid === obj.p2Data[i].leaderboardId);
+                if(mapInfo != undefined && mapInfo != null) {
+                    resultData["stars"] = mapInfo.stars + "★";
+                } else {
+                    resultData["stars"] = 0 + "★";
+                }
+
                 resultData["leaderboardId"] = obj.p2Data[i].leaderboardId;
                 resultData["songName"] = obj.p2Data[i].songName;
                 resultData["songAuthorName"] = obj.p2Data[i].songAuthorName;
@@ -416,8 +426,8 @@ function Compare(controlData) {
         var globalRankPage = parseInt((data.playerInfo.rank - 1) / 50) + 1;
         var countryRankPage = parseInt((data.playerInfo.countryRank - 1) / 50) + 1;
         html = '<hr>';
-        html += '<h4><b><font color="red">P' + index + '</font> : <a href="https://scoresaber.com/u/' + data.playerInfo.playerId + '" target="_blank"><font color="green">' + data.playerInfo.playerName + '</font></a> <a href="https://scoresaber.com/global?country=' + data.playerInfo.country + '" target="_blank"><font color="blue">(' + data.playerInfo.country + ')</font></a></b></h4>';
-        html += '<h4><b>Global Rank : <a href="https://scoresaber.com/global/' + globalRankPage + '" target="_blank"><font color="red">' + data.playerInfo.rank + '</font></a>' + ' (<a href="https://scoresaber.com/global/' + countryRankPage + '&country=' + data.playerInfo.country + '" target="_blank"><font color="orange">' + data.playerInfo.countryRank + '</font></a>)</b></h4>';
+        html += '<h4><b><font color="red">P' + index + '</font> : <a href="https://scoresaber.com/u/' + data.playerInfo.playerId + '" target="_blank"><font color="green">' + data.playerInfo.playerName + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.playerInfo.country + '" target="_blank"><font color="blue">(' + data.playerInfo.country + ')</font></a></b></h4>';
+        html += '<h4><b>Global Rank : <a href="https://scoresaber.com/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.playerInfo.rank + '</font></a>' + ' (<a href="https://scoresaber.com/rankings?page=' + countryRankPage + '&countries=' + data.playerInfo.country + '" target="_blank"><font color="orange">' + data.playerInfo.countryRank + '</font></a>)</b></h4>';
         html += '<h4><b>PP : ' + data.playerInfo.pp + ', Avg Accuracy : ' + data.scoreStats.averageRankedAccuracy.toFixed(2) + '</b></h4>';
         html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';
         $("#dvtitleArea").append(html).trigger("create");
@@ -456,10 +466,12 @@ function Compare(controlData) {
 
         // #region 개발자 영역 > API callback 함수
 		var callback_get_full1 = function(data) {
+            var pages = Number(obj.txtGetPages.val());
             obj.statusAllSearch1 = "ready";
             obj.p1Nickname = data.playerInfo.playerName;
+            obj.country = data.playerInfo.country;
             obj.max_page1 = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
-            obj.max_page1 = (obj.max_page1 > 30) ? 30 : obj.max_page1;
+            obj.max_page1 = (obj.max_page1 > pages) ? pages : obj.max_page1;
             obj.total_count = data.scoreStats.totalPlayCount
             obj.displayData(1, data);
             
@@ -479,10 +491,11 @@ function Compare(controlData) {
         };
         
 		var callback_get_full2 = function(data) {
+            var pages = Number(obj.txtGetPages.val());
             obj.statusAllSearch2 = "ready";
             obj.p2Nickname = data.playerInfo.playerName;
             obj.max_page2 = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
-            obj.max_page2 = (obj.max_page2 > 30) ? 30 : obj.max_page2;
+            obj.max_page2 = (obj.max_page2 > pages) ? pages : obj.max_page2;
             obj.total_count = data.scoreStats.totalPlayCount
             obj.displayData(2, data);
             
@@ -579,9 +592,9 @@ function Compare(controlData) {
             } else {
                 return null
             }
-
-            var processCount = (obj.pageIndex2 > 30) ? 30 : obj.pageIndex2;
-            var gridCaption = "Searched <font color='red'><b>" + processCount + " / 30</b></font> Completed.";
+            var pages = Number(obj.txtGetPages.val());
+            var processCount = (obj.pageIndex2 > pages) ? pages : obj.pageIndex2;
+            var gridCaption = "Searched <font color='red'><b>" + processCount + " / " + pages + "</b></font> Completed.";
             obj.compareContainer.jqGrid("setCaption", gridCaption);
 
             if (obj.statusAllSearch2 == "ready" || obj.statusAllSearch2 == "process" || obj.statusAllSearch2 == "resume") {

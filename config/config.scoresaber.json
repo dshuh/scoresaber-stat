@@ -844,6 +844,13 @@
                             "hidden": true
                         },
                         { 
+                            "name": "summary", 
+                            "index": "beatSaverKey", 
+                            "width": 150,
+                            "text": "ytb title",
+                            "formatter": "convertYoutube"
+                        },
+                        { 
                             "name": "timeSet", 
                             "index": "timeSet", 
                             "width": 150,

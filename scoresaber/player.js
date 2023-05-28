@@ -234,8 +234,8 @@ function Player(controlData) {
 			return ConvertToString("time", options);
         };
         $.fn.fmatter.convertYoutube = function (cellValue,rowObject,options) {
-            var title = "Beat Saber " + options.stars + " " + options.songName + " " + // " by " + options.levelAuthorName + " " + 
-                ConvertToString("difficulty", options) + " " + ConvertToString("accuracy", options) + "% #" + options.rank + " " + options.beatSaverKey;
+            var title = "Beat Saber " + options.songName + " - " + options.songAuthorName + " by " + options.levelAuthorName + " " 
+                options.stars + " " + ConvertToString("difficulty", options) + " " + ConvertToString("accuracy", options) + "% #" + options.rank + " " + options.beatSaverKey;
 			return title;
         };
         

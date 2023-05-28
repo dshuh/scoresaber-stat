@@ -853,7 +853,7 @@
                         { 
                             "name": "summary", 
                             "index": "beatSaverKey", 
-                            "width": 150,
+                            "width": 250,
                             "text": "ytb title",
                             "formatter": "convertYoutube"
                         },

@@ -29,12 +29,12 @@
 
     <script src="../js/common.js"></script>
     <script src="../js/config.js"></script>
-	<script src="../scoresaber/util.js"></script>
-	<script src="../scoresaber/index.js"></script>
+	<script src="../scoresaber2/util.js"></script>
+	<script src="../scoresaber2/index.js"></script>
 	<script src="../scoresaber2/map.js"></script>
-	<script src="../scoresaber/ranking.js"></script>
-	<script src="../scoresaber/player.js"></script>
-	<script src="../scoresaber/compare.js"></script>
+	<script src="../scoresaber2/player.js"></script>
+	<script src="../scoresaber2/ranking.js"></script>
+	<script src="../scoresaber2/compare.js"></script>
 
     <script type="text/javascript">
         var __n = (navigator.userAgent || '');
@@ -86,7 +86,7 @@
         $.when(
             $.getJSON("../data/ranked_map.json", function(data) {
             }),
-            $.getJSON("../config/config.scoresaber.json", function(data) {
+            $.getJSON("../config/config.scoresaber2.json", function(data) {
             })
         ).done(function(data1, data2) {
             config = data2[0];

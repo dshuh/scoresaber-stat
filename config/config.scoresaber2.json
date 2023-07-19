@@ -1,0 +1,1237 @@
+{
+    "service_name": "ScoreSaber",
+    "code_name": "scoresaber",
+    "environments": [
+        {
+            "name": "scoresaber.com",
+            "group": "beatsaber",
+            "prefix_internal_url": "https://scoresaber.com/api"
+        }
+    ],
+    "apis" : {
+        "map": [
+        ],
+        "player": [
+            {
+                "id": "get_player",
+                "path": "/player/{user_id}/scores",
+                "method": "GET",
+                "content_type": "application/x-www-form-urlencoded",
+                "callback": "callback_get_player",
+                "parameters": [
+                    "ctrl.user_id",
+                    "ctrl.selSearchType",
+                    "var.page_index"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            },{
+                "id": "get_all_player",
+                "path": "/player/{user_id}/scores",
+                "method": "GET",
+                "content_type": "application/x-www-form-urlencoded",
+                "callback": "callback_get_all_player",
+                "parameters": [
+                    "ctrl.user_id",
+                    "ctrl.selSearchType",
+                    "var.page_index"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            },{
+                "id": "get_full",
+                "path": "/player/{user_id}/full",
+                "method": "GET",
+                "content_type": "application/json",
+                "callback": "callback_get_full",
+                "parameters": [
+                    "ctrl.user_id"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred while viewing the user profile."
+                }
+            }
+        ],
+        "ranking": [
+            {
+                "id": "pages",
+                "path": "/players/pages",
+                "method": "GET",
+                "content_type": "application/json",
+                "callback": "callback_get_pages",
+                "parameters": [
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            },{
+                "id": "get_ranking",
+                "path": "/players/{page_index}",
+                "method": "GET",
+                "content_type": "application/json",
+                "callback": "callback_get_ranking",
+                "parameters": [
+                    "var.page_index"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            }
+        ],
+        "compare": [
+            {
+                "id": "get_player",
+                "path": "/player/{user_id}/scores",
+                "method": "GET",
+                "content_type": "application/json",
+                "callback": "callback_get_player",
+                "parameters": [
+                    "ctrl.user_id",
+                    "ctrl.selSearchType",
+                    "var.page_index"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            },{
+                "id": "get_all_player1",
+                "path": "/player/{user_id1}/scores?sort=top",
+                "method": "GET",
+                "content_type": "application/x-www-form-urlencoded",
+                "callback": "callback_get_all_player1",
+                "parameters": [
+                    "ctrl.user_id1",
+                    "var.page_index1"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            },{
+                "id": "get_all_player2",
+                "path": "/player/{user_id2}/scores?sort=top",
+                "method": "GET",
+                "content_type": "application/x-www-form-urlencoded",
+                "callback": "callback_get_all_player2",
+                "parameters": [
+                    "ctrl.user_id2",
+                    "var.page_index2"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            },{
+                "id": "get_full1",
+                "path": "/player/{user_id1}/full",
+                "method": "GET",
+                "content_type": "application/json",
+                "callback": "callback_get_full1",
+                "parameters": [
+                    "ctrl.user_id1"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred while viewing the user profile."
+                }
+            },{
+                "id": "get_full2",
+                "path": "/player/{user_id2}/full",
+                "method": "GET",
+                "content_type": "application/json",
+                "callback": "callback_get_full2",
+                "parameters": [
+                    "ctrl.user_id2"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred while viewing the user profile."
+                }
+            }
+        ],
+        "dependency": [
+            {
+            }
+        ],
+        "parameters": [
+            {
+                "id": "ctrl.selPageIndex",
+                "name": "{page_index}",
+                "value_type": "control",
+                "value": "selPageIndex",
+                "type": "integer",
+                "in": "query"
+            },{
+                "id": "ctrl.user_id",
+                "name": "{user_id}",
+                "value_type": "control",
+                "value": "txtUserID",
+                "type": "string",
+                "in": "path",
+                "required": true
+            },{
+                "id": "ctrl.selSearchType",
+                "name": "sort",
+                "value_type": "control",
+                "value": "selSearchType",
+                "type": "string",
+                "in": "query",
+                "required": true
+            },{
+                "id": "var.page_index",
+                "name": "page",
+                "value_type": "variable",
+                "value": "obj.pageIndex",
+                "type": "integer",
+                "in": "query",
+                "required": true
+            },{
+                "id": "ctrl.user_id1",
+                "name": "{user_id1}",
+                "value_type": "control",
+                "value": "txtUserID1",
+                "type": "string",
+                "in": "path",
+                "required": true
+            },{
+                "id": "ctrl.user_id2",
+                "name": "{user_id2}",
+                "value_type": "control",
+                "value": "txtUserID2",
+                "type": "string",
+                "in": "path",
+                "required": true
+            },{
+                "id": "var.page_index1",
+                "name": "page",
+                "value_type": "variable",
+                "value": "obj.pageIndex1",
+                "type": "integer",
+                "in": "query",
+                "required": true
+            },{
+                "id": "var.page_index2",
+                "name": "page",
+                "value_type": "variable",
+                "value": "obj.pageIndex2",
+                "type": "integer",
+                "in": "query",
+                "required": true
+            }
+        ]
+    },
+    "controls": [
+        {
+            "id": "selPageSize",
+            "name": "selPageSize",
+            "tag": "select",
+            "title": "PageSize",
+            "options": [
+                {
+                    "value": "1",
+                    "text": "50",
+                    "selected": "selected"
+                },
+                {
+                    "value": "2",
+                    "text": "100"
+                },
+                {
+                    "value": "4",
+                    "text": "200"
+                },
+                {
+                    "value": "10",
+                    "text": "500"
+                }
+            ]
+        },{
+            "id": "selPageIndex",
+            "name": "selPageIndex",
+            "tag": "select",
+            "title": "Page No",
+            "options": [
+                {
+                    "value": "1",
+                    "text": "1 page",
+                    "selected": "selected"
+                }
+            ]
+        },{
+            "id": "selMapSearchType",
+            "name": "selMapSearchType",
+            "tag": "select",
+            "title": "Map Search Type",
+            "options": [
+                {
+                    "value": "name",
+                    "text": "Title",
+                    "selected": "selected"
+                },
+                {
+                    "value": "mapper",
+                    "text": "Mapper"
+                },
+                {
+                    "value": "artist",
+                    "text": "Artist"
+                }
+            ]
+        },{
+            "id": "selMapSortType",
+            "name": "selMapSortType",
+            "tag": "select",
+            "title": "Map Sort Type",
+            "options": [
+                {
+                    "value": "uid",
+                    "text": "Date",
+                    "selected": "selected"
+                },
+                {
+                    "value": "stars",
+                    "text": "stars"
+                },
+                {
+                    "value": "pp",
+                    "text": "PP"
+                },
+                {
+                    "value": "rating",
+                    "text": "Rating"
+                },
+                {
+                    "value": "downloads",
+                    "text": "downloads"
+                },
+                {
+                    "value": "name",
+                    "text": "Name"
+                },
+                {
+                    "value": "artist",
+                    "text": "Artist"
+                },
+                {
+                    "value": "mapper",
+                    "text": "Mapper"
+                },
+                {
+                    "value": "durationSeconds",
+                    "text": "Playtime"
+                },
+                {
+                    "value": "noteCount",
+                    "text": "NoteCount"
+                },
+                {
+                    "value": "njs",
+                    "text": "NJS"
+                }
+            ]
+        },{
+            "id": "selMapSortValue",
+            "name": "selMapSortValue",
+            "tag": "select",
+            "title": "Map Sort Value",
+            "options": [
+                {
+                    "value": "asc",
+                    "text": "asc"
+                },
+                {
+                    "value": "desc",
+                    "text": "desc",
+                    "selected": "selected"
+                }
+            ]
+        },{
+            "id": "txtMapSearchValue",
+            "name": "txtMapSearchValue",
+            "tag": "text",
+            "value": "",
+            "placeholder": "Map Search Value",
+            "title": "Map Search Value"
+        },{
+            "id": "selStartStar",
+            "name": "selStartStar",
+            "tag": "select",
+            "title": "Start Star",
+            "options": [
+            ]
+        },{
+            "id": "selEndStar",
+            "name": "selEndStar",
+            "tag": "select",
+            "title": "End Star",
+            "options": [
+            ]
+        },{
+            "id": "txtCountry",
+            "name": "txtCountry",
+            "tag": "text",
+            "title": "Country",
+            "value": "KR"
+        },{
+            "id": "btnMapSearch",
+            "name": "btnMapSearch",
+            "tag": "button",
+            "value": "Search",
+            "title": "Search"
+        },{
+            "id": "btnRankSearch",
+            "name": "btnRankSearch",
+            "tag": "button",
+            "value": "Search",
+            "title": "Search",
+            "api": "get_ranking"
+        },{
+            "id": "txtUserID",
+            "name": "txtUserID",
+            "tag": "text",
+            "value": "76561198830502286",
+            "placeholder": "Steam User ID",
+            "title": "Steam User ID"
+        },{
+            "id": "selSearchType",
+            "name": "selSearchType",
+            "tag": "select",
+            "title": "Sort Type",
+            "options": [
+                {
+                    "value": "top",
+                    "text": "Best Records Sort"
+                },
+                {
+                    "value": "recent",
+                    "text": "Latest Records Sort",
+                    "selected": "selected"
+                }
+            ]
+        },{
+            "id": "btnProfileSearch",
+            "name": "btnProfileSearch",
+            "tag": "button",
+            "value": "Profile Search",
+            "title": "Profile Search",
+            "api": "get_full"
+        },{
+            "id": "btnSearch",
+            "name": "btnSearch",
+            "tag": "button",
+            "value": "Search",
+            "title": "Search",
+            "api": "get_player"
+        },{
+            "id": "btnAllSearch",
+            "name": "btnAllSearch",
+            "tag": "button",
+            "value": "Stop/Resume All Search",
+            "title": "Stop/Resume All Search",
+            "api": "get_all_player"
+        },{
+            "id": "txtUserID1",
+            "name": "txtUserID1",
+            "tag": "text",
+            "value": "76561198830502286",
+            "placeholder": "Steam User ID",
+            "title": "Steam User ID"
+        },{
+            "id": "txtUserID2",
+            "name": "txtUserID2",
+            "tag": "text",
+            "value": "76561198830502286",
+            "placeholder": "Steam User ID",
+            "title": "Steam User ID"
+        },{
+            "id": "txtGetPages",
+            "name": "txtGetPages",
+            "tag": "text",
+            "value": "30",
+            "placeholder": "Get User Rank Pages",
+            "title": "Get User Rank Pages"
+        },{
+            "id": "btnCompareSearch",
+            "name": "btnCompareSearch",
+            "tag": "button",
+            "value": "Search",
+            "title": "Search"
+        }
+    ],
+    "menu": [
+        {
+            "id": "map",
+            "name": "Map",
+            "desc": "Ranking Maps",
+            "search_area": {
+                "title": "Set search value for calling Ranking Maps lookup API.",
+                "controls": [
+                    "selStartStar",
+                    "selEndStar",
+                    "txtCountry",
+                    "btnSearch"
+                ]
+            },
+            "contents_area": {
+                "title": "Ranking Maps results are inquired through Grid.<br/><b>If a timeout error occurs during search, you can search consecutively with the more button at the bottom of the page.</b>",
+                "controls": [
+                    "mapContainer",
+                    "mapPager"
+                ],
+                "grid": {
+                    "id": "mapContainer",
+                    "checkbox_name": "chk_columns",
+                    "columns" : [
+                        { 
+                            "name": "beatSaverKey", 
+                            "index": "beatSaverKey", 
+                            "width": 60,
+                            "text": "down",
+                            "search": false,
+                            "formatter": "convertDownload"
+                        },
+                        { 
+                            "name": "stars", 
+                            "index": "stars", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "stars",
+                            "formatter": "convertStars"
+                        },
+                        { 
+                            "name": "name", 
+                            "index": "name", 
+                            "width": 150,
+                            "text": "name",
+                            "formatter": "convertMapTitle"
+                        },
+                        { 
+                            "name": "diff", 
+                            "index": "diff", 
+                            "width": 80,
+                            "text": "diff"
+                        },
+                        { 
+                            "name": "artist", 
+                            "index": "artist", 
+                            "width": 120,
+                            "text": "artist"
+                        },
+                        { 
+                            "name": "mapper", 
+                            "index": "mapper", 
+                            "width": 120,
+                            "text": "mapper"
+                        },
+                        { 
+                            "name": "pp", 
+                            "index": "pp", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "pp",
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "rating", 
+                            "index": "rating", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "rating",
+                            "formatter": "convertRating"
+                        },
+                        { 
+                            "name": "durationSeconds", 
+                            "index": "durationSeconds", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Playtime",
+                            "formatter": "convertSongTime"
+                        },
+                        { 
+                            "name": "noteCount", 
+                            "index": "noteCount", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "noteCount"
+                        },
+                        { 
+                            "name": "njs", 
+                            "index": "njs", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["lt", "eq"]
+                            },
+                            "text": "njs"
+                        },
+                        { 
+                            "name": "upvotes", 
+                            "index": "upvotes", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "upvotes"
+                        },
+                        { 
+                            "name": "downvotes", 
+                            "index": "downvotes", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "downvotes"
+                        },
+                        { 
+                            "name": "downloads", 
+                            "index": "downloads", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "downloads"
+                        },
+                        { 
+                            "name": "uid", 
+                            "index": "uid", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "text": "leaderboard"
+                        },
+                        { 
+                            "name": "download", 
+                            "index": "download", 
+                            "width": 60,
+                            "text": "download",
+                            "search": false,
+                            "hidden": true
+                        }
+                    ],
+                    "toolbar": {
+                        "id": "mapPager",
+                        "add": false, 
+                        "search": false, 
+                        "edit": false, 
+                        "del": false, 
+                        "refresh": true,
+                        "buttons":[
+                            {
+                                "id": "search",
+                                "caption": "search",
+                                "title": "search",
+                                "buttonicon": "ui-icon-pin-s",
+                                "position": "last",
+                                "callback": "callback_navButton_search"
+                            },{
+                                "id": "download",
+                                "caption": "download",
+                                "title": "download",
+                                "buttonicon": "ui-icon-disk",
+                                "position": "last",
+                                "callback": "callback_navButton_download"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "id": "player",
+            "name": "Player",
+            "desc": "Player Ranking Maps",
+            "search_area": {
+                "title": "Set search value for calling Player Ranking Maps lookup API.",
+                "controls": [
+                    "txtUserID",
+                    "selSearchType",
+                    "{newline}",
+                    "btnSearch",
+                    "btnAllSearch"
+                ]
+            },
+            "contents_area": {
+                "title": "Player Ranking Maps results are inquired through Grid.<br/><b>If a timeout error occurs during search, you can search consecutively with the more button at the bottom of the page.</b>",
+                "controls": [
+                    "playerContainer",
+                    "playerPager"
+                ],
+                "grid": {
+                    "id": "playerContainer",
+                    "checkbox_name": "chk_columns",
+                    "columns" : [
+                        { 
+                            "name": "beatSaverKey", 
+                            "index": "beatSaverKey", 
+                            "width": 60,
+                            "text": "down",
+                            "formatter": "convertDownload"
+                        },
+                        { 
+                            "name": "rank", 
+                            "index": "rank", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "text": "Rank",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["lt", "eq"]
+                            },
+                            "formatter": "convertRank"
+                        },
+                        { 
+                            "name": "stars", 
+                            "index": "stars", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "Stars",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["lt", "eq"]
+                            }
+                        },
+                        { 
+                            "name": "songName", 
+                            "index": "songName", 
+                            "width": 200,
+                            "text": "SongName",
+                            "formatter": "convertSongTitle"
+                        },
+                        { 
+                            "name": "songAuthorName", 
+                            "index": "songAuthorName", 
+                            "width": 120,
+                            "text": "SongAuthor"
+                        },
+                        { 
+                            "name": "diff", 
+                            "index": "diff", 
+                            "width": 70,
+                            "text": "Difficulty"
+                        },
+                        { 
+                            "name": "accuracy", 
+                            "index": "accuracy", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Accuracy"
+                        },
+                        { 
+                            "name": "pp", 
+                            "index": "pp", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "text": "PP",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "mypp", 
+                            "index": "mypp", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "My PP",
+                            "hidden": true
+                        },
+                        { 
+                            "name": "noteCount", 
+                            "index": "noteCount", 
+                            "width": 70,
+                            "text": "noteCount",
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            }
+                        },
+                        { 
+                            "name": "durationSeconds", 
+                            "index": "durationSeconds", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "text": "songTime",
+                            "formatter": "convertSongTime"
+                        },
+                        { 
+                            "name": "bpm", 
+                            "index": "bpm", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "bpm"
+                        },
+                        { 
+                            "name": "njs", 
+                            "index": "njs", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "njs"
+                        },
+                        { 
+                            "name": "rating", 
+                            "index": "rating", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "text": "rating",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            }
+                        },
+                        { 
+                            "name": "leaderboardId", 
+                            "index": "leaderboardId", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "text": "leaderboardId",
+                            "hidden": true
+                        },
+                        { 
+                            "name": "summary", 
+                            "index": "beatSaverKey", 
+                            "width": 250,
+                            "text": "ytb title",
+                            "formatter": "convertYoutube"
+                        },
+                        { 
+                            "name": "timeSet", 
+                            "index": "timeSet", 
+                            "width": 150,
+                            "text": "Record Date(UTC)",
+                            "formatter": "convertTime"
+                        }
+                    ],
+                    "toolbar": {
+                        "id": "playerPager",
+                        "add": false, 
+                        "search": false, 
+                        "edit": false, 
+                        "del": false, 
+                        "refresh": true,
+                        "buttons":[
+                            {
+                                "id": "search",
+                                "caption": "search",
+                                "title": "search",
+                                "buttonicon": "ui-icon-pin-s",
+                                "position": "last",
+                                "callback": "callback_navButton_search"
+                            },{
+                                "id": "download",
+                                "caption": "download",
+                                "title": "download",
+                                "buttonicon": "ui-icon-disk",
+                                "position": "last",
+                                "callback": "callback_navButton_download"
+                            },{
+                                "id": "more",
+                                "caption": "more",
+                                "title": "more",
+                                "buttonicon": "ui-icon-seek-next",
+                                "position": "last",
+                                "callback": "callback_navButton_more"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "id": "ranking",
+            "name": "Ranking",
+            "desc": "Global Ranking",
+            "search_area": {
+                "title": "Set search value for calling Global Ranking lookup API.",
+                "controls": [
+                    "selPageSize",
+                    "selPageIndex",
+                    "btnRankSearch"
+                ]
+            },
+            "contents_area": {
+                "title": "Global Ranking results are inquired through Grid.<br/><b>If a timeout error occurs during search, you can search consecutively with the more button at the bottom of the page.</b>",
+                "controls": [
+                    "rankingContainer",
+                    "rankingPager"
+                ],
+                "grid": {
+                    "id": "rankingContainer",
+                    "checkbox_name": "chk_columns",
+                    "columns" : [
+                        { 
+                            "name": "rank", 
+                            "index": "rank", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Rank"
+                        },
+                        { 
+                            "name": "avatar", 
+                            "index": "avatar", 
+                            "width": 40,
+                            "text": "AVT",
+                            "formatter": "convertAvartar"
+                        },
+                        { 
+                            "name": "playerName", 
+                            "index": "playerName", 
+                            "width": 210,
+                            "text": "Nickname",
+                            "formatter": "convertPlayerName"
+                        },
+                        { 
+                            "name": "country", 
+                            "index": "country", 
+                            "width": 80,
+                            "text": "CTRY",
+                            "formatter": "convertCountry"
+                        },
+                        { 
+                            "name": "pp", 
+                            "index": "pp", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "PP"
+                        },
+                        { 
+                            "name": "weekly_gap", 
+                            "index": "weekly_gap", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "text": "Weekly Gap"
+                        },
+                        { 
+                            "name": "daily_gap", 
+                            "index": "daily_gap", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "text": "Daily Gap"
+                        },
+                        { 
+                            "name": "monthly_gap", 
+                            "index": "monthly_gap", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "text": "Monthly Gap"
+                        },
+                        { 
+                            "name": "playerId", 
+                            "index": "playerId", 
+                            "width": 150,
+                            "text": "playerId"
+                        }
+                    ],
+                    "toolbar": {
+                        "id": "rankingPager",
+                        "add": false, 
+                        "search": false, 
+                        "edit": false, 
+                        "del": false, 
+                        "refresh": true,
+                        "buttons":[
+                            {
+                                "id": "search",
+                                "caption": "search",
+                                "title": "search",
+                                "buttonicon": "ui-icon-pin-s",
+                                "position": "last",
+                                "callback": "callback_navButton_search"
+                            },{
+                                "id": "download",
+                                "caption": "download",
+                                "title": "download",
+                                "buttonicon": "ui-icon-disk",
+                                "position": "last",
+                                "callback": "callback_navButton_download"
+                            },{
+                                "id": "more",
+                                "caption": "more",
+                                "title": "more",
+                                "buttonicon": "ui-icon-seek-next",
+                                "position": "last",
+                                "callback": "callback_navButton_more"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "id": "compare",
+            "name": "Compare",
+            "desc": "Player Compare Ranking Maps",
+            "search_area": {
+                "title": "Set search value for calling Player Ranking Maps lookup API.",
+                "controls": [
+                    "txtUserID1",
+                    "txtUserID2",
+                    "txtGetPages",
+                    "btnCompareSearch"
+                ]
+            },
+            "contents_area": {
+                "title": "Player Ranking Maps results are inquired through Grid.<br/><b>If a timeout error occurs during search, you can search consecutively with the more button at the bottom of the page.</b>",
+                "controls": [
+                    "compareContainer",
+                    "comparePager"
+                ],
+                "grid": {
+                    "id": "compareContainer",
+                    "checkbox_name": "chk_columns",
+                    "columns" : [
+                        { 
+                            "name": "leaderboardId", 
+                            "index": "leaderboardId", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "text": "leaderboardId",
+                            "hidden": true
+                        },
+                        { 
+                            "name": "stars", 
+                            "index": "stars", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "stars",
+                            "formatter": "convertStars"
+                        },
+                        { 
+                            "name": "songName", 
+                            "index": "songName", 
+                            "width": 150,
+                            "text": "SongName",
+                            "formatter": "convertSongTitle"
+                        },
+                        { 
+                            "name": "diff", 
+                            "index": "diff", 
+                            "width": 80,
+                            "text": "Difficulty"
+                        },
+                        { 
+                            "name": "winner", 
+                            "index": "winner", 
+                            "width": 80,
+                            "text": "Winner"
+                        },
+                        { 
+                            "name": "p1_rank", 
+                            "index": "p1_rank", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "P1 Rank",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["lt", "eq"]
+                            },
+                            "formatter": "convertRank"
+                        },
+                        { 
+                            "name": "p2_rank", 
+                            "index": "p2_rank", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "P2 Rank",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["lt", "eq"]
+                            },
+                            "formatter": "convertRank"
+                        },
+                        { 
+                            "name": "rank_gap", 
+                            "index": "rank_gap", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "Rank Gap",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["lt", "eq"]
+                            }
+                        },
+                        { 
+                            "name": "p1_accuracy", 
+                            "index": "p1_accuracy", 
+                            "width": 100,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "P1 Accuracy"
+                        },
+                        { 
+                            "name": "p2_accuracy", 
+                            "index": "p2_accuracy", 
+                            "width": 100,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "P2 Accuracy"
+                        },
+                        { 
+                            "name": "accuracy_gap", 
+                            "index": "accuracy_gap", 
+                            "width": 100,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Accuracy Gap"
+                        },
+                        { 
+                            "name": "p1_pp", 
+                            "index": "p1_pp", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "P1 PP",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "p2_pp", 
+                            "index": "p2_pp", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "P2 PP",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "pp_gap", 
+                            "index": "pp_gap", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "PP Gap",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "songAuthorName", 
+                            "index": "songAuthorName", 
+                            "width": 150,
+                            "text": "SongAuthor"
+                        },
+                        { 
+                            "name": "p1_timeSet", 
+                            "index": "p1_timeSet", 
+                            "width": 150,
+                            "text": "P1 Record Date(UTC)",
+                            "formatter": "convertTime"
+                        },
+                        { 
+                            "name": "p2_timeSet", 
+                            "index": "p2_timeSet", 
+                            "width": 150,
+                            "text": "P2 Record Date(UTC)",
+                            "formatter": "convertTime"
+                        }
+                    ],
+                    "toolbar": {
+                        "id": "comparePager",
+                        "add": false, 
+                        "search": false, 
+                        "edit": false, 
+                        "del": false, 
+                        "refresh": true,
+                        "buttons":[
+                            {
+                                "id": "search",
+                                "caption": "search",
+                                "title": "search",
+                                "buttonicon": "ui-icon-pin-s",
+                                "position": "last",
+                                "callback": "callback_navButton_search"
+                            },{
+                                "id": "download",
+                                "caption": "download",
+                                "title": "download",
+                                "buttonicon": "ui-icon-disk",
+                                "position": "last",
+                                "callback": "callback_navButton_download"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}

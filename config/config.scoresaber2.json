@@ -63,11 +63,13 @@
         "ranking": [
             {
                 "id": "pages",
-                "path": "/players/pages",
+                "path": "/players",
                 "method": "GET",
-                "content_type": "application/json",
+                "content_type": "application/x-www-form-urlencoded",
                 "callback": "callback_get_pages",
                 "parameters": [
+                    "ctrl.country",
+                    "var.page_index"
                 ],
                 "message": {
                     "confirm": "",
@@ -76,11 +78,12 @@
                 }
             },{
                 "id": "get_ranking",
-                "path": "/players/{page_index}",
+                "path": "/players",
                 "method": "GET",
-                "content_type": "application/json",
+                "content_type": "application/x-www-form-urlencoded",
                 "callback": "callback_get_ranking",
                 "parameters": [
+                    "ctrl.country",
                     "var.page_index"
                 ],
                 "message": {
@@ -195,6 +198,13 @@
                 "type": "string",
                 "in": "query",
                 "required": true
+            },{
+                "id": "ctrl.country",
+                "name": "countries",
+                "value_type": "control",
+                "value": "txtCountry",
+                "type": "string",
+                "in": "query"
             },{
                 "id": "var.page_index",
                 "name": "page",
@@ -426,6 +436,289 @@
                     "selected": "selected"
                 }
             ]
+        },{
+            "id": "selUserList",
+            "name": "selUserList",
+            "tag": "select",
+            "title": "User List",
+            "options": [
+                {
+                    "value": "76561198830502286",
+                    "text": "hudson",
+                    "selected": "selected"
+                },
+                {
+                    "value": "76561198825761961",
+                    "text": "✿VZN✿ Johadesu"
+                },
+                {
+                    "value": "76561199117056779",
+                    "text": "Specialist"
+                },
+                {
+                    "value": "76561198220154913",
+                    "text": "shabbang"
+                },
+                {
+                    "value": "76561198916348291",
+                    "text": "Pokemonkor"
+                },
+                {
+                    "value": "76561199147467017",
+                    "text": "roroloa"
+                },
+                {
+                    "value": "76561198071550037",
+                    "text": "KTurret"
+                },
+                {
+                    "value": "76561199401386366",
+                    "text": "HONEY-VENUS"
+                },
+                {
+                    "value": "76561199010837589",
+                    "text": "SIUN_HAKU"
+                },
+                {
+                    "value": "76561198071550037",
+                    "text": "Twinpigs"
+                },
+                {
+                    "value": "76561198945422470",
+                    "text": "zippy25"
+                },
+                {
+                    "value": "76561199111855646",
+                    "text": "starpudding"
+                },
+                {
+                    "value": "76561199212926716",
+                    "text": "FITCHI"
+                },
+                {
+                    "value": "76561199043219678",
+                    "text": "zxcv10222"
+                },
+                {
+                    "value": "76561198014644758",
+                    "text": "Mirinae Ch. 미리내"
+                },
+                {
+                    "value": "76561198876887642",
+                    "text": "LUMA"
+                },
+                {
+                    "value": "76561198055704137",
+                    "text": "Mark_zuckerbug"
+                },
+                {
+                    "value": "76561198047926236",
+                    "text": "Jin"
+                },
+                {
+                    "value": "76561199021884913",
+                    "text": "노련한베테랑3살미숙아최종생체병기"
+                },
+                {
+                    "value": "76561198836041721",
+                    "text": "DOLEN"
+                },
+                {
+                    "value": "76561198184557029",
+                    "text": "zookeyra"
+                }
+            ]
+        },{
+            "id": "selUserList1",
+            "name": "selUserList1",
+            "tag": "select",
+            "title": "User List",
+            "options": [
+                {
+                    "value": "76561198830502286",
+                    "text": "hudson",
+                    "selected": "selected"
+                },
+                {
+                    "value": "76561198825761961",
+                    "text": "✿VZN✿ Johadesu"
+                },
+                {
+                    "value": "76561199117056779",
+                    "text": "Specialist"
+                },
+                {
+                    "value": "76561198220154913",
+                    "text": "shabbang"
+                },
+                {
+                    "value": "76561198916348291",
+                    "text": "Pokemonkor"
+                },
+                {
+                    "value": "76561199147467017",
+                    "text": "roroloa"
+                },
+                {
+                    "value": "76561198071550037",
+                    "text": "KTurret"
+                },
+                {
+                    "value": "76561199401386366",
+                    "text": "HONEY-VENUS"
+                },
+                {
+                    "value": "76561199010837589",
+                    "text": "SIUN_HAKU"
+                },
+                {
+                    "value": "76561198071550037",
+                    "text": "Twinpigs"
+                },
+                {
+                    "value": "76561198945422470",
+                    "text": "zippy25"
+                },
+                {
+                    "value": "76561199111855646",
+                    "text": "starpudding"
+                },
+                {
+                    "value": "76561199212926716",
+                    "text": "FITCHI"
+                },
+                {
+                    "value": "76561199043219678",
+                    "text": "zxcv10222"
+                },
+                {
+                    "value": "76561198014644758",
+                    "text": "Mirinae Ch. 미리내"
+                },
+                {
+                    "value": "76561198876887642",
+                    "text": "LUMA"
+                },
+                {
+                    "value": "76561198055704137",
+                    "text": "Mark_zuckerbug"
+                },
+                {
+                    "value": "76561198047926236",
+                    "text": "Jin"
+                },
+                {
+                    "value": "76561199021884913",
+                    "text": "노련한베테랑3살미숙아최종생체병기"
+                },
+                {
+                    "value": "76561198836041721",
+                    "text": "DOLEN"
+                },
+                {
+                    "value": "76561198184557029",
+                    "text": "zookeyra"
+                }
+            ]
+        },{
+            "id": "selUserList2",
+            "name": "selUserList2",
+            "tag": "select",
+            "title": "User List",
+            "options": [
+                {
+                    "value": "76561198830502286",
+                    "text": "hudson"
+                },
+                {
+                    "value": "76561198825761961",
+                    "text": "✿VZN✿ Johadesu",
+                    "selected": "selected"
+                },
+                {
+                    "value": "76561199117056779",
+                    "text": "Specialist"
+                },
+                {
+                    "value": "76561198220154913",
+                    "text": "shabbang"
+                },
+                {
+                    "value": "76561198916348291",
+                    "text": "Pokemonkor"
+                },
+                {
+                    "value": "76561199147467017",
+                    "text": "roroloa"
+                },
+                {
+                    "value": "76561198071550037",
+                    "text": "KTurret"
+                },
+                {
+                    "value": "76561199401386366",
+                    "text": "HONEY-VENUS"
+                },
+                {
+                    "value": "76561199010837589",
+                    "text": "SIUN_HAKU"
+                },
+                {
+                    "value": "76561198071550037",
+                    "text": "Twinpigs"
+                },
+                {
+                    "value": "76561198945422470",
+                    "text": "zippy25"
+                },
+                {
+                    "value": "76561199111855646",
+                    "text": "starpudding"
+                },
+                {
+                    "value": "76561199212926716",
+                    "text": "FITCHI"
+                },
+                {
+                    "value": "76561199043219678",
+                    "text": "zxcv10222"
+                },
+                {
+                    "value": "76561198014644758",
+                    "text": "Mirinae Ch. 미리내"
+                },
+                {
+                    "value": "76561198876887642",
+                    "text": "LUMA"
+                },
+                {
+                    "value": "76561198055704137",
+                    "text": "Mark_zuckerbug"
+                },
+                {
+                    "value": "76561198047926236",
+                    "text": "Jin"
+                },
+                {
+                    "value": "76561199021884913",
+                    "text": "노련한베테랑3살미숙아최종생체병기"
+                },
+                {
+                    "value": "76561198836041721",
+                    "text": "DOLEN"
+                },
+                {
+                    "value": "76561198184557029",
+                    "text": "zookeyra"
+                }
+            ]
+        },{
+            "id": "txtCountry",
+            "name": "txtCountry",
+            "tag": "text",
+            "value": "kr",
+            "placeholder": "Country",
+            "title": "Country"
         },{
             "id": "btnProfileSearch",
             "name": "btnProfileSearch",
@@ -687,6 +980,7 @@
             "search_area": {
                 "title": "Set search value for calling Player Ranking Maps lookup API.",
                 "controls": [
+                    "selUserList",
                     "txtUserID",
                     "selSearchType",
                     "{newline}",
@@ -733,6 +1027,13 @@
                                 "searchOperators": true,
                                 "sopt": ["lt", "eq"]
                             }
+                        },
+                        { 
+                            "name": "coverImage", 
+                            "index": "coverImage", 
+                            "width": 40,
+                            "text": "image",
+                            "formatter": "convertCoverImage"
                         },
                         { 
                             "name": "songName", 
@@ -789,6 +1090,34 @@
                             "hidden": true
                         },
                         { 
+                            "name": "mistakes", 
+                            "index": "mistakes", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "text": "mistakes"
+                        },
+                        { 
+                            "name": "modifiers", 
+                            "index": "modifiers", 
+                            "width": 70,
+                            "text": "modifiers"
+                        },
+                        { 
+                            "name": "durationSeconds", 
+                            "index": "durationSeconds", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "text": "songTime",
+                            "formatter": "convertSongTime"
+                        },
+                        { 
+                            "name": "plays", 
+                            "index": "plays", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "text": "plays"
+                        },
+                        { 
                             "name": "noteCount", 
                             "index": "noteCount", 
                             "width": 70,
@@ -798,14 +1127,6 @@
                                 "searchOperators": true,
                                 "sopt": ["gt", "eq"]
                             }
-                        },
-                        { 
-                            "name": "durationSeconds", 
-                            "index": "durationSeconds", 
-                            "width": 70,
-                            "sorttype":"int",
-                            "text": "songTime",
-                            "formatter": "convertSongTime"
                         },
                         { 
                             "name": "bpm", 
@@ -897,6 +1218,7 @@
             "search_area": {
                 "title": "Set search value for calling Global Ranking lookup API.",
                 "controls": [
+                    "txtCountry",
                     "selPageSize",
                     "selPageIndex",
                     "btnRankSearch"
@@ -924,15 +1246,26 @@
                             "text": "Rank"
                         },
                         { 
-                            "name": "avatar", 
-                            "index": "avatar", 
+                            "name": "countryRank", 
+                            "index": "countryRank", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "CTRY Rank"
+                        },
+                        { 
+                            "name": "profilePicture", 
+                            "index": "profilePicture", 
                             "width": 40,
                             "text": "AVT",
                             "formatter": "convertAvartar"
                         },
                         { 
-                            "name": "playerName", 
-                            "index": "playerName", 
+                            "name": "name", 
+                            "index": "name", 
                             "width": 210,
                             "text": "Nickname",
                             "formatter": "convertPlayerName"
@@ -956,18 +1289,18 @@
                             "text": "PP"
                         },
                         { 
-                            "name": "weekly_gap", 
-                            "index": "weekly_gap", 
-                            "width": 80,
-                            "sorttype":"int",
-                            "text": "Weekly Gap"
-                        },
-                        { 
                             "name": "daily_gap", 
                             "index": "daily_gap", 
                             "width": 80,
                             "sorttype":"int",
                             "text": "Daily Gap"
+                        },
+                        { 
+                            "name": "weekly_gap", 
+                            "index": "weekly_gap", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "text": "Weekly Gap"
                         },
                         { 
                             "name": "monthly_gap", 
@@ -977,10 +1310,10 @@
                             "text": "Monthly Gap"
                         },
                         { 
-                            "name": "playerId", 
-                            "index": "playerId", 
+                            "name": "id", 
+                            "index": "id", 
                             "width": 150,
-                            "text": "playerId"
+                            "text": "id"
                         }
                     ],
                     "toolbar": {
@@ -1025,9 +1358,12 @@
             "search_area": {
                 "title": "Set search value for calling Player Ranking Maps lookup API.",
                 "controls": [
+                    "selUserList1",
                     "txtUserID1",
+                    "selUserList2",
                     "txtUserID2",
                     "txtGetPages",
+                    "{newline}",
                     "btnCompareSearch"
                 ]
             },

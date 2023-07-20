@@ -27,8 +27,8 @@ function Compare(controlData) {
     obj.init = function () {
         obj.createCompareLayer();
         obj.pageCompareLayer.show();
-        obj.txtUserID1.val(getUrlParameter('user1'));
-        obj.txtUserID2.val(getUrlParameter('user2'));
+        // obj.txtUserID1.val(getUrlParameter('user1'));
+        // obj.txtUserID2.val(getUrlParameter('user2'));
     };
 
     // 서비스를 비활성화를 위한 리셋 설정을 담당한다.
@@ -61,7 +61,9 @@ function Compare(controlData) {
 
     // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 변수를 정의한다.
     obj.defineElements = function() {
+		obj.selUserList1 = $("#selUserList1");
 		obj.txtUserID1 = $("#txtUserID1");
+		obj.selUserList2 = $("#selUserList2");
 		obj.txtUserID2 = $("#txtUserID2");
         obj.txtGetPages = $("#txtGetPages");
 		obj.btnCompareSearch = $("#btnCompareSearch");
@@ -72,7 +74,15 @@ function Compare(controlData) {
     obj.defineElementsEvent = function() {
         // #region 개발자 영역 > Config 정의한 Controls 이벤트 등록
         // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 이벤트 함수를 등록한다.
-		obj.btnCompareSearch.click(function () {
+		obj.selUserList1.change(function(){
+            obj.txtUserID1.val(this.value);
+		});
+        obj.selUserList1.change();
+        obj.selUserList2.change(function(){
+            obj.txtUserID2.val(this.value);
+		});
+        obj.selUserList2.change();
+        obj.btnCompareSearch.click(function () {
             obj.setGrid(); //Grid 조회 시 주석 해제
             obj.pageIndex1 = 1;
             obj.pageIndex2 = 1;
@@ -426,7 +436,8 @@ function Compare(controlData) {
         var globalRankPage = parseInt((data.rank - 1) / 50) + 1;
         var countryRankPage = parseInt((data.countryRank - 1) / 50) + 1;
         html = '<hr>';
-        html += '<h4><b><font color="red">P' + index + '</font> : <a href="https://scoresaber.com/u/' + data.playerId + '" target="_blank"><font color="green">' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
+        //html += '<h4><b><font color="red">P' + index + '</font> : <a href="https://scoresaber.com/u/' + data.playerId + '" target="_blank"><font color="green">' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
+        html += '<h4><b><a href="https://scoresaber.com/u/' + data.id + '" target="_blank">'+ "<img src='" + data.profilePicture + "' width=50 height=50 boarder=0 />" + '<font color="green"> ' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
         html += '<h4><b>Global Rank : <a href="https://scoresaber.com/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '</font></a>' + ' (<a href="https://scoresaber.com/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '</font></a>)</b></h4>';
         html += '<h4><b>PP : ' + data.pp + ', Avg Accuracy : ' + data.scoreStats.averageRankedAccuracy.toFixed(2) + '</b></h4>';
         html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';

@@ -21,7 +21,7 @@ function Player(controlData) {
     obj.init = function () {
         obj.createPlayerLayer();
         obj.pagePlayerLayer.show();
-        obj.txtUserID.val(getUrlParameter('user'));
+        // obj.txtUserID.val(getUrlParameter('user'));
     };
 
     // 서비스를 비활성화를 위한 리셋 설정을 담당한다.
@@ -51,7 +51,8 @@ function Player(controlData) {
 
     // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 변수를 정의한다.
     obj.defineElements = function() {
-		obj.txtUserID = $("#txtUserID");
+		obj.selUserList = $("#selUserList");
+        obj.txtUserID = $("#txtUserID");
 		obj.selSearchType = $("#selSearchType");
 		obj.btnSearch = $("#btnSearch");
 		obj.btnAllSearch = $("#btnAllSearch");
@@ -62,7 +63,12 @@ function Player(controlData) {
     obj.defineElementsEvent = function() {
         // #region 개발자 영역 > Config 정의한 Controls 이벤트 등록
         // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 이벤트 함수를 등록한다.
-		obj.selSearchType.change(function(){
+		obj.selUserList.change(function(){
+            obj.txtUserID.val(this.value);
+		});
+        obj.selUserList.change();
+        // obj.txtUserID.text($('#selUserList option:first').text());
+        obj.selSearchType.change(function(){
 		});
 		obj.btnSearch.click(function () {
             obj.pageIndex = 1;
@@ -201,10 +207,13 @@ function Player(controlData) {
         $.fn.fmatter.convertRank = function (cellValue,rowObject,options) {
             //var page = parseInt((cellValue / 12) + 1);
             var page = parseInt((cellValue - 1) / 12) + 1;
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=" + page + "' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboard.id + "?page=" + page + "' target='_blank'>" + cellValue + "</a>";
+        };
+        $.fn.fmatter.convertCoverImage = function (cellValue,rowObject,options) {
+			return "<img src='" + options.coverImage + "' width=30 height=30 boarder=0 />";
         };
         $.fn.fmatter.convertSongTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboard.id + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
 			return ConvertToString("pp", options);
@@ -288,7 +297,9 @@ function Player(controlData) {
                 (data[i].leaderboard.difficulty.difficulty == 7) ? "Expert" : 
                 (data[i].leaderboard.difficulty.difficulty == 9) ? "Expert+" : 
                 data[i].leaderboard.difficulty.difficultyRaw;
-
+            data[i].timeSet = data[i].score.timeSet;
+            data[i].plays = data[i].leaderboard.plays;
+            data[i].coverImage = data[i].leaderboard.coverImage;
             data[i].levelAuthorName = data[i].leaderboard.levelAuthorName;
 			// #region 개발자 영역 > paging(more) 처리를 위한 셋팅
 			if(i == data.length - 1) {
@@ -372,7 +383,7 @@ function Player(controlData) {
         var globalRankPage = parseInt((data.rank - 1) / 50) + 1;
         var countryRankPage = parseInt((data.countryRank - 1) / 50) + 1;
         html = '<hr>';
-        html += '<h4><b>Nickname : <a href="https://scoresaber.com/u/' + data.id + '" target="_blank"><font color="green">' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
+        html += '<h4><b><a href="https://scoresaber.com/u/' + data.id + '" target="_blank">'+ "<img src='" + data.profilePicture + "' width=50 height=50 boarder=0 />" + '<font color="green"> ' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
         html += '<h4><b>Global Rank : <a href="https://scoresaber.com/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '</font></a>' + ' (<a href="https://scoresaber.com/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '</font></a>)</b></h4>';
         html += '<h4><b>PP : ' + data.pp + ', Avg Accuracy : ' + data.scoreStats.averageRankedAccuracy.toFixed(2) + '</b></h4>';
         html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';

@@ -201,10 +201,10 @@ function Ranking(controlData) {
 
         // #region 개발자 영역 > Grid Formatter callback 함수 구현부
         $.fn.fmatter.convertPlayerName = function (cellValue,rowObject,options) {
-			return '<a href="https://scoresaber.com/u/' + options.playerId + '" target="_blank"><font color="green">' + options.playerName + '</font></a>';
+			return '<a href="https://scoresaber.com/u/' + options.id + '" target="_blank"><font color="green">' + options.name + '</font></a>';
         };
         $.fn.fmatter.convertAvartar = function (cellValue,rowObject,options) {
-			return "<img src='https://new.scoresaber.com" + options.avatar + "' border=0 width=24 height=24 />";
+			return "<img src='" + options.profilePicture + "' border=0 width=24 height=24 />";
         };
         $.fn.fmatter.convertCountry = function (cellValue,rowObject,options) {
 			return "<img src='https://new.scoresaber.com/api/static/flags/" + options.country.toLowerCase() + ".png' title=" + options.country + " border=0  width=16 height=11/>";
@@ -222,7 +222,7 @@ function Ranking(controlData) {
         };
         $.fn.fmatter.convertMonthRankGap = function (cellValue,rowObject,options) {
             var result = "";
-            var splitHistory = options.history.split(",");
+            var splitHistory = options.histories.split(",");
             if (splitHistory[splitHistory.length - 30] > 900000) {
                 result = "NEW";
             } else {
@@ -239,7 +239,7 @@ function Ranking(controlData) {
         };
         $.fn.fmatter.convertDailyRankGap = function (cellValue,rowObject,options) {
             var result = "";
-            var splitHistory = options.history.split(",");
+            var splitHistory = options.histories.split(",");
             if (splitHistory[splitHistory.length - 2] > 900000) {
                 result = "NEW";
             } else {
@@ -261,9 +261,16 @@ function Ranking(controlData) {
 
     // Grid Data Binding
     obj.bindGrid = function(data) {
+        console.log(data);
 		for(var i=0; i<data.length; i++) {
-            var splitHistory = data[i].history.split(",");
-            data[i].weekly_gap = data[i].difference;
+            console.log(data[i]);
+            var splitHistory = data[i].histories.split(",");
+            //data[i].weekly_gap = data[i].difference;
+            if (splitHistory[splitHistory.length - 7] > 900000) {
+                data[i].weekly_gap = "NEW";
+            } else {
+                data[i].weekly_gap = splitHistory[splitHistory.length-7] - data[i].rank;
+            }
             if (splitHistory[splitHistory.length - 1] > 900000) {
                 data[i].daily_gap = "NEW";
             } else {
@@ -283,6 +290,7 @@ function Ranking(controlData) {
 			}
 			// #endregion
 			// #region 개발자 영역 > Grid에 UUID Mapping
+            console.log(data[i]);
 			obj.rankingContainer.jqGrid("addRowData", data[i].rank, data[i]);
 			// #endregion
 		}
@@ -387,7 +395,7 @@ function Ranking(controlData) {
 
         // #region 개발자 영역 > API callback 함수
 		var callback_get_pages = function(data) {
-            obj.dataCount = (data.pages != undefined) ? data.pages : 0;
+            obj.dataCount = (data.metadata != undefined) ? data.metadata.total : 0;
             obj.total_count = data.pages*50;
             var optionHtml = "";
             for (var i=2;i<=obj.dataCount;i++) {

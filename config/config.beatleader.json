@@ -1097,8 +1097,8 @@
                     "checkbox_name": "chk_columns",
                     "columns" : [
                         { 
-                            "name": "beatSaverKey", 
-                            "index": "beatSaverKey", 
+                            "name": "download", 
+                            "index": "download", 
                             "width": 60,
                             "text": "down",
                             "formatter": "convertDownload"
@@ -1201,8 +1201,8 @@
                             "text": "modifiers"
                         },
                         { 
-                            "name": "durationSeconds", 
-                            "index": "durationSeconds", 
+                            "name": "duration", 
+                            "index": "duration", 
                             "width": 70,
                             "sorttype":"int",
                             "text": "songTime",
@@ -1267,8 +1267,8 @@
                             "formatter": "convertYoutube"
                         },
                         { 
-                            "name": "timeSet", 
-                            "index": "timeSet", 
+                            "name": "timeset", 
+                            "index": "timeset", 
                             "width": 150,
                             "text": "Record Date(UTC)",
                             "formatter": "convertTime"

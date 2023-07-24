@@ -147,3 +147,15 @@ function sortJSONArray(list, prop, asc) {
         }
     });
 }
+
+function removeBeatSaberKeyString(str) {
+    console.log(str);
+    const regex = /x{2,}/;
+    const match = str.match(regex);
+    
+    if (match) {
+      const index = match.index;
+      return str.substring(0, index);
+    }
+    return str;
+  }

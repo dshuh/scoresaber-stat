@@ -199,21 +199,21 @@ function Player(controlData) {
         // #region 개발자 영역 > Grid Formatter callback 함수 구현부
         $.fn.fmatter.convertDownload = function (cellValue,rowObject,options) {
 			if(options.download != "") {
-                return "<a href='https://api.beatsaver.com/download/key/" + cellValue + "'>" + cellValue + "</a>";
+                return "<a href='" + cellValue + "'>" + options.beatSaverKey + "</a>";
             } else {
                 return "";
             }
         };
         $.fn.fmatter.convertRank = function (cellValue,rowObject,options) {
             //var page = parseInt((cellValue / 12) + 1);
-            var page = parseInt((cellValue - 1) / 12) + 1;
-			return "<a href='https://www.beatleader.xyz/leaderboard/" + options.leaderboard.id + "?page=" + page + "' target='_blank'>" + cellValue + "</a>";
+            var page = parseInt((cellValue - 1) / 10) + 1;
+			return "<a href='https://www.beatleader.xyz/leaderboard/global/" + options.leaderboard.id + "/" + page + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertCoverImage = function (cellValue,rowObject,options) {
 			return "<img src='" + options.coverImage + "' width=30 height=30 boarder=0 />";
         };
         $.fn.fmatter.convertSongTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://www.beatleader.xyz/leaderboard/" + options.leaderboard.id + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://www.beatleader.xyz/leaderboard/global/" + options.leaderboard.id + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
 			return ConvertToString("pp", options);
@@ -237,10 +237,16 @@ function Player(controlData) {
 			return ConvertToString("rating", options) + "%";
         };
         $.fn.fmatter.convertSongTime = function (cellValue,rowObject,options) {
-			return ConvertToString("durationSeconds", options);
+            var min = cellValue / 60;
+            var sec = cellValue % 60;
+            return Math.floor(min) + "m " + sec + "s";
         };
         $.fn.fmatter.convertTime = function (cellValue,rowObject,options) {
-			return ConvertToString("time", options);
+			var date = new Date(cellValue).toISOString().
+                replace(/T/, ' ').      // replace T with a space
+                replace(/\..+/, '');
+            return date;
+            // return ConvertToString("time", options);
         };
         $.fn.fmatter.convertYoutube = function (cellValue,rowObject,options) {
             var title = "Beat Saber " + options.stars + " " + options.songName + " - " + options.songAuthorName + " by " + options.levelAuthorName + " " +
@@ -256,51 +262,57 @@ function Player(controlData) {
     // Grid Data Binding
     obj.bindGrid = function(data) {
 		for(var i=0; i<data.length; i++) {
-            var mapInfo = mapList.find(x => x.uid === data[i].leaderboard.id);
-            if(mapInfo != undefined && mapInfo != null) {
-                data[i].beatSaverKey = mapInfo.beatSaverKey;
-                data[i].bpm = mapInfo.bpm;
-                data[i].download = mapInfo.download;
-                data[i].durationSeconds = mapInfo.durationSeconds;
-                data[i].njs = mapInfo.njs;
-                data[i].noteCount = mapInfo.noteCount;
-                data[i].maxPP = mapInfo.pp;
-                data[i].rating = mapInfo.rating.toFixed(2) + "%";
-            } else {
-                data[i].beatSaverKey = "";
-                data[i].bpm = 0;
-                data[i].download = "";
-                data[i].durationSeconds = 0;
-                data[i].njs = 0;
-                data[i].noteCount = 0;
-                data[i].maxPP = 0;
-                data[i].rating = 0 + "%";
-            }
+            // var mapInfo = mapList.find(x => x.uid === data[i].leaderboard.id);
+            // if(mapInfo != undefined && mapInfo != null) {
+            //     data[i].beatSaverKey = mapInfo.beatSaverKey;
+            //     data[i].bpm = mapInfo.bpm;
+            //     data[i].download = mapInfo.download;
+            //     data[i].durationSeconds = mapInfo.durationSeconds;
+            //     data[i].njs = mapInfo.njs;
+            //     data[i].noteCount = mapInfo.noteCount;
+            //     data[i].maxPP = mapInfo.pp;
+            //     data[i].rating = mapInfo.rating.toFixed(2) + "%";
+            // } else {
+            //     data[i].beatSaverKey = "";
+            //     data[i].bpm = 0;
+            //     data[i].download = "";
+            //     data[i].durationSeconds = 0;
+            //     data[i].njs = 0;
+            //     data[i].noteCount = 0;
+            //     data[i].maxPP = 0;
+            //     data[i].rating = 0 + "%";
+            // }
             
             data[i].id = data[i].leaderboard.id;
-            data[i].rank = data[i].score.rank;
-            data[i].songName = data[i].leaderboard.songName;
-            data[i].songAuthorName = data[i].leaderboard.songAuthorName;
-            data[i].stars = data[i].leaderboard.stars + "★";
-            data[i].modifiers = data[i].score.modifiers;
-            data[i].realpp = (data[i].score.pp * data[i].score.weight).toFixed(2);
-            data[i].mistakes = data[i].score.badCuts + data[i].score.missedNotes;
+            // data[i].rank = data[i].rank;
+            data[i].songName = data[i].leaderboard.song.name;
+            data[i].songAuthorName = data[i].leaderboard.song.author;
+            data[i].stars = (data[i].leaderboard.difficulty.stars != null) ? data[i].leaderboard.difficulty.stars.toFixed(2) + "★" : "UnRanked";
+            data[i].modifiers = data[i].modifiers;
+            data[i].realpp = (data[i].pp * data[i].weight).toFixed(2);
+            data[i].mistakes = data[i].badCuts + data[i].missedNotes + data[i].wallsHit;
             
-            data[i].accuracy = (data[i].leaderboard.maxScore > 0) ? 
-                ((data[i].score.baseScore * 100) / data[i].leaderboard.maxScore).toFixed(2) : 
+            data[i].accuracy = (data[i].leaderboard.difficulty.maxScore > 0) ? 
+                ((data[i].baseScore * 100) / data[i].leaderboard.difficulty.maxScore).toFixed(2) : 
                 0;
-            data[i].pp = data[i].score.pp.toFixed(2);
-            data[i].mypp = (data[i].score.pp * data[i].score.weight).toFixed(2);
-            data[i].diff = (data[i].leaderboard.difficulty.difficulty == 1) ? "Easy" : 
-                (data[i].leaderboard.difficulty.difficulty == 3) ? "Normal" : 
-                (data[i].leaderboard.difficulty.difficulty == 5) ? "Hard" : 
-                (data[i].leaderboard.difficulty.difficulty == 7) ? "Expert" : 
-                (data[i].leaderboard.difficulty.difficulty == 9) ? "Expert+" : 
-                data[i].leaderboard.difficulty.difficultyRaw;
-            data[i].timeSet = data[i].score.timeSet;
+            data[i].pp = data[i].pp.toFixed(2);
+            data[i].mypp = (data[i].pp * data[i].weight).toFixed(2);
+            // data[i].diff = data[i].leaderboard.difficulty.difficultyName;
+            data[i].diff = (data[i].leaderboard.difficulty.value == 1) ? "Easy" : 
+                (data[i].leaderboard.difficulty.value == 3) ? "Normal" : 
+                (data[i].leaderboard.difficulty.value == 5) ? "Hard" : 
+                (data[i].leaderboard.difficulty.value == 7) ? "Expert" : 
+                (data[i].leaderboard.difficulty.value == 9) ? "Expert+" : 
+                data[i].leaderboard.value.difficultyName;
+            data[i].difficulty = data[i].leaderboard.difficulty.value;
             data[i].plays = data[i].leaderboard.plays;
-            data[i].coverImage = data[i].leaderboard.coverImage;
-            data[i].levelAuthorName = data[i].leaderboard.levelAuthorName;
+            data[i].coverImage = data[i].leaderboard.song.coverImage;
+            data[i].levelAuthorName = data[i].leaderboard.song.mapper;
+            data[i].download = data[i].leaderboard.song.downloadUrl;
+            data[i].duration = data[i].leaderboard.song.duration;
+            
+            data[i].beatSaverKey = data[i].leaderboard.song.id;
+
 			// #region 개발자 영역 > paging(more) 처리를 위한 셋팅
 			if(i == data.length - 1) {
 				obj.pageIndex++;
@@ -382,8 +394,8 @@ function Player(controlData) {
         //https://www.beatleader.xyz/global/2&country=kr
         var globalRankPage = parseInt((data.rank - 1) / 50) + 1;
         var countryRankPage = parseInt((data.countryRank - 1) / 50) + 1;
-        var globalRankGap = (data.lastWeekRank-data.rank) > 0 ? '↑'+(data.lastWeekRank-data.rank) : (data.lastWeekRank-data.rank) < 0 ? '↓'+(data.rank-data.lastWeekRank) : 0;
-        var countryRankGap = (data.lastWeekCountryRank-data.countryRank) > 0 ? '↑'+(data.lastWeekCountryRank-data.countryRank) : (data.lastWeekCountryRank-data.countryRank) < 0 ? '↓'+(data.countryRank-data.lastWeekCountryRank) : 0;
+        var globalRankGap = (data.lastWeekRank-data.rank) > 0 ? '↑'+(data.lastWeekRank-data.rank) : (data.lastWeekRank-data.rank) < 0 ? '↓'+(data.rank-data.lastWeekRank) : '-';
+        var countryRankGap = (data.lastWeekCountryRank-data.countryRank) > 0 ? '↑'+(data.lastWeekCountryRank-data.countryRank) : (data.lastWeekCountryRank-data.countryRank) < 0 ? '↓'+(data.countryRank-data.lastWeekCountryRank) : '-';
         var clansHtml = '';
         for(var i=0;i<data.clans.length;i++) {
             clansHtml += '<a href="https://www.beatleader.xyz/clan/' + data.clans[i].tag + '" target="_blank"><font color="' + data.clans[i].color + '">' + data.clans[i].tag + '</font></a> ';
@@ -391,7 +403,7 @@ function Player(controlData) {
         html = '<hr>';
         html += '<h4><b><a href="https://www.beatleader.xyz/u/' + data.id + '" target="_blank">'+ "<img src='" + data.avatar + "' width=50 height=50 boarder=0 />" + '<font color="green"> ' + data.name + '</font></a> <a href="https://www.beatleader.xyz/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a> ' + clansHtml + '</b></h4>';
         html += '<h4><b>Global / Country Rank : <a href="https://www.beatleader.xyz/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '(' + globalRankGap + ')</font></a>' + ' / <a href="https://www.beatleader.xyz/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '(' + countryRankGap + ')</font></a></b></h4>';
-        html += '<h4><b>PP : ' + data.pp + ', Avg Accuracy : ' + data.scoreStats.averageRankedAccuracy.toFixed(2) + '</b></h4>';
+        html += '<h4><b>PP : ' + data.pp + ', Avg Accuracy : ' + (data.scoreStats.averageRankedAccuracy*100).toFixed(2) + '</b></h4>';
         html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';
         html += '<h4><b>SS+:<font color="red">' + data.scoreStats.sspPlays + '</font>, SS:<font color="orange">' + data.scoreStats.ssPlays + '</font>, S+:<font color="blue">' + data.scoreStats.spPlays + '</font>, S:<font color="green">' + data.scoreStats.sPlays + '</font>, A:<font color="gray">' + data.scoreStats.aPlays + '</font></b></h4>';
         $("#dvtitleArea").empty().append(html).trigger("create");
@@ -440,9 +452,9 @@ function Player(controlData) {
 
         // #region 개발자 영역 > API callback 함수
 		var callback_get_player = function(data) {
-            obj.dataCount = (data != undefined) ? data.length : 0;
+            obj.dataCount = (data != undefined) ? data.data.length : 0;
             if (obj.dataCount > 0) {
-                obj.bindGrid(data);
+                obj.bindGrid(data.data);
             } else {
                 return null
             }
@@ -451,9 +463,9 @@ function Player(controlData) {
 
         // #region 개발자 영역 > API callback 함수
 		var callback_get_all_player = function(data) {
-            obj.dataCount = (data.playerScores != undefined) ? data.playerScores.length : 0;
+            obj.dataCount = (data.data != undefined) ? data.data.length : 0;
             if (obj.dataCount > 0) {
-                obj.bindGrid(data.playerScores);
+                obj.bindGrid(data.data);
             } else {
                 return null
             }

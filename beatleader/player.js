@@ -242,11 +242,7 @@ function Player(controlData) {
             return Math.floor(min) + "m " + sec + "s";
         };
         $.fn.fmatter.convertTime = function (cellValue,rowObject,options) {
-			var date = new Date(cellValue).toISOString().
-                replace(/T/, ' ').      // replace T with a space
-                replace(/\..+/, '');
-            return date;
-            // return ConvertToString("time", options);
+			return ConvertToString("timestamp", cellValue);
         };
         $.fn.fmatter.convertYoutube = function (cellValue,rowObject,options) {
             var title = "Beat Saber " + options.stars + " " + options.songName + " - " + options.songAuthorName + " by " + options.levelAuthorName + " " +
@@ -445,7 +441,7 @@ function Player(controlData) {
             obj.statusAllSearch = "ready";
             // obj.max_page = (data.scoreStats.totalPlayCount / 8).toFixed(0); 
             obj.max_page = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
-            obj.total_count = data.scoreStats.totalPlayCount
+            obj.total_count = data.scoreStats.totalPlayCount;
             obj.country = data.country;
             obj.displayData(data);
 		};

@@ -20,7 +20,8 @@
     obj.pageCompareLayer = $(controlData.pageCompareLayer);
 	obj.compare = new Compare({ pageCompareLayer: obj.pageCompareLayer });
 
-    obj.apiConfig = config.apis.auth;
+    console.log(config);
+    obj.apiConfig = config.apis;
     obj.isInternal = false;
     obj.isLocalhost = false;
     obj.appKey = "";

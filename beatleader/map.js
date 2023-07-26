@@ -5,6 +5,7 @@ function Map(controlData) {
 
     obj.menuConfig = config.menu.find(x => x.id === "map");
     obj.gridConfig = obj.menuConfig.contents_area.grid;
+    obj.apiConfig = config.apis.map;
     obj.checkedColNames = [];
 
     // #region 개발자 영역 > 멤버변수 선언 및 초기화
@@ -46,8 +47,9 @@ function Map(controlData) {
     obj.defineElements = function() {
 		obj.selStartStar = $("#selStartStar");
 		obj.selEndStar = $("#selEndStar");
+        obj.selOrder = $("#selOrder");
         obj.txtCountry = $("#txtCountry");
-		obj.btnSearch = $("#btnSearch");
+		obj.btnMapSearch = $("#btnMapSearch");
 		obj.mapContainer = $("#mapContainer");
 		obj.mapPager = $("#mapPager");
     };
@@ -57,22 +59,24 @@ function Map(controlData) {
         // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 이벤트 함수를 등록한다.
 		
         var optionHtml = "";
-        for (var i=0;i<=15;i++) {
+        for (var i=0;i<=20;i++) {
             optionHtml += '<option value="' + i + '">' + i + ' stars</option>';
         }
         obj.selStartStar.append(optionHtml).trigger("create");
         obj.selEndStar.append(optionHtml).trigger("create");
 
         obj.selStartStar.val("0").prop("selected", true).change();
-        obj.selEndStar.val("15").prop("selected", true).change();
+        obj.selEndStar.val("20").prop("selected", true).change();
 
-		obj.btnSearch.click(function () {
+		obj.btnMapSearch.click(function () {
+            obj.pageIndex = 1;
 			obj.setGrid(); //Grid 조회 시 주석 해제
-            var dataList = mapList.filter(function (el) {
-                return el.stars >= obj.selStartStar.val() &&
-                       el.stars < obj.selEndStar.val()
-              });
-            obj.bindGrid(dataList); //Grid 조회 시 주석 해제
+            obj.mapApiCall(config.controls.find(x => x.id === this.id).api);
+            // var dataList = mapList.filter(function (el) {
+            //     return el.stars >= obj.selStartStar.val() &&
+            //            el.stars < obj.selEndStar.val()
+            //   });
+            // obj.bindGrid(dataList); //Grid 조회 시 주석 해제
 		});
 
         // #endregion
@@ -161,30 +165,69 @@ function Map(controlData) {
         // #endregion
 
         // #region 개발자 영역 > Grid Formatter callback 함수 구현부
+        // #region 개발자 영역 > Grid Formatter callback 함수 구현부
         $.fn.fmatter.convertDownload = function (cellValue,rowObject,options) {
-			if(cellValue != "") {
-                return "<a href='" + options.download + "'>" + cellValue + "</a>";
+			if(options.download != "") {
+                return "<a href='" + cellValue + "'><img src='https://w7.pngwing.com/pngs/596/75/png-transparent-download-now-download-icon-download-button-download-logo-flat-icon-flat-logo-flat-image-button-flat-round-thumbnail.png' width='20px' height='20px' /></a>";
+            } else {
+                return "";
             }
-            return "";
         };
-        $.fn.fmatter.convertStars = function (cellValue,rowObject,options) {
-			return ConvertToString("stars", options);
+        $.fn.fmatter.convertRank = function (cellValue,rowObject,options) {
+            //var page = parseInt((cellValue / 12) + 1);
+            var page = parseInt((cellValue - 1) / 10) + 1;
+			return "<a href='https://www.beatleader.xyz/leaderboard/global/" + options.leaderboard.id + "/" + page + "' target='_blank'>" + cellValue + "</a>";
         };
-        $.fn.fmatter.convertMapTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.uid + "?page=1&countries=" + obj.txtCountry.val() + "' target='_blank'>" + cellValue + "</a>";
+        $.fn.fmatter.convertCoverImage = function (cellValue,rowObject,options) {
+			return "<img src='" + options.coverImage + "' width=30 height=30 boarder=0 />";
         };
         $.fn.fmatter.convertSongTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=" + obj.txtCountry.val() + "' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://www.beatleader.xyz/leaderboard/global/" + options.id + "?page=1' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
 			return ConvertToString("pp", options);
+        };
+        $.fn.fmatter.convertMyPP = function (cellValue,rowObject,options) {
+			return ConvertToString("mypp", options);
+        };
+        $.fn.fmatter.convertMaxPP = function (cellValue,rowObject,options) {
+			return ConvertToString("maxPP", options);
+        };
+        $.fn.fmatter.convertWeight = function (cellValue,rowObject,options) {
+			return ConvertToString("weight", options);
+        };
+        $.fn.fmatter.convertDifficulty = function (cellValue,rowObject,options) {
+			return ConvertToString("difficulty", options);
+        };
+        $.fn.fmatter.convertAccuracy = function (cellValue,rowObject,options) {
+			return ConvertToString("accuracy", options) + "%";
         };
         $.fn.fmatter.convertRating = function (cellValue,rowObject,options) {
 			return ConvertToString("rating", options) + "%";
         };
         $.fn.fmatter.convertSongTime = function (cellValue,rowObject,options) {
-			return ConvertToString("durationSeconds", options);
+            var min = cellValue / 60;
+            var sec = cellValue % 60;
+            return Math.floor(min) + "m " + sec + "s";
         };
+        $.fn.fmatter.convertTime = function (cellValue,rowObject,options) {
+			return ConvertToString("timestamp", cellValue);
+        };
+        
+        $.fn.fmatter.convertStars = function (cellValue,rowObject,options) {
+			return ConvertToString("stars", options);
+        };
+        $.fn.fmatter.convertAccRating = function (cellValue,rowObject,options) {
+			return options.accRating.toFixed(2) + "★";
+        };
+        $.fn.fmatter.convertTechRating = function (cellValue,rowObject,options) {
+			return options.techRating.toFixed(2) + "★";
+        };
+        $.fn.fmatter.convertPassRating = function (cellValue,rowObject,options) {
+			return options.passRating.toFixed(2) + "★";
+        };
+        
+        
         // #endregion
         
         obj.navGrid();
@@ -193,10 +236,49 @@ function Map(controlData) {
     // Grid Data Binding
     obj.bindGrid = function(data) {
 		for(var i=data.length-1; i>=0; i--) {
-			obj.mapContainer.jqGrid("addRowData", data[i].uid, data[i]);
+            data[i].songName = data[i].song.name;
+            data[i].songAuthorName = data[i].song.author;
+            data[i].stars = (data[i].difficulty.stars != null) ? data[i].difficulty.stars.toFixed(2) : "0";
+            data[i].modifiers = data[i].modifiers;
+            
+            data[i].diff = (data[i].difficulty.value == 1) ? "Easy" : 
+                (data[i].difficulty.value == 3) ? "Normal" : 
+                (data[i].difficulty.value == 5) ? "Hard" : 
+                (data[i].difficulty.value == 7) ? "Expert" : 
+                (data[i].difficulty.value == 9) ? "Expert+" : 
+                data[i].difficulty.difficultyName;
+            data[i].accRating  = data[i].difficulty.accRating;
+            data[i].techRating = data[i].difficulty.techRating;
+            data[i].passRating = data[i].difficulty.passRating;
+            data[i].diffValue = data[i].difficulty.value;
+
+            data[i].coverImage = data[i].song.coverImage;
+            data[i].levelAuthorName = data[i].song.mapper;
+            data[i].download = data[i].song.downloadUrl;
+            data[i].durationSeconds = data[i].song.duration;
+            data[i].upvotes = data[i].positiveVotes;
+            data[i].downvotes = data[i].negativeVotes;
+            data[i].votes = data[i].positiveVotes - data[i].negativeVotes;
+            
+            data[i].noteCount = data[i].difficulty.notes;
+            data[i].njs = data[i].difficulty.njs;
+            data[i].nps = data[i].difficulty.nps;
+            data[i].rankedTime = data[i].difficulty.rankedTime.toString();
+            data[i].diffValue = data[i].difficulty.value;
+
+            data[i].beatSaverKey = data[i].song.id;
+            data[i].id = data[i].song.id;
+
+			// #region 개발자 영역 > paging(more) 처리를 위한 셋팅
+			if(i == data.length - 1) {
+				obj.pageIndex++;
+			}
+
+			obj.mapContainer.jqGrid("addRowData", data[i].id, data[i]);
 		}
 		var gridCount = obj.mapContainer.getGridParam("reccount");
-		var gridCaption = "Searched <font color='blue'><b>" + gridCount + "</b></font> Completed.";
+		var percentage = (obj.dataCount != 0) ? parseFloat((gridCount*100) / obj.total_count).toFixed(2) : 0;
+		var gridCaption = "Searched <font color='blue'><b>" + gridCount + "</b></font> out of <font color='red'><b>" + obj.total_count + "</b></font> - <font color='green'><b>" + percentage + "%</b></font> Completed.";
 		obj.mapContainer.jqGrid("setCaption", gridCaption);
     }
 
@@ -255,7 +337,7 @@ function Map(controlData) {
             link.click();
 		};
 		var callback_navButton_more = function() {
-            obj.mapApiCall("get_map");
+            obj.mapApiCall("get_leaderboards");
 		};
 
         // #endregion
@@ -306,53 +388,14 @@ function Map(controlData) {
         };
 
         // #region 개발자 영역 > API callback 함수
-		var callback_get_full = function(data) {
-            obj.statusAllSearch = "ready";
-            // obj.max_page = (data.scoreStats.totalPlayCount / 8).toFixed(0); 
-            obj.max_page = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
-            obj.total_count = data.scoreStats.totalPlayCount
-            obj.displayData(data);
-		};
-
-        // #region 개발자 영역 > API callback 함수
-		var callback_get_map = function(data) {
-            obj.dataCount = (data.scores != undefined) ? data.scores.length : 0;
+		var callback_get_leaderboards = function(data) {
+            obj.dataCount = (data != undefined) ? data.data.length : 0;
+            obj.total_count = data.metadata.total;
             if (obj.dataCount > 0) {
-                obj.bindGrid(data.scores);
+                obj.bindGrid(data.data);
             } else {
                 return null
             }
-		};
-
-
-        // #region 개발자 영역 > API callback 함수
-		var callback_get_all_map = function(data) {
-            obj.dataCount = (data.scores != undefined) ? data.scores.length : 0;
-            if (obj.dataCount > 0) {
-                obj.bindGrid(data.scores);
-            } else {
-                return null
-            }
-
-            if (obj.statusAllSearch == "ready" || obj.statusAllSearch == "process" || obj.statusAllSearch == "resume") {
-                if (obj.pageIndex <= obj.max_page) {
-                    obj.statusAllSearch = "process";
-                    obj.mapApiCall("get_all_map");
-                } else {
-                    obj.statusAllSearch = "complete";
-                    return null
-                }
-            } else if (obj.statusAllSearch == "stop") {
-                obj.statusAllSearch = "resume";
-                return null;
-            } else {
-
-            }
-
-            // if (obj.pageIndex <= obj.max_page) {
-            //     obj.statusAllSearch = "process";
-            //     obj.mapApiCall("get_all_map");
-            // }
 		};
 
         // #endregion

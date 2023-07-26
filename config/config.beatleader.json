@@ -10,6 +10,26 @@
     ],
     "apis" : {
         "map": [
+            {
+                "id": "get_leaderboards",
+                "path": "/leaderboards?type=ranked",
+                "method": "GET",
+                "content_type": "application/x-www-form-urlencoded",
+                "callback": "callback_get_leaderboards",
+                "parameters": [
+                    "var.page_index",
+                    "ctrl.selMapSortBy",
+                    "ctrl.selOrder",
+                    "ctrl.selStartStar",
+                    "ctrl.selEndStar",
+                    "ctrl.selPageCount"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            }
         ],
         "player": [
             {
@@ -230,11 +250,48 @@
                 "in": "query",
                 "required": true
             },{
+                "id": "ctrl.selMapSortBy",
+                "name": "sortBy",
+                "value_type": "control",
+                "value": "selMapSortBy",
+                "type": "string",
+                "in": "query",
+                "required": true
+            },{
+                "id": "ctrl.selStartStar",
+                "name": "stars_from",
+                "value_type": "control",
+                "value": "selStartStar",
+                "type": "int",
+                "in": "query"
+            },{
+                "id": "ctrl.selEndStar",
+                "name": "stars_to",
+                "value_type": "control",
+                "value": "selEndStar",
+                "type": "int",
+                "in": "query"
+            },{
+                "id": "ctrl.selMapSortBy",
+                "name": "sortBy",
+                "value_type": "control",
+                "value": "selMapSortBy",
+                "type": "string",
+                "in": "query",
+                "required": true
+            },{
                 "id": "ctrl.selOrder",
                 "name": "order",
                 "value_type": "control",
                 "value": "selOrder",
                 "type": "string",
+                "in": "query"
+            },{
+                "id": "ctrl.selPageCount",
+                "name": "count",
+                "value_type": "control",
+                "value": "selPageCount",
+                "type": "int",
                 "in": "query"
             },{
                 "id": "ctrl.country",
@@ -443,7 +500,8 @@
             "name": "btnMapSearch",
             "tag": "button",
             "value": "Search",
-            "title": "Search"
+            "title": "Search",
+            "api": "get_leaderboards"
         },{
             "id": "btnRankSearch",
             "name": "btnRankSearch",
@@ -458,6 +516,49 @@
             "value": "76561198830502286",
             "placeholder": "Steam User ID",
             "title": "Steam User ID"
+        },{
+            "id": "selMapSortBy",
+            "name": "selMapSortBy",
+            "tag": "select",
+            "title": "MapSort Type",
+            "options": [
+                {
+                    "value": "stars",
+                    "text": "stars"
+                },
+                {
+                    "value": "timestamp",
+                    "text": "timestamp"
+                },
+                {
+                    "value": "accRating",
+                    "text": "accRating"
+                },
+                {
+                    "value": "techRating",
+                    "text": "techRating"
+                },
+                {
+                    "value": "passRating",
+                    "text": "passRating"
+                },
+                {
+                    "value": "name",
+                    "text": "name"
+                },
+                {
+                    "value": "playcount",
+                    "text": "playcount"
+                },
+                {
+                    "value": "votecount",
+                    "text": "votecount"
+                },
+                {
+                    "value": "voteratio",
+                    "text": "voteratio"
+                }
+            ]
         },{
             "id": "selSortBy",
             "name": "selSortBy",
@@ -500,6 +601,29 @@
                 {
                     "value": "asc",
                     "text": "asc"
+                }
+            ]
+        },{
+            "id": "selPageCount",
+            "name": "selPageCount",
+            "tag": "select",
+            "title": "Page Count",
+            "options": [
+                {
+                    "value": "5000",
+                    "text": "전체",
+                    "selected": "selected"
+                },{
+                    "value": "50",
+                    "text": "50"
+                },
+                {
+                    "value": "500",
+                    "text": "500"
+                },
+                {
+                    "value": "1000",
+                    "text": "1000"
                 }
             ]
         },{
@@ -877,8 +1001,11 @@
                 "controls": [
                     "selStartStar",
                     "selEndStar",
-                    "txtCountry",
-                    "btnSearch"
+                    "selMapSortBy",
+                    "selOrder",
+                    "selPageCount",
+                    "{newline}",
+                    "btnMapSearch"
                 ]
             },
             "contents_area": {
@@ -892,10 +1019,10 @@
                     "checkbox_name": "chk_columns",
                     "columns" : [
                         { 
-                            "name": "beatSaverKey", 
-                            "index": "beatSaverKey", 
-                            "width": 60,
-                            "text": "down",
+                            "name": "download", 
+                            "index": "download", 
+                            "width": 30,
+                            "text": "dn",
                             "search": false,
                             "formatter": "convertDownload"
                         },
@@ -912,11 +1039,18 @@
                             "formatter": "convertStars"
                         },
                         { 
-                            "name": "name", 
-                            "index": "name", 
+                            "name": "coverImage", 
+                            "index": "coverImage", 
+                            "width": 40,
+                            "text": "image",
+                            "formatter": "convertCoverImage"
+                        },
+                        { 
+                            "name": "songName", 
+                            "index": "songName", 
                             "width": 150,
                             "text": "name",
-                            "formatter": "convertMapTitle"
+                            "formatter": "convertSongTitle"
                         },
                         { 
                             "name": "diff", 
@@ -925,40 +1059,52 @@
                             "text": "diff"
                         },
                         { 
-                            "name": "artist", 
-                            "index": "artist", 
+                            "name": "accRating", 
+                            "index": "accRating", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Acc",
+                            "formatter": "convertAccRating"
+                        },
+                        { 
+                            "name": "techRating", 
+                            "index": "techRating", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Tech",
+                            "formatter": "convertTechRating"
+                        },
+                        { 
+                            "name": "passRating", 
+                            "index": "passRating", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Pass",
+                            "formatter": "convertPassRating"
+                        },
+                        { 
+                            "name": "songAuthorName", 
+                            "index": "songAuthorName", 
                             "width": 120,
                             "text": "artist"
                         },
                         { 
-                            "name": "mapper", 
-                            "index": "mapper", 
+                            "name": "levelAuthorName", 
+                            "index": "levelAuthorName", 
                             "width": 120,
                             "text": "mapper"
-                        },
-                        { 
-                            "name": "pp", 
-                            "index": "pp", 
-                            "width": 70,
-                            "sorttype":"int",
-                            "searchoptions": {
-                                "searchOperators": true,
-                                "sopt": ["gt", "eq"]
-                            },
-                            "text": "pp",
-                            "formatter": "convertPP"
-                        },
-                        { 
-                            "name": "rating", 
-                            "index": "rating", 
-                            "width": 70,
-                            "sorttype":"int",
-                            "searchoptions": {
-                                "searchOperators": true,
-                                "sopt": ["gt", "eq"]
-                            },
-                            "text": "rating",
-                            "formatter": "convertRating"
                         },
                         { 
                             "name": "durationSeconds", 
@@ -995,6 +1141,39 @@
                             "text": "njs"
                         },
                         { 
+                            "name": "nps", 
+                            "index": "nps", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["lt", "eq"]
+                            },
+                            "text": "nps"
+                        },
+                        { 
+                            "name": "plays", 
+                            "index": "plays", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "plays"
+                        },
+                        { 
+                            "name": "votes", 
+                            "index": "votes", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "votes"
+                        },
+                        { 
                             "name": "upvotes", 
                             "index": "upvotes", 
                             "width": 70,
@@ -1017,30 +1196,16 @@
                             "text": "downvotes"
                         },
                         { 
-                            "name": "downloads", 
-                            "index": "downloads", 
+                            "name": "rankedTime", 
+                            "index": "rankedTime", 
                             "width": 70,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
                                 "sopt": ["gt", "eq"]
                             },
-                            "text": "downloads"
-                        },
-                        { 
-                            "name": "uid", 
-                            "index": "uid", 
-                            "width": 70,
-                            "sorttype":"int",
-                            "text": "leaderboard"
-                        },
-                        { 
-                            "name": "download", 
-                            "index": "download", 
-                            "width": 60,
-                            "text": "download",
-                            "search": false,
-                            "hidden": true
+                            "text": "rankedTime",
+                            "formatter": "convertTime"
                         }
                     ],
                     "toolbar": {
@@ -1065,6 +1230,13 @@
                                 "buttonicon": "ui-icon-disk",
                                 "position": "last",
                                 "callback": "callback_navButton_download"
+                            },{
+                                "id": "more",
+                                "caption": "more",
+                                "title": "more",
+                                "buttonicon": "ui-icon-seek-next",
+                                "position": "last",
+                                "callback": "callback_navButton_more"
                             }
                         ]
                     }
@@ -1081,6 +1253,7 @@
                     "selUserList",
                     "txtUserID",
                     "selSortBy",
+                    "selOrder",
                     "{newline}",
                     "btnSearch",
                     "btnAllSearch"

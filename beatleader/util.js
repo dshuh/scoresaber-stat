@@ -48,7 +48,29 @@ Date.prototype.yyyyMMddHHmmss = function() {
 };
 
 function ConvertToString(key, value) {
-    if (key == "time") {
+    if (key == "timestamp") {
+        if (value.length == 10) {
+            value = value + "000";
+        } else if (value.length == 19) {
+            value = value.substring(0, 13);
+        }
+        date = new Date(parseInt(value));
+        var year = date.getFullYear();
+
+        var month = (1 + date.getMonth()).toString();
+        month = month.length > 1 ? month : '0' + month;
+
+        var day = date.getDate().toString();
+        day = day.length > 1 ? day : '0' + day;
+
+        var hour = date.getHours().toString();
+        hour = hour.length > 1 ? hour : '0' + hour;
+        
+        var minutes = date.getMinutes().toString();
+        minutes = minutes.length > 1 ? minutes : '0' + minutes;
+
+        return year + "-" + month + "-" + day + " " + hour  + ':' + minutes;
+    } else if (key == "time") {
         var date = new Date(value.timeSet).toISOString().
         replace(/T/, ' ').      // replace T with a space
         replace(/\..+/, '');

@@ -65,6 +65,7 @@ function Player(controlData) {
         // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 이벤트 함수를 등록한다.
 		obj.selUserList.change(function(){
             obj.txtUserID.val(this.value);
+            obj.btnSearch.click();
 		});
         obj.selUserList.change();
         // obj.txtUserID.text($('#selUserList option:first').text());
@@ -198,8 +199,8 @@ function Player(controlData) {
 
         // #region 개발자 영역 > Grid Formatter callback 함수 구현부
         $.fn.fmatter.convertDownload = function (cellValue,rowObject,options) {
-			if(options.download != "") {
-                return "<a href='" + cellValue + "'>" + options.beatSaverKey + "</a>";
+            if(cellValue != "") {
+                return "<a href='" + cellValue + "'><img src='https://w7.pngwing.com/pngs/596/75/png-transparent-download-now-download-icon-download-button-download-logo-flat-icon-flat-logo-flat-image-button-flat-round-thumbnail.png' width='20px' height='20px' /></a>";
             } else {
                 return "";
             }
@@ -216,7 +217,7 @@ function Player(controlData) {
 			return "<a href='https://www.beatleader.xyz/leaderboard/global/" + options.leaderboard.id + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
-			return ConvertToString("pp", options);
+			return (cellValue == 0) ? "-" : ConvertToString("pp", options);
         };
         $.fn.fmatter.convertMyPP = function (cellValue,rowObject,options) {
 			return ConvertToString("mypp", options);
@@ -248,6 +249,48 @@ function Player(controlData) {
             var title = "Beat Saber " + options.stars + " " + options.songName + " - " + options.songAuthorName + " by " + options.levelAuthorName + " " +
             options.diff + " " + options.accuracy + "% #" + options.rank + " " + options.beatSaverKey;
 			return title;
+        };
+        $.fn.fmatter.convertAccRating = function (cellValue,rowObject,options) {
+			if(cellValue != null) {
+                return cellValue.toFixed(2) + "★";
+            } else {
+                return "-";
+            }
+        };
+        $.fn.fmatter.convertTechRating = function (cellValue,rowObject,options) {
+			if(cellValue != null) {
+                return cellValue.toFixed(2) + "★";
+            } else {
+                return "-";
+            }
+        };
+        $.fn.fmatter.convertPassRating = function (cellValue,rowObject,options) {
+            if(cellValue != null) {
+                return cellValue.toFixed(2) + "★";
+            } else {
+                return "-";
+            }
+        };
+        $.fn.fmatter.convertAccPP = function (cellValue,rowObject,options) {
+			if(cellValue != 0) {
+                return cellValue.toFixed(2) + "pp";
+            } else {
+                return "-";
+            }
+        };
+        $.fn.fmatter.convertTechPP = function (cellValue,rowObject,options) {
+			if(cellValue != 0) {
+                return cellValue.toFixed(2) + "pp";
+            } else {
+                return "-";
+            }
+        };
+        $.fn.fmatter.convertPassPP = function (cellValue,rowObject,options) {
+			if(cellValue != 0) {
+                return cellValue.toFixed(2) + "pp";
+            } else {
+                return "-";
+            }
         };
         
         // #endregion
@@ -283,7 +326,7 @@ function Player(controlData) {
             // data[i].rank = data[i].rank;
             data[i].songName = data[i].leaderboard.song.name;
             data[i].songAuthorName = data[i].leaderboard.song.author;
-            data[i].stars = (data[i].leaderboard.difficulty.stars != null) ? data[i].leaderboard.difficulty.stars.toFixed(2) + "★" : "UnRanked";
+            data[i].stars = (data[i].leaderboard.difficulty.stars != null) ? data[i].leaderboard.difficulty.stars.toFixed(2) + "★" : "-";
             data[i].modifiers = data[i].modifiers;
             data[i].realpp = (data[i].pp * data[i].weight).toFixed(2);
             data[i].mistakes = data[i].badCuts + data[i].missedNotes + data[i].wallsHit;
@@ -300,6 +343,16 @@ function Player(controlData) {
                 (data[i].leaderboard.difficulty.value == 7) ? "Expert" : 
                 (data[i].leaderboard.difficulty.value == 9) ? "Expert+" : 
                 data[i].leaderboard.value.difficultyName;
+            data[i].accRating = data[i].leaderboard.difficulty.accRating;
+            data[i].techRating = data[i].leaderboard.difficulty.techRating;
+            data[i].passRating = data[i].leaderboard.difficulty.passRating;
+            
+            data[i].noteCount = data[i].leaderboard.difficulty.notes;
+            data[i].njs = data[i].leaderboard.difficulty.njs;
+            data[i].nps = data[i].leaderboard.difficulty.nps;
+            data[i].rankedTime = data[i].leaderboard.difficulty.rankedTime.toString();
+            data[i].diffValue = data[i].leaderboard.difficulty.value;
+            
             data[i].difficulty = data[i].leaderboard.difficulty.value;
             data[i].plays = data[i].leaderboard.plays;
             data[i].coverImage = data[i].leaderboard.song.coverImage;
@@ -392,16 +445,17 @@ function Player(controlData) {
         var countryRankPage = parseInt((data.countryRank - 1) / 50) + 1;
         var globalRankGap = (data.lastWeekRank-data.rank) > 0 ? '↑'+(data.lastWeekRank-data.rank) : (data.lastWeekRank-data.rank) < 0 ? '↓'+(data.rank-data.lastWeekRank) : '-';
         var countryRankGap = (data.lastWeekCountryRank-data.countryRank) > 0 ? '↑'+(data.lastWeekCountryRank-data.countryRank) : (data.lastWeekCountryRank-data.countryRank) < 0 ? '↓'+(data.countryRank-data.lastWeekCountryRank) : '-';
+        var globalPPGap = (data.pp-data.lastWeekPp) > 0 ? '↑'+(data.pp-data.lastWeekPp).toFixed(2)+"pp" : (data.pp-data.lastWeekPp) < 0 ? '↓'+(data.lastWeekPp-data.pp).toFixed(2)+"pp" : '-';
         var clansHtml = '';
         for(var i=0;i<data.clans.length;i++) {
             clansHtml += '<a href="https://www.beatleader.xyz/clan/' + data.clans[i].tag + '" target="_blank"><font color="' + data.clans[i].color + '">' + data.clans[i].tag + '</font></a> ';
         }
         html = '<hr>';
         html += '<h4><b><a href="https://www.beatleader.xyz/u/' + data.id + '" target="_blank">'+ "<img src='" + data.avatar + "' width=50 height=50 boarder=0 />" + '<font color="green"> ' + data.name + '</font></a> <a href="https://www.beatleader.xyz/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a> ' + clansHtml + '</b></h4>';
-        html += '<h4><b>Global / Country Rank : <a href="https://www.beatleader.xyz/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '(' + globalRankGap + ')</font></a>' + ' / <a href="https://www.beatleader.xyz/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '(' + countryRankGap + ')</font></a></b></h4>';
-        html += '<h4><b>PP : ' + data.pp + ', Avg Accuracy : ' + (data.scoreStats.averageRankedAccuracy*100).toFixed(2) + '</b></h4>';
-        html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';
-        html += '<h4><b>SS+:<font color="red">' + data.scoreStats.sspPlays + '</font>, SS:<font color="orange">' + data.scoreStats.ssPlays + '</font>, S+:<font color="blue">' + data.scoreStats.spPlays + '</font>, S:<font color="green">' + data.scoreStats.sPlays + '</font>, A:<font color="gray">' + data.scoreStats.aPlays + '</font></b></h4>';
+        html += '<h4><b><font color="darkgray">Global / Country Rank</font> : <a href="https://www.beatleader.xyz/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '(' + globalRankGap + ')</font></a>' + ' / <a href="https://www.beatleader.xyz/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '(' + countryRankGap + ')</font></a></b></h4>';
+        html += '<h4><b><font color="darkgray">PP</font> : <font color="red">' + data.pp + 'pp</font>(<font color="green">' + globalPPGap + '</font>) (Acc : <font color="#ff7300">' + data.accPp.toFixed(2) + '</font> , Tech : <font color="orange">' + data.techPp.toFixed(2) + '</font> , Pass : <font color="blue">' + data.passPp.toFixed(2) + '</font>)</b></h4>';
+        html += '<h4><b><font color="darkgray">Avg Accuracy</font> : <font color="red">' + (data.scoreStats.averageRankedAccuracy*100).toFixed(2) + '%</font> (SS+:<font color="#ff7300">' + data.scoreStats.sspPlays + '</font>, SS:<font color="orange">' + data.scoreStats.ssPlays + '</font>, S+:<font color="blue">' + data.scoreStats.spPlays + '</font>, S:<font color="green">' + data.scoreStats.sPlays + '</font>, A:<font color="gray">' + data.scoreStats.aPlays + '</font>)</b></h4>';
+        html += '<h4><b><font color="darkgray">Play Count(Rank Count)</font> : <font color="red">' + data.scoreStats.totalPlayCount + '</font>(<font color="green">' + data.scoreStats.rankedPlayCount + '</font>)</b></h4>';
         $("#dvtitleArea").empty().append(html).trigger("create");
     }
 

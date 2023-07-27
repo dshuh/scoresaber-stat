@@ -47,7 +47,7 @@ function Map(controlData) {
     obj.defineElements = function() {
 		obj.selStartStar = $("#selStartStar");
 		obj.selEndStar = $("#selEndStar");
-        obj.selOrder = $("#selOrder");
+        obj.selMapSortValue = $("#selMapSortValue");
         obj.txtCountry = $("#txtCountry");
 		obj.btnMapSearch = $("#btnMapSearch");
 		obj.mapContainer = $("#mapContainer");
@@ -167,7 +167,7 @@ function Map(controlData) {
         // #region 개발자 영역 > Grid Formatter callback 함수 구현부
         // #region 개발자 영역 > Grid Formatter callback 함수 구현부
         $.fn.fmatter.convertDownload = function (cellValue,rowObject,options) {
-			if(options.download != "") {
+			if(cellValue != "") {
                 return "<a href='" + cellValue + "'><img src='https://w7.pngwing.com/pngs/596/75/png-transparent-download-now-download-icon-download-button-download-logo-flat-icon-flat-logo-flat-image-button-flat-round-thumbnail.png' width='20px' height='20px' /></a>";
             } else {
                 return "";
@@ -235,7 +235,7 @@ function Map(controlData) {
 
     // Grid Data Binding
     obj.bindGrid = function(data) {
-		for(var i=data.length-1; i>=0; i--) {
+		for(var i=0; i<data.length; i++) {
             data[i].songName = data[i].song.name;
             data[i].songAuthorName = data[i].song.author;
             data[i].stars = (data[i].difficulty.stars != null) ? data[i].difficulty.stars.toFixed(2) : "0";

@@ -19,7 +19,7 @@
                 "parameters": [
                     "var.page_index",
                     "ctrl.selMapSortBy",
-                    "ctrl.selOrder",
+                    "ctrl.selMapSortValue",
                     "ctrl.selStartStar",
                     "ctrl.selEndStar",
                     "ctrl.selPageCount"
@@ -280,6 +280,13 @@
                 "in": "query",
                 "required": true
             },{
+                "id": "ctrl.selMapSortValue",
+                "name": "order",
+                "value_type": "control",
+                "value": "selMapSortValue",
+                "type": "string",
+                "in": "query"
+            },{
                 "id": "ctrl.selOrder",
                 "name": "order",
                 "value_type": "control",
@@ -460,12 +467,12 @@
             "options": [
                 {
                     "value": "asc",
-                    "text": "asc"
+                    "text": "asc",
+                    "selected": "selected"
                 },
                 {
                     "value": "desc",
-                    "text": "desc",
-                    "selected": "selected"
+                    "text": "desc"
                 }
             ]
         },{
@@ -610,12 +617,9 @@
             "title": "Page Count",
             "options": [
                 {
-                    "value": "5000",
-                    "text": "전체",
-                    "selected": "selected"
-                },{
                     "value": "50",
-                    "text": "50"
+                    "text": "50",
+                    "selected": "selected"
                 },
                 {
                     "value": "500",
@@ -624,6 +628,10 @@
                 {
                     "value": "1000",
                     "text": "1000"
+                },
+                {
+                    "value": "5000",
+                    "text": "전체"
                 }
             ]
         },{
@@ -1002,7 +1010,7 @@
                     "selStartStar",
                     "selEndStar",
                     "selMapSortBy",
-                    "selOrder",
+                    "selMapSortValue",
                     "selPageCount",
                     "{newline}",
                     "btnMapSearch"
@@ -1029,7 +1037,7 @@
                         { 
                             "name": "stars", 
                             "index": "stars", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1048,20 +1056,20 @@
                         { 
                             "name": "songName", 
                             "index": "songName", 
-                            "width": 150,
+                            "width": 250,
                             "text": "name",
                             "formatter": "convertSongTitle"
                         },
                         { 
                             "name": "diff", 
                             "index": "diff", 
-                            "width": 80,
+                            "width": 60,
                             "text": "diff"
                         },
                         { 
                             "name": "accRating", 
                             "index": "accRating", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1073,7 +1081,7 @@
                         { 
                             "name": "techRating", 
                             "index": "techRating", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1085,7 +1093,7 @@
                         { 
                             "name": "passRating", 
                             "index": "passRating", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1121,18 +1129,18 @@
                         { 
                             "name": "noteCount", 
                             "index": "noteCount", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
                                 "sopt": ["gt", "eq"]
                             },
-                            "text": "noteCount"
+                            "text": "notes"
                         },
                         { 
                             "name": "njs", 
                             "index": "njs", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1143,7 +1151,7 @@
                         { 
                             "name": "nps", 
                             "index": "nps", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1154,7 +1162,7 @@
                         { 
                             "name": "plays", 
                             "index": "plays", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1165,7 +1173,7 @@
                         { 
                             "name": "votes", 
                             "index": "votes", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1176,7 +1184,7 @@
                         { 
                             "name": "upvotes", 
                             "index": "upvotes", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1187,7 +1195,7 @@
                         { 
                             "name": "downvotes", 
                             "index": "downvotes", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1198,7 +1206,7 @@
                         { 
                             "name": "rankedTime", 
                             "index": "rankedTime", 
-                            "width": 70,
+                            "width": 120,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1272,14 +1280,14 @@
                         { 
                             "name": "download", 
                             "index": "download", 
-                            "width": 60,
+                            "width": 30,
                             "text": "down",
                             "formatter": "convertDownload"
                         },
                         { 
                             "name": "rank", 
                             "index": "rank", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "text": "Rank",
                             "searchoptions": {
@@ -1291,7 +1299,7 @@
                         { 
                             "name": "stars", 
                             "index": "stars", 
-                            "width": 60,
+                            "width": 50,
                             "sorttype":"int",
                             "text": "Stars",
                             "searchoptions": {
@@ -1314,16 +1322,16 @@
                             "formatter": "convertSongTitle"
                         },
                         { 
-                            "name": "songAuthorName", 
-                            "index": "songAuthorName", 
-                            "width": 120,
-                            "text": "SongAuthor"
-                        },
-                        { 
                             "name": "diff", 
                             "index": "diff", 
                             "width": 70,
                             "text": "Difficulty"
+                        },
+                        { 
+                            "name": "songAuthorName", 
+                            "index": "songAuthorName", 
+                            "width": 120,
+                            "text": "SongAuthor"
                         },
                         { 
                             "name": "accuracy", 
@@ -1349,6 +1357,78 @@
                             "formatter": "convertPP"
                         },
                         { 
+                            "name": "accRating", 
+                            "index": "accRating", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "AccStar",
+                            "formatter": "convertAccRating"
+                        },
+                        { 
+                            "name": "accPP", 
+                            "index": "accPP", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "AccPP",
+                            "formatter": "convertAccPP"
+                        },
+                        { 
+                            "name": "techRating", 
+                            "index": "techRating", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "TechStar",
+                            "formatter": "convertTechRating"
+                        },
+                        { 
+                            "name": "techPP", 
+                            "index": "techPP", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "TechPP",
+                            "formatter": "convertTechPP"
+                        },
+                        { 
+                            "name": "passRating", 
+                            "index": "passRating", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "PassStar",
+                            "formatter": "convertPassRating"
+                        },
+                        { 
+                            "name": "passPP", 
+                            "index": "passPP", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "PassPP",
+                            "formatter": "convertPassPP"
+                        },
+                        { 
                             "name": "mypp", 
                             "index": "mypp", 
                             "width": 70,
@@ -1361,17 +1441,10 @@
                             "hidden": true
                         },
                         { 
-                            "name": "mistakes", 
-                            "index": "mistakes", 
-                            "width": 70,
-                            "sorttype":"int",
-                            "text": "mistakes"
-                        },
-                        { 
                             "name": "modifiers", 
                             "index": "modifiers", 
                             "width": 70,
-                            "text": "modifiers"
+                            "text": "mod"
                         },
                         { 
                             "name": "duration", 
@@ -1382,17 +1455,10 @@
                             "formatter": "convertSongTime"
                         },
                         { 
-                            "name": "plays", 
-                            "index": "plays", 
-                            "width": 60,
-                            "sorttype":"int",
-                            "text": "plays"
-                        },
-                        { 
                             "name": "noteCount", 
                             "index": "noteCount", 
-                            "width": 70,
-                            "text": "noteCount",
+                            "width": 50,
+                            "text": "notes",
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1400,23 +1466,37 @@
                             }
                         },
                         { 
-                            "name": "bpm", 
-                            "index": "bpm", 
-                            "width": 60,
+                            "name": "mistakes", 
+                            "index": "mistakes", 
+                            "width": 50,
                             "sorttype":"int",
-                            "text": "bpm"
+                            "text": "miss"
+                        },
+                        { 
+                            "name": "plays", 
+                            "index": "plays", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "plays"
                         },
                         { 
                             "name": "njs", 
                             "index": "njs", 
-                            "width": 60,
+                            "width": 50,
                             "sorttype":"int",
                             "text": "njs"
                         },
                         { 
+                            "name": "nps", 
+                            "index": "nps", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "nps"
+                        },
+                        { 
                             "name": "rating", 
                             "index": "rating", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "text": "rating",
                             "searchoptions": {
@@ -1659,7 +1739,7 @@
                         { 
                             "name": "stars", 
                             "index": "stars", 
-                            "width": 70,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,

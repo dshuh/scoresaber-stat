@@ -14,7 +14,6 @@ function Ranking(controlData) {
     obj.pageSize = 50; // list 페이징 처리를 page_no로 처리할 경우 사용.
     obj.dataCount = 0; // list 조회 시 전체 카운트 제공 시 사용.
     obj.total_count = 0;
-    obj.loopCnt = 1;
     obj.statusSearch = "none";
     // #endregion
 
@@ -23,8 +22,7 @@ function Ranking(controlData) {
         obj.createRankingLayer();
         obj.pageRankingLayer.show();
         //obj.selPageSize.val(getUrlParameter('page_size'));
-        obj.selPageIndex.val(getUrlParameter('page_index'));
-        obj.rankingApiCall("pages");
+        // obj.rankingApiCall("pages");
     };
 
     // 서비스를 비활성화를 위한 리셋 설정을 담당한다.
@@ -55,8 +53,9 @@ function Ranking(controlData) {
 
     // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 변수를 정의한다.
     obj.defineElements = function() {
-		obj.selPageIndex = $("#selPageIndex");
-		obj.selPageSize = $("#selPageSize");
+		obj.selCountryList = $("#selCountryList");
+		obj.selRankSortBy = $("#selRankSortBy");
+		obj.selRankOrder = $("#selRankOrder");
 		obj.btnRankSearch = $("#btnRankSearch");
 		obj.rankingContainer = $("#rankingContainer");
 		obj.rankingPager = $("#rankingPager");
@@ -65,25 +64,21 @@ function Ranking(controlData) {
     obj.defineElementsEvent = function() {
         // #region 개발자 영역 > Config 정의한 Controls 이벤트 등록
         // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 이벤트 함수를 등록한다.
-		obj.selPageSize.change(function(){
-            //obj.btnRankSearch.click();
-        });
-
-        obj.selPageIndex.change(function(){
+		
+        obj.selCountryList.change(function(){
             obj.btnRankSearch.click();
-        });
-        
+		});
+        obj.selRankSortBy.change(function(){
+            obj.btnRankSearch.click();
+		});
+        obj.selRankOrder.change(function(){
+            obj.btnRankSearch.click();
+		});
+
 		obj.btnRankSearch.click(function () {
-			obj.setGrid(); //Grid 조회 시 주석 해제
-            obj.loopCnt = 1;
-            obj.pageSize = parseInt(obj.selPageSize.val());
-            if (obj.pageSize == 1) {
-                obj.pageIndex = (obj.pageSize * parseInt(obj.selPageIndex.val()));
-            } else {
-                obj.pageIndex = (obj.pageSize * (parseInt(obj.selPageIndex.val())-1)) + 1;
-            }
-            
-            obj.statusSearch = "none";
+			obj.pageIndex = 1;
+
+            obj.setGrid(); //Grid 조회 시 주석 해제
             obj.rankingApiCall("get_ranking");
 		});
 		// obj.btnSearch.click(function () {
@@ -200,59 +195,37 @@ function Ranking(controlData) {
         // #endregion
 
         // #region 개발자 영역 > Grid Formatter callback 함수 구현부
+        $.fn.fmatter.convertGap = function (cellValue,rowObject,options) {
+            return cellValue > 0 ? '▲'+ Math.abs(cellValue) : cellValue < 0 ? '▼'+ Math.abs(cellValue) : '-';
+        };
+        $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
+			if(cellValue != 0) {
+                return cellValue.toFixed(2) + "pp";
+            } else {
+                return "-";
+            }
+        };
+        $.fn.fmatter.convertAccuracy = function (cellValue,rowObject,options) {
+			return (cellValue == 0) ? "-" : cellValue.toFixed(2) +"%";
+        };
+        $.fn.fmatter.convertTime = function (cellValue,rowObject,options) {
+			return ConvertToString("timestamp", cellValue);
+        };
         $.fn.fmatter.convertPlayerName = function (cellValue,rowObject,options) {
-			return '<a href="https://scoresaber.com/u/' + options.id + '" target="_blank"><font color="green">' + options.name + '</font></a>';
+			return '<a href="https://www.beatleader.xyz/u/' + options.id + '" target="_blank"><font color="green">' + cellValue + '</font></a>';
         };
         $.fn.fmatter.convertAvartar = function (cellValue,rowObject,options) {
-			return "<img src='" + options.profilePicture + "' border=0 width=24 height=24 />";
+			return "<img src='" + cellValue + "' border=0 width=24 height=24 />";
+        };
+        $.fn.fmatter.convertClans = function (cellValue,rowObject,options) {
+			var clans = '';
+            for(var i=0;i<cellValue.length;i++) {
+                clans += '<a href="https://www.beatleader.xyz/clan/' + cellValue[i].tag + '" target="_blank" style="bgcolor:black;"><font color="' + cellValue[i].color + '">' + cellValue[i].tag + '</font></a> ';
+            }
+            return clans;
         };
         $.fn.fmatter.convertCountry = function (cellValue,rowObject,options) {
-			return "<img src='https://new.scoresaber.com/api/static/flags/" + options.country.toLowerCase() + ".png' title=" + options.country + " border=0  width=16 height=11/>";
-        };
-        $.fn.fmatter.convertPeriodRankGap = function (cellValue,rowObject,options) {
-            var result = "";
-            if (cellValue < 0) {
-                result = "▼" + Math.abs(cellValue);
-            } else if (cellValue > 0) {
-                result = "▲" + cellValue;
-            } else if (cellValue == 0) {
-                result = "-";
-            }
-            return result;
-        };
-        $.fn.fmatter.convertMonthRankGap = function (cellValue,rowObject,options) {
-            var result = "";
-            var splitHistory = options.histories.split(",");
-            if (splitHistory[splitHistory.length - 30] > 900000) {
-                result = "NEW";
-            } else {
-                var monthGap = splitHistory[splitHistory.length - 30] - options.rank;
-                if (monthGap < 0) {
-                    result = "▼" + Math.abs(monthGap);
-                } else if (monthGap > 0) {
-                    result = "▲" + monthGap;
-                } else if (monthGap == 0) {
-                    result = "-";
-                }
-            }
-            return result;
-        };
-        $.fn.fmatter.convertDailyRankGap = function (cellValue,rowObject,options) {
-            var result = "";
-            var splitHistory = options.histories.split(",");
-            if (splitHistory[splitHistory.length - 2] > 900000) {
-                result = "NEW";
-            } else {
-                var dailyGap = splitHistory[splitHistory.length-2] - options.rank;
-                if (dailyGap < 0) {
-                    result = "▼" + Math.abs(dailyGap);
-                } else if (dailyGap > 0) {
-                    result = "▲" + dailyGap;
-                } else if (dailyGap == 0) {
-                    result = "-";
-                }
-            }
-            return result;
+			return "<img src='https://www.beatleader.xyz/assets/flags/" + cellValue.toLowerCase() + ".png' title=" + cellValue + " border=0  width=16 height=11/>";
         };
         // #endregion
         
@@ -261,37 +234,38 @@ function Ranking(controlData) {
 
     // Grid Data Binding
     obj.bindGrid = function(data) {
-        console.log(data);
+        console.log(data.length);
 		for(var i=0; i<data.length; i++) {
-            console.log(data[i]);
-            var splitHistory = data[i].histories.split(",");
-            //data[i].weekly_gap = data[i].difference;
-            if (splitHistory[splitHistory.length - 7] > 900000) {
-                data[i].weekly_gap = "NEW";
-            } else {
-                data[i].weekly_gap = splitHistory[splitHistory.length-7] - data[i].rank;
-            }
-            if (splitHistory[splitHistory.length - 1] > 900000) {
-                data[i].daily_gap = "NEW";
-            } else {
-                data[i].daily_gap = splitHistory[splitHistory.length-1] - data[i].rank;
-            }
-            if (splitHistory.length < 30) {
-                data[i].monthly_gap = "NEW";
-            } else if (splitHistory[splitHistory.length - 30] > 900000) {
-                data[i].monthly_gap = "COMEBACK";
-            } else {
-                data[i].monthly_gap = splitHistory[splitHistory.length - 30] - data[i].rank;
-            }
-        
+            // var globalRankPage = parseInt((data[i].rank - 1) / 50) + 1;
+            // var countryRankPage = parseInt((data[i].countryRank - 1) / 50) + 1;
+            data[i].globalRankGap = data[i].lastWeekRank-data[i].rank;
+            data[i].countryRankGap = data[i].lastWeekCountryRank-data[i].countryRank;
+            data[i].globalPPGap = (data[i].pp-data[i].lastWeekPp).toFixed(2);
+            // var clans = '';
+            
+            // data[i].clans = clans;
+            data[i].averageRank = data[i].scoreStats.averageRank.toFixed(2);
+            data[i].accuracy = (data[i].scoreStats.averageRankedAccuracy*100);
+            data[i].weightedAccuracy = (data[i].scoreStats.averageWeightedRankedAccuracy*100);
+            data[i].topPp = data[i].scoreStats.topPp;
+            data[i].maxStreak = data[i].scoreStats.maxStreak;
+            data[i].watchedReplays = data[i].scoreStats.anonimusReplayWatched;
+            data[i].sspPlays = data[i].scoreStats.sspPlays;
+            data[i].ssPlays = data[i].scoreStats.ssPlays;
+            data[i].spPlays = data[i].scoreStats.spPlays;
+            data[i].sPlays = data[i].scoreStats.sPlays;
+            data[i].aPlays = data[i].scoreStats.aPlays;
+            data[i].lastScoreTime = data[i].scoreStats.lastScoreTime.toString();
+            data[i].totalPlayCount = data[i].scoreStats.totalPlayCount;
+            data[i].rankedPlayCount = data[i].scoreStats.rankedPlayCount;
+            
             // #region 개발자 영역 > paging(more) 처리를 위한 셋팅
 			if(i == data.length - 1) {
 				obj.pageIndex++;
 			}
 			// #endregion
 			// #region 개발자 영역 > Grid에 UUID Mapping
-            console.log(data[i]);
-			obj.rankingContainer.jqGrid("addRowData", data[i].rank, data[i]);
+			obj.rankingContainer.jqGrid("addRowData", data[i].id, data[i]);
 			// #endregion
 		}
 		var gridCount = obj.rankingContainer.getGridParam("reccount");
@@ -394,26 +368,13 @@ function Ranking(controlData) {
         };
 
         // #region 개발자 영역 > API callback 함수
-		var callback_get_pages = function(data) {
-            obj.dataCount = (data.metadata != undefined) ? data.metadata.total : 0;
-            obj.total_count = data.pages*50;
-            var optionHtml = "";
-            for (var i=2;i<=obj.dataCount;i++) {
-                if(i <= 10 || i%5 == 0) {
-                    optionHtml += '<option value="' + i + '">' + i + ' page</option>';
-                }
-            }
-            obj.selPageIndex.append(optionHtml).trigger("create");;
-        };
         
 		var callback_get_ranking = function(data) {
+            obj.dataCount = (data != undefined) ? data.data.length : 0;
+            obj.max_page = parseInt((data.metadata.total - 1) / data.metadata.itemsPerPage) + 1;
+            obj.total_count = data.metadata.total;//(data.metadata.total * data.metadata.itemsPerPage);
             if (obj.dataCount > 0) {
-                obj.bindGrid(data.players);
-                
-                if(obj.loopCnt < parseInt(obj.selPageSize.val())){
-                    obj.rankingApiCall("get_ranking");
-                    obj.loopCnt++;
-                }
+                obj.bindGrid(data.data);
             } else {
                 return null
             }

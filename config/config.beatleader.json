@@ -113,28 +113,15 @@
         ],
         "ranking": [
             {
-                "id": "pages",
-                "path": "/players",
-                "method": "GET",
-                "content_type": "application/x-www-form-urlencoded",
-                "callback": "callback_get_pages",
-                "parameters": [
-                    "ctrl.country",
-                    "var.page_index"
-                ],
-                "message": {
-                    "confirm": "",
-                    "success": "",
-                    "error": "An error occurred during ranking inquiry."
-                }
-            },{
                 "id": "get_ranking",
-                "path": "/players",
+                "path": "/players?mapsType=ranked&ppType=general",
                 "method": "GET",
                 "content_type": "application/x-www-form-urlencoded",
                 "callback": "callback_get_ranking",
                 "parameters": [
                     "ctrl.country",
+                    "ctrl.selRankSortBy",
+                    "ctrl.selRankOrder",
                     "var.page_index"
                 ],
                 "message": {
@@ -258,6 +245,22 @@
                 "in": "query",
                 "required": true
             },{
+                "id": "ctrl.selRankSortBy",
+                "name": "sortBy",
+                "value_type": "control",
+                "value": "selRankSortBy",
+                "type": "string",
+                "in": "query",
+                "required": true
+            },{
+                "id": "ctrl.selRankOrder",
+                "name": "order",
+                "value_type": "control",
+                "value": "selRankOrder",
+                "type": "string",
+                "in": "query",
+                "required": true
+            },{
                 "id": "ctrl.selStartStar",
                 "name": "stars_from",
                 "value_type": "control",
@@ -304,7 +307,7 @@
                 "id": "ctrl.country",
                 "name": "countries",
                 "value_type": "control",
-                "value": "txtCountry",
+                "value": "selCountryList",
                 "type": "string",
                 "in": "query"
             },{
@@ -611,6 +614,58 @@
                 }
             ]
         },{
+            "id": "selRankSortBy",
+            "name": "selRankSortBy",
+            "tag": "select",
+            "title": "Sort Type",
+            "options": [
+                {
+                    "value": "pp",
+                    "text": "PP",
+                    "selected": "selected"
+                },
+                {
+                    "value": "weightedAcc",
+                    "text": "weightedAcc"
+                },
+                {
+                    "value": "topPp",
+                    "text": "topPp"
+                },
+                {
+                    "value": "maxStreak",
+                    "text": "maxStreak"
+                },
+                {
+                    "value": "playCount",
+                    "text": "playCount"
+                },
+                {
+                    "value": "weightedRank",
+                    "text": "weightedRank"
+                },
+                {
+                    "value": "replaysWatched",
+                    "text": "replaysWatched"
+                }
+            ]
+        },{
+            "id": "selRankOrder",
+            "name": "selRankOrder",
+            "tag": "select",
+            "title": "Order Type",
+            "options": [
+                {
+                    "value": "desc",
+                    "text": "desc",
+                    "selected": "selected"
+                },
+                {
+                    "value": "asc",
+                    "text": "asc"
+                }
+            ]
+        },{
             "id": "selPageCount",
             "name": "selPageCount",
             "tag": "select",
@@ -633,6 +688,266 @@
                     "value": "5000",
                     "text": "전체"
                 }
+            ]
+        },{
+            "id": "selCountryList",
+            "name": "selCountryList",
+            "tag": "select",
+            "title": "Countries",
+            "options": [
+                {"value": "", "text": "country","selected": "selected"},
+                {"value": "KR", "text": "Korea, Republic of"},
+                {"value": "US", "text": "United States"},
+                {"value": "JP", "text": "Japan"},
+                {"value": "GB", "text": "United Kingdom"},
+                {"value": "AU", "text": "Australia"},
+                {"value": "CA", "text": "Canada"},
+                {"value": "FR", "text": "France"},
+                {"value": "DE", "text": "Germany"},
+                {"value": "HK", "text": "Hong Kong"},
+                {"value": "IN", "text": "India"},
+                {"value": "ID", "text": "Indonesia"},
+                {"value": "IT", "text": "Italy"},
+                {"value": "KP", "text": "Korea, Democratic People's Republic of"},
+                {"value": "NO", "text": "Norway"},
+                {"value": "SZ", "text": "Swaziland"},
+                {"value": "SE", "text": "Sweden"},
+                {"value": "TH", "text": "Thailand"},
+                {"value": "AF", "text": "Afghanistan"},
+                {"value": "AX", "text": "Aland Islands"},
+                {"value": "AL", "text": "Albania"},
+                {"value": "DZ", "text": "Algeria"},
+                {"value": "AS", "text": "American Samoa"},
+                {"value": "AD", "text": "Andorra"},
+                {"value": "AO", "text": "Angola"},
+                {"value": "AI", "text": "Anguilla"},
+                {"value": "AQ", "text": "Antarctica"},
+                {"value": "AG", "text": "Antigua and Barbuda"},
+                {"value": "AR", "text": "Argentina"},
+                {"value": "AM", "text": "Armenia"},
+                {"value": "AW", "text": "Aruba"},
+                {"value": "AT", "text": "Austria"},
+                {"value": "AZ", "text": "Azerbaijan"},
+                {"value": "BS", "text": "Bahamas"},
+                {"value": "BH", "text": "Bahrain"},
+                {"value": "BD", "text": "Bangladesh"},
+                {"value": "BB", "text": "Barbados"},
+                {"value": "BY", "text": "Belarus"},
+                {"value": "BE", "text": "Belgium"},
+                {"value": "BZ", "text": "Belize"},
+                {"value": "BJ", "text": "Benin"},
+                {"value": "BM", "text": "Bermuda"},
+                {"value": "BT", "text": "Bhutan"},
+                {"value": "BO", "text": "Bolivia"},
+                {"value": "BQ", "text": "Bonaire, Sint Eustatius and Saba"},
+                {"value": "BA", "text": "Bosnia and Herzegovina"},
+                {"value": "BW", "text": "Botswana"},
+                {"value": "BV", "text": "Bouvet Island"},
+                {"value": "BR", "text": "Brazil"},
+                {"value": "IO", "text": "British Indian Ocean Territory"},
+                {"value": "BN", "text": "Brunei Darussalam"},
+                {"value": "BG", "text": "Bulgaria"},
+                {"value": "BF", "text": "Burkina Faso"},
+                {"value": "BI", "text": "Burundi"},
+                {"value": "KH", "text": "Cambodia"},
+                {"value": "CM", "text": "Cameroon"},
+                {"value": "CV", "text": "Cape Verde"},
+                {"value": "KY", "text": "Cayman Islands"},
+                {"value": "CF", "text": "Central African Republic"},
+                {"value": "TD", "text": "Chad"},
+                {"value": "CL", "text": "Chile"},
+                {"value": "CN", "text": "China"},
+                {"value": "CX", "text": "Christmas Island"},
+                {"value": "CC", "text": "Cocos (Keeling) Islands"},
+                {"value": "CO", "text": "Colombia"},
+                {"value": "KM", "text": "Comoros"},
+                {"value": "CG", "text": "Congo"},
+                {"value": "CD", "text": "Congo, Democratic Republic of the Congo"},
+                {"value": "CK", "text": "Cook Islands"},
+                {"value": "CR", "text": "Costa Rica"},
+                {"value": "CI", "text": "Cote D'Ivoire"},
+                {"value": "HR", "text": "Croatia"},
+                {"value": "CU", "text": "Cuba"},
+                {"value": "CW", "text": "Curacao"},
+                {"value": "CY", "text": "Cyprus"},
+                {"value": "CZ", "text": "Czech Republic"},
+                {"value": "DK", "text": "Denmark"},
+                {"value": "DJ", "text": "Djibouti"},
+                {"value": "DM", "text": "Dominica"},
+                {"value": "DO", "text": "Dominican Republic"},
+                {"value": "EC", "text": "Ecuador"},
+                {"value": "EG", "text": "Egypt"},
+                {"value": "SV", "text": "El Salvador"},
+                {"value": "GQ", "text": "Equatorial Guinea"},
+                {"value": "ER", "text": "Eritrea"},
+                {"value": "EE", "text": "Estonia"},
+                {"value": "ET", "text": "Ethiopia"},
+                {"value": "FK", "text": "Falkland Islands (Malvinas)"},
+                {"value": "FO", "text": "Faroe Islands"},
+                {"value": "FJ", "text": "Fiji"},
+                {"value": "FI", "text": "Finland"},
+                {"value": "GF", "text": "French Guiana"},
+                {"value": "PF", "text": "French Polynesia"},
+                {"value": "TF", "text": "French Southern Territories"},
+                {"value": "GA", "text": "Gabon"},
+                {"value": "GM", "text": "Gambia"},
+                {"value": "GE", "text": "Georgia"},
+                {"value": "GH", "text": "Ghana"},
+                {"value": "GI", "text": "Gibraltar"},
+                {"value": "GR", "text": "Greece"},
+                {"value": "GL", "text": "Greenland"},
+                {"value": "GD", "text": "Grenada"},
+                {"value": "GP", "text": "Guadeloupe"},
+                {"value": "GU", "text": "Guam"},
+                {"value": "GT", "text": "Guatemala"},
+                {"value": "GG", "text": "Guernsey"},
+                {"value": "GN", "text": "Guinea"},
+                {"value": "GW", "text": "Guinea-Bissau"},
+                {"value": "GY", "text": "Guyana"},
+                {"value": "HT", "text": "Haiti"},
+                {"value": "HM", "text": "Heard Island and McDonald Islands"},
+                {"value": "VA", "text": "Holy See (Vatican City State)"},
+                {"value": "HN", "text": "Honduras"},
+                {"value": "HU", "text": "Hungary"},
+                {"value": "IS", "text": "Iceland"},
+                {"value": "IR", "text": "Iran, Islamic Republic of"},
+                {"value": "IQ", "text": "Iraq"},
+                {"value": "IE", "text": "Ireland"},
+                {"value": "IM", "text": "Isle of Man"},
+                {"value": "IL", "text": "Israel"},
+                {"value": "JM", "text": "Jamaica"},
+                {"value": "JE", "text": "Jersey"},
+                {"value": "JO", "text": "Jordan"},
+                {"value": "KZ", "text": "Kazakhstan"},
+                {"value": "KE", "text": "Kenya"},
+                {"value": "KI", "text": "Kiribati"},
+                {"value": "XK", "text": "Kosovo"},
+                {"value": "KW", "text": "Kuwait"},
+                {"value": "KG", "text": "Kyrgyzstan"},
+                {"value": "LA", "text": "Lao People's Democratic Republic"},
+                {"value": "LV", "text": "Latvia"},
+                {"value": "LB", "text": "Lebanon"},
+                {"value": "LS", "text": "Lesotho"},
+                {"value": "LR", "text": "Liberia"},
+                {"value": "LY", "text": "Libyan Arab Jamahiriya"},
+                {"value": "LI", "text": "Liechtenstein"},
+                {"value": "LT", "text": "Lithuania"},
+                {"value": "LU", "text": "Luxembourg"},
+                {"value": "MO", "text": "Macao"},
+                {"value": "MK", "text": "Macedonia, the Former Yugoslav Republic of"},
+                {"value": "MG", "text": "Madagascar"},
+                {"value": "MW", "text": "Malawi"},
+                {"value": "MY", "text": "Malaysia"},
+                {"value": "MV", "text": "Maldives"},
+                {"value": "ML", "text": "Mali"},
+                {"value": "MT", "text": "Malta"},
+                {"value": "MH", "text": "Marshall Islands"},
+                {"value": "MQ", "text": "Martinique"},
+                {"value": "MR", "text": "Mauritania"},
+                {"value": "MU", "text": "Mauritius"},
+                {"value": "YT", "text": "Mayotte"},
+                {"value": "MX", "text": "Mexico"},
+                {"value": "FM", "text": "Micronesia, Federated States of"},
+                {"value": "MD", "text": "Moldova, Republic of"},
+                {"value": "MC", "text": "Monaco"},
+                {"value": "MN", "text": "Mongolia"},
+                {"value": "ME", "text": "Montenegro"},
+                {"value": "MS", "text": "Montserrat"},
+                {"value": "MA", "text": "Morocco"},
+                {"value": "MZ", "text": "Mozambique"},
+                {"value": "MM", "text": "Myanmar"},
+                {"value": "NA", "text": "Namibia"},
+                {"value": "NR", "text": "Nauru"},
+                {"value": "NP", "text": "Nepal"},
+                {"value": "NL", "text": "Netherlands"},
+                {"value": "AN", "text": "Netherlands Antilles"},
+                {"value": "NC", "text": "New Caledonia"},
+                {"value": "NZ", "text": "New Zealand"},
+                {"value": "NI", "text": "Nicaragua"},
+                {"value": "NE", "text": "Niger"},
+                {"value": "NG", "text": "Nigeria"},
+                {"value": "NU", "text": "Niue"},
+                {"value": "NF", "text": "Norfolk Island"},
+                {"value": "MP", "text": "Northern Mariana Islands"},
+                {"value": "OM", "text": "Oman"},
+                {"value": "PK", "text": "Pakistan"},
+                {"value": "PW", "text": "Palau"},
+                {"value": "PS", "text": "Palestinian Territory, Occupied"},
+                {"value": "PA", "text": "Panama"},
+                {"value": "PG", "text": "Papua New Guinea"},
+                {"value": "PY", "text": "Paraguay"},
+                {"value": "PE", "text": "Peru"},
+                {"value": "PH", "text": "Philippines"},
+                {"value": "PN", "text": "Pitcairn"},
+                {"value": "PL", "text": "Poland"},
+                {"value": "PT", "text": "Portugal"},
+                {"value": "PR", "text": "Puerto Rico"},
+                {"value": "QA", "text": "Qatar"},
+                {"value": "RE", "text": "Reunion"},
+                {"value": "RO", "text": "Romania"},
+                {"value": "RU", "text": "Russian Federation"},
+                {"value": "RW", "text": "Rwanda"},
+                {"value": "BL", "text": "Saint Barthelemy"},
+                {"value": "SH", "text": "Saint Helena"},
+                {"value": "KN", "text": "Saint Kitts and Nevis"},
+                {"value": "LC", "text": "Saint Lucia"},
+                {"value": "MF", "text": "Saint Martin"},
+                {"value": "PM", "text": "Saint Pierre and Miquelon"},
+                {"value": "VC", "text": "Saint Vincent and the Grenadines"},
+                {"value": "WS", "text": "Samoa"},
+                {"value": "SM", "text": "San Marino"},
+                {"value": "ST", "text": "Sao Tome and Principe"},
+                {"value": "SA", "text": "Saudi Arabia"},
+                {"value": "SN", "text": "Senegal"},
+                {"value": "RS", "text": "Serbia"},
+                {"value": "CS", "text": "Serbia and Montenegro"},
+                {"value": "SC", "text": "Seychelles"},
+                {"value": "SL", "text": "Sierra Leone"},
+                {"value": "SG", "text": "Singapore"},
+                {"value": "SX", "text": "St Martin"},
+                {"value": "SK", "text": "Slovakia"},
+                {"value": "SI", "text": "Slovenia"},
+                {"value": "SB", "text": "Solomon Islands"},
+                {"value": "SO", "text": "Somalia"},
+                {"value": "ZA", "text": "South Africa"},
+                {"value": "GS", "text": "South Georgia and the South Sandwich Islands"},
+                {"value": "SS", "text": "South Sudan"},
+                {"value": "ES", "text": "Spain"},
+                {"value": "LK", "text": "Sri Lanka"},
+                {"value": "SD", "text": "Sudan"},
+                {"value": "SR", "text": "Suriname"},
+                {"value": "SJ", "text": "Svalbard and Jan Mayen"},
+                {"value": "CH", "text": "Switzerland"},
+                {"value": "SY", "text": "Syrian Arab Republic"},
+                {"value": "TW", "text": "Taiwan, Province of China"},
+                {"value": "TJ", "text": "Tajikistan"},
+                {"value": "TZ", "text": "Tanzania, United Republic of"},
+                {"value": "TL", "text": "Timor-Leste"},
+                {"value": "TG", "text": "Togo"},
+                {"value": "TK", "text": "Tokelau"},
+                {"value": "TO", "text": "Tonga"},
+                {"value": "TT", "text": "Trinidad and Tobago"},
+                {"value": "TN", "text": "Tunisia"},
+                {"value": "TR", "text": "Turkey"},
+                {"value": "TM", "text": "Turkmenistan"},
+                {"value": "TC", "text": "Turks and Caicos Islands"},
+                {"value": "TV", "text": "Tuvalu"},
+                {"value": "UG", "text": "Uganda"},
+                {"value": "UA", "text": "Ukraine"},
+                {"value": "AE", "text": "United Arab Emirates"},
+                {"value": "UM", "text": "United States Minor Outlying Islands"},
+                {"value": "UY", "text": "Uruguay"},
+                {"value": "UZ", "text": "Uzbekistan"},
+                {"value": "VU", "text": "Vanuatu"},
+                {"value": "VE", "text": "Venezuela"},
+                {"value": "VN", "text": "Viet Nam"},
+                {"value": "VG", "text": "Virgin Islands, British"},
+                {"value": "VI", "text": "Virgin Islands, U.S."},
+                {"value": "WF", "text": "Wallis and Futuna"},
+                {"value": "EH", "text": "Western Sahara"},
+                {"value": "YE", "text": "Yemen"},
+                {"value": "ZM", "text": "Zambia"},
+                {"value": "ZW", "text": "Zimbabwe"}
             ]
         },{
             "id": "selUserList",
@@ -1569,9 +1884,10 @@
             "search_area": {
                 "title": "Set search value for calling Global Ranking lookup API.",
                 "controls": [
-                    "txtCountry",
-                    "selPageSize",
-                    "selPageIndex",
+                    "selCountryList",
+                    "selRankSortBy",
+                    "selRankOrder",
+                    "{newline}",
                     "btnRankSearch"
                 ]
             },
@@ -1588,7 +1904,7 @@
                         { 
                             "name": "rank", 
                             "index": "rank", 
-                            "width": 60,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -1597,36 +1913,77 @@
                             "text": "Rank"
                         },
                         { 
+                            "name": "globalRankGap", 
+                            "index": "globalRankGap", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "Gap",
+                            "formatter": "convertGap"
+                        },
+                        { 
+                            "name": "country", 
+                            "index": "country", 
+                            "width": 40,
+                            "text": "CTRY",
+                            "formatter": "convertCountry"
+                        },
+                        { 
                             "name": "countryRank", 
                             "index": "countryRank", 
-                            "width": 60,
+                            "width": 50,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
                                 "sopt": ["gt", "eq"]
                             },
-                            "text": "CTRY Rank"
+                            "text": "Rank"
                         },
                         { 
-                            "name": "profilePicture", 
-                            "index": "profilePicture", 
-                            "width": 40,
+                            "name": "countryRankGap", 
+                            "index": "countryRankGap", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Gap",
+                            "formatter": "convertGap"
+                        },
+                        { 
+                            "name": "avatar", 
+                            "index": "avatar", 
+                            "width": 30,
                             "text": "AVT",
                             "formatter": "convertAvartar"
                         },
                         { 
                             "name": "name", 
                             "index": "name", 
-                            "width": 210,
-                            "text": "Nickname",
+                            "width": 150,
+                            "text": "Name",
                             "formatter": "convertPlayerName"
                         },
                         { 
-                            "name": "country", 
-                            "index": "country", 
-                            "width": 80,
-                            "text": "CTRY",
-                            "formatter": "convertCountry"
+                            "name": "clans", 
+                            "index": "clans", 
+                            "width": 120,
+                            "text": "Clans",
+                            "formatter": "convertClans"
+                        },
+                        { 
+                            "name": "totalPlayCount", 
+                            "index": "totalPlayCount", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "totalCnt"
+                        },
+                        { 
+                            "name": "rankedPlayCount", 
+                            "index": "rankedPlayCount", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "rankCnt"
                         },
                         { 
                             "name": "pp", 
@@ -1637,34 +1994,193 @@
                                 "searchOperators": true,
                                 "sopt": ["gt", "eq"]
                             },
-                            "text": "PP"
+                            "text": "PP",
+                            "formatter": "convertPP"
                         },
                         { 
-                            "name": "daily_gap", 
-                            "index": "daily_gap", 
+                            "name": "globalPPGap", 
+                            "index": "globalPPGap", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "PPGap",
+                            "formatter": "convertGap"
+                        },
+                        { 
+                            "name": "accuracy", 
+                            "index": "accuracy", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "AvgAcc",
+                            "formatter": "convertAccuracy"
+                        },
+                        { 
+                            "name": "averageRank", 
+                            "index": "averageRank", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "avgRank"
+                        },
+                        { 
+                            "name": "topPp", 
+                            "index": "topPp", 
                             "width": 80,
                             "sorttype":"int",
-                            "text": "Daily Gap"
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "topPp",
+                            "formatter": "convertPP"
                         },
                         { 
-                            "name": "weekly_gap", 
-                            "index": "weekly_gap", 
+                            "name": "accPp", 
+                            "index": "accPp", 
                             "width": 80,
                             "sorttype":"int",
-                            "text": "Weekly Gap"
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "AccPP",
+                            "formatter": "convertPP"
                         },
                         { 
-                            "name": "monthly_gap", 
-                            "index": "monthly_gap", 
+                            "name": "techPp", 
+                            "index": "techPp", 
                             "width": 80,
                             "sorttype":"int",
-                            "text": "Monthly Gap"
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "TechPP",
+                            "formatter": "convertPP"
                         },
                         { 
-                            "name": "id", 
-                            "index": "id", 
-                            "width": 150,
-                            "text": "id"
+                            "name": "passPp", 
+                            "index": "passPp", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "PassPP",
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "sspPlays", 
+                            "index": "sspPlays", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "SS+",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            }
+                        },
+                        { 
+                            "name": "ssPlays", 
+                            "index": "ssPlays", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "SS",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            }
+                        },
+                        { 
+                            "name": "spPlays", 
+                            "index": "spPlays", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "S+",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            }
+                        },
+                        { 
+                            "name": "sPlays", 
+                            "index": "sPlays", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "S",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            }
+                        },
+                        { 
+                            "name": "aPlays", 
+                            "index": "aPlays", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "A",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            }
+                        },
+                        { 
+                            "name": "platform", 
+                            "index": "platform", 
+                            "width": 80,
+                            "text": "Platform"
+                        },
+                        { 
+                            "name": "lastScoreTime", 
+                            "index": "lastScoreTime", 
+                            "width": 120,
+                            "text": "lastplay",
+                            "formatter": "convertTime"
+                        },
+                        { 
+                            "name": "weightedAccuracy", 
+                            "index": "weightedAccuracy", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "weightedAcc",
+                            "formatter": "convertAccuracy"
+                        },
+                        { 
+                            "name": "maxStreak", 
+                            "index": "maxStreak", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "maxStreak"
+                        },
+                        { 
+                            "name": "watchedReplays", 
+                            "index": "watchedReplays", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "replays"
                         }
                     ],
                     "toolbar": {

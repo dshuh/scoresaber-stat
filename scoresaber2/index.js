@@ -30,6 +30,7 @@
 
     obj.init = function () {
         // Layer Template 생성
+        createLeftMenuLayer(obj);
         obj.createHeaderLayer();
         obj.createMenuLayer();
 

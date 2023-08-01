@@ -52,6 +52,8 @@ function Player(controlData) {
     // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 변수를 정의한다.
     obj.defineElements = function() {
 		obj.selUserList = $("#selUserList");
+        obj.selCountryList = $("#selCountryList");
+        obj.btnUserMoreSearch = $("#btnUserMoreSearch");
         obj.txtUserID = $("#txtUserID");
 		obj.selSearchType = $("#selSearchType");
 		obj.btnSearch = $("#btnSearch");
@@ -63,13 +65,22 @@ function Player(controlData) {
     obj.defineElementsEvent = function() {
         // #region 개발자 영역 > Config 정의한 Controls 이벤트 등록
         // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 이벤트 함수를 등록한다.
-		obj.selUserList.change(function(){
+		obj.selCountryList.change(function(){
+            obj.pageUserIndex = 1;
+            obj.selUserList.empty();
+            obj.btnUserMoreSearch.click();
+		});
+        obj.selUserList.change(function(){
             obj.txtUserID.val(this.value);
             obj.btnSearch.click();
 		});
         obj.selUserList.change();
         // obj.txtUserID.text($('#selUserList option:first').text());
         obj.selSearchType.change(function(){
+		});
+		obj.btnUserMoreSearch.click(function () {
+            // obj.setGrid(); //Grid 조회 시 주석 해제
+            obj.playerApiCall(config.controls.find(x => x.id === this.id).api);
 		});
 		obj.btnSearch.click(function () {
             obj.pageIndex = 1;
@@ -200,7 +211,14 @@ function Player(controlData) {
         // #region 개발자 영역 > Grid Formatter callback 함수 구현부
         $.fn.fmatter.convertDownload = function (cellValue,rowObject,options) {
             if(cellValue != "") {
-                return "<a href='" + cellValue + "'><img src='https://w7.pngwing.com/pngs/596/75/png-transparent-download-now-download-icon-download-button-download-logo-flat-icon-flat-logo-flat-image-button-flat-round-thumbnail.png' width='20px' height='20px' /></a>";
+                return "<a href='" + cellValue + "'><img src='https://w7.pngwing.com/pngs/596/75/png-transparent-download-now-download-icon-download-button-download-logo-flat-icon-flat-logo-flat-image-button-flat-round-thumbnail.png' width='25px' height='25px' /></a>";
+            } else {
+                return "";
+            }
+        };
+        $.fn.fmatter.convertReplay = function (cellValue,rowObject,options) {
+            if(cellValue != "") {
+                return "<a href='https://replay.beatleader.xyz/?scoreId=" + cellValue + "' target='_blank'><img src='https://www.beatleader.xyz/assets/bs-pepe.gif' width='25px' height='25px' /></a>";
             } else {
                 return "";
             }
@@ -217,10 +235,10 @@ function Player(controlData) {
 			return "<a href='https://www.beatleader.xyz/leaderboard/global/" + options.leaderboard.id + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
         };
         $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
-			return (cellValue == 0) ? "-" : ConvertToString("pp", options);
+			return (cellValue == 0) ? "-" : cellValue.toFixed(2) + "pp";
         };
         $.fn.fmatter.convertMyPP = function (cellValue,rowObject,options) {
-			return ConvertToString("mypp", options);
+			return (cellValue == 0) ? "-" : cellValue.toFixed(2) + "pp";
         };
         $.fn.fmatter.convertMaxPP = function (cellValue,rowObject,options) {
 			return ConvertToString("maxPP", options);
@@ -232,7 +250,10 @@ function Player(controlData) {
 			return ConvertToString("difficulty", options);
         };
         $.fn.fmatter.convertAccuracy = function (cellValue,rowObject,options) {
-			return ConvertToString("accuracy", options) + "%";
+			return (cellValue == 0) ? "-" : cellValue.toFixed(2) + "%";
+        };
+        $.fn.fmatter.convertAccPoint = function (cellValue,rowObject,options) {
+			return (cellValue == 0) ? "-" : cellValue.toFixed(2);
         };
         $.fn.fmatter.convertRating = function (cellValue,rowObject,options) {
 			return ConvertToString("rating", options) + "%";
@@ -322,7 +343,7 @@ function Player(controlData) {
             //     data[i].rating = 0 + "%";
             // }
             
-            data[i].id = data[i].leaderboard.id;
+            // data[i].id = data[i].leaderboard.id;
             // data[i].rank = data[i].rank;
             data[i].songName = data[i].leaderboard.song.name;
             data[i].songAuthorName = data[i].leaderboard.song.author;
@@ -332,10 +353,11 @@ function Player(controlData) {
             data[i].mistakes = data[i].badCuts + data[i].missedNotes + data[i].wallsHit;
             
             data[i].accuracy = (data[i].leaderboard.difficulty.maxScore > 0) ? 
-                ((data[i].baseScore * 100) / data[i].leaderboard.difficulty.maxScore).toFixed(2) : 
+                ((data[i].baseScore * 100) / data[i].leaderboard.difficulty.maxScore) : 
                 0;
-            data[i].pp = data[i].pp.toFixed(2);
-            data[i].mypp = (data[i].pp * data[i].weight).toFixed(2);
+            data[i].accPoint = (data[i].accLeft + data[i].accRight)/2;
+            // data[i].pp = data[i].pp.toFixed(2);
+            data[i].mypp = (data[i].pp * data[i].weight);
             // data[i].diff = data[i].leaderboard.difficulty.difficultyName;
             data[i].diff = (data[i].leaderboard.difficulty.value == 1) ? "Easy" : 
                 (data[i].leaderboard.difficulty.value == 3) ? "Normal" : 
@@ -349,7 +371,7 @@ function Player(controlData) {
             
             data[i].noteCount = data[i].leaderboard.difficulty.notes;
             data[i].njs = data[i].leaderboard.difficulty.njs;
-            data[i].nps = data[i].leaderboard.difficulty.nps;
+            data[i].nps = data[i].leaderboard.difficulty.nps.toFixed(2);
             data[i].rankedTime = data[i].leaderboard.difficulty.rankedTime.toString();
             data[i].diffValue = data[i].leaderboard.difficulty.value;
             
@@ -368,7 +390,7 @@ function Player(controlData) {
 			}
 			// #endregion
 			// #region 개발자 영역 > Grid에 UUID Mapping
-			obj.playerContainer.jqGrid("addRowData", data[i].id, data[i]);
+			obj.playerContainer.jqGrid("addRowData", data[i].leaderboardId, data[i]);
 			// #endregion
 		}
 		var gridCount = obj.playerContainer.getGridParam("reccount");
@@ -539,6 +561,23 @@ function Player(controlData) {
             //     obj.statusAllSearch = "process";
             //     obj.playerApiCall("get_all_player");
             // }
+		};
+
+        var callback_get_ranking = function(data) {
+            obj.userDataCount = (data != undefined) ? data.data.length : 0;
+            obj.user_max_page = parseInt((data.metadata.total - 1) / data.metadata.itemsPerPage) + 1;
+            obj.user_total_count = data.metadata.total;//(data.metadata.total * data.metadata.itemsPerPage);
+            if (obj.userDataCount > 0) {
+                var iterHtml = "";
+                iterHtml += "<option value='' selected='selected'>select</option>";
+                for (var i = 0; i < data.data.length; i++) {
+                    iterHtml += "<option value='" + data.data[i].id + "'>(" + data.data[i].rank + ") " + data.data[i].name + "</option>";
+                }
+                obj.selUserList.append(iterHtml).trigger('create');
+                obj.pageUserIndex++;
+            } else {
+                return null
+            }
 		};
 
         // #endregion

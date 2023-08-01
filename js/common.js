@@ -293,48 +293,13 @@ function createLeftMenuLayer(obj) {
 
     var html = '\
         <ul data-role="listview">\
-            <li><a data-role="button">Stove Backend Tools</a></li>\
-            <li><a id="hpZelosLayer">zelos</a></li>\
-            <li><a id="hpDynocapsLayer">dynocaps</a></li>\
-            <li><a id="hpCerberusLayer">cerberus</a></li>\
-            <li><a id="hpTgwLayer">tgw</a></li>\
-            <li><a id="hpRBACLayer">rbac</a></li>\
-            <li><a id="hpExampleLayer">example</a></li>\
+            <li><a data-role="button">Game Tools</a></li>\
+            <li><a href="../scoresaber/index.html">ScoreSaber</a></li>\
+            <li><a href="../scoresaber2/index.html">ScoreSaber2</a></li>\
+            <li><a href="../beatleader/index.html">BeatLeader</a></li>\
             <li></li>\
-            <li><a href="http://wiki.smilegate.net:8090/pages/viewpage.action?pageId=85093090" target="_blank">Wiki Guide</a></li>\
         </ul>\
     ';
 
     obj.navpanel_left.empty().append(html).trigger('create');
-
-    obj.hpZelosLayer = $("#hpZelosLayer");
-    obj.hpDynocapsLayer = $("#hpDynocapsLayer");
-    obj.hpCerberusLayer = $("#hpCerberusLayer");
-    obj.hpTgwLayer = $("#hpTgwLayer");
-    obj.hpRBACLayer = $("#hpRBACLayer");
-    obj.hpExampleLayer = $("#hpExampleLayer");
-
-    obj.hpZelosLayer.click(function () {
-        location.href = './zelos';
-    });
-
-    obj.hpDynocapsLayer.click(function () {
-        location.href = './dynocaps';
-    });
-
-    obj.hpCerberusLayer.click(function () {
-        location.href = './cerberus';
-    });
-    
-    obj.hpTgwLayer.click(function () {
-        location.href = './tgw';
-    });
-    
-    obj.hpRBACLayer.click(function () {
-        location.href = './rbac';
-    });
-    
-    obj.hpExampleLayer.click(function () {
-        location.href = './example';
-    });
 };

@@ -37,11 +37,11 @@ function Compare(controlData) {
         obj.selectedRankIDs = [];
         obj.pageIndex1 = 1;
         obj.pageIndex2 = 1;
+        obj.userPageIndex1 = 1;
+        obj.userPageIndex2 = 1;
         obj.dataCount1 = 0;
         obj.dataCount2 = 0;
         obj.total_count = 0;
-        obj.statusAllSearch1 = "none";
-        obj.statusAllSearch2 = "none";
         // #endregion
 
         obj.checkedColNames = [];
@@ -62,10 +62,15 @@ function Compare(controlData) {
     // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 변수를 정의한다.
     obj.defineElements = function() {
 		obj.selUserList1 = $("#selUserList1");
+        obj.selCountryList1 = $("#selCountryList1");
 		obj.txtUserID1 = $("#txtUserID1");
+		obj.btnUserMoreSearch1 = $("#btnUserMoreSearch1");
+
 		obj.selUserList2 = $("#selUserList2");
+        obj.selCountryList2 = $("#selCountryList2");
 		obj.txtUserID2 = $("#txtUserID2");
-        obj.txtGetPages = $("#txtGetPages");
+		obj.btnUserMoreSearch2 = $("#btnUserMoreSearch2");
+
 		obj.btnCompareSearch = $("#btnCompareSearch");
 		obj.compareContainer = $("#compareContainer");
 		obj.comparePager = $("#comparePager");
@@ -74,22 +79,42 @@ function Compare(controlData) {
     obj.defineElementsEvent = function() {
         // #region 개발자 영역 > Config 정의한 Controls 이벤트 등록
         // config 파일의 root > menu > {search_area | contents_area} > controls 항목들에 대한 이벤트 함수를 등록한다.
-		obj.selUserList1.change(function(){
+		obj.selCountryList1.change(function(){
+            obj.pageUserIndex1 = 1;
+            obj.selUserList1.empty();
+            obj.btnUserMoreSearch1.click();
+		});
+        obj.selUserList1.change(function(){
             obj.txtUserID1.val(this.value);
 		});
         obj.selUserList1.change();
+
+        obj.btnUserMoreSearch1.click(function () {
+            // obj.setGrid(); //Grid 조회 시 주석 해제
+            obj.compareApiCall(config.controls.find(x => x.id === this.id).api);
+		});
+
+        obj.selCountryList2.change(function(){
+            obj.pageUserIndex2 = 1;
+            obj.selUserList2.empty();
+            obj.btnUserMoreSearch2.click();
+		});
         obj.selUserList2.change(function(){
             obj.txtUserID2.val(this.value);
 		});
         obj.selUserList2.change();
+
+        obj.btnUserMoreSearch2.click(function () {
+            // obj.setGrid(); //Grid 조회 시 주석 해제
+            obj.compareApiCall(config.controls.find(x => x.id === this.id).api);
+		});
+
         obj.btnCompareSearch.click(function () {
             obj.setGrid(); //Grid 조회 시 주석 해제
             obj.pageIndex1 = 1;
             obj.pageIndex2 = 1;
             obj.dataCount1 = 0;
             obj.dataCount2 = 0;
-            obj.statusAllSearch1 = "none";
-            obj.statusAllSearch2 = "none";
             obj.p1Data = [];
             obj.p2Data = [];
             $("#dvtitleArea").empty().trigger("create");
@@ -183,31 +208,32 @@ function Compare(controlData) {
         // #endregion
 
         // #region 개발자 영역 > Grid Formatter callback 함수 구현부
-        $.fn.fmatter.convertRank = function (cellValue,rowObject,options) {
-            //var page = parseInt((cellValue / 12) + 1);
-            var page = parseInt((cellValue - 1) / 12) + 1;
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=" + page + "' target='_blank'>" + cellValue + "</a>";
+        $.fn.fmatter.convertDownload = function (cellValue,rowObject,options) {
+            if(cellValue != "") {
+                return "<a href='" + cellValue + "'><img src='https://w7.pngwing.com/pngs/596/75/png-transparent-download-now-download-icon-download-button-download-logo-flat-icon-flat-logo-flat-image-button-flat-round-thumbnail.png' width='25px' height='25px' /></a>";
+            } else {
+                return "";
+            }
         };
         $.fn.fmatter.convertSongTitle = function (cellValue,rowObject,options) {
-			return "<a href='https://scoresaber.com/leaderboard/" + options.leaderboardId + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
+			return "<a href='https://www.beatleader.xyz/leaderboard/global/" + options.leaderboard.id + "?page=1&countries=" + obj.country + "' target='_blank'>" + cellValue + "</a>";
         };
-        $.fn.fmatter.convertPP = function (cellValue,rowObject,options) {
-			return ConvertToString("pp", options);
+        $.fn.fmatter.convertDifficulty = function (cellValue,rowObject,options) {
+			return ConvertToString("difficulty", options);
         };
-        $.fn.fmatter.convertMyPP = function (cellValue,rowObject,options) {
-			return ConvertToString("mypp", options);
-        };
-        $.fn.fmatter.convertWeight = function (cellValue,rowObject,options) {
-			return ConvertToString("weight", options);
-        };
-        // $.fn.fmatter.convertDifficulty = function (cellValue,rowObject,options) {
-		// 	return ConvertToString("diff", options);
-        // };
         $.fn.fmatter.convertAccuracy = function (cellValue,rowObject,options) {
-			return ConvertToString("accuracy", options);
+            return (cellValue*100).toFixed(2) + "%";
+			// return (cellValue <= 0) ? "-" : (cellValue*100).toFixed(2) + "%";
+        };
+        $.fn.fmatter.convertStar = function (cellValue,rowObject,options) {
+			if(cellValue != null) {
+                return cellValue.toFixed(2) + "★";
+            } else {
+                return "-";
+            }
         };
         $.fn.fmatter.convertTime = function (cellValue,rowObject,options) {
-			return ConvertToString("time", options);
+			return ConvertToString("timestamp", cellValue);
         };
         // #endregion
         
@@ -216,6 +242,8 @@ function Compare(controlData) {
 
     // Grid Data Binding
     obj.bindGrid = function() {
+        console.log("bindGrid start");
+
         var resultData = {};
         var p1WinCount = 0;
         var p1LoseCount = 0;
@@ -227,89 +255,60 @@ function Compare(controlData) {
         for(var i=0; i<obj.p1Data.length; i++) {
             var isDuplicate = false;
             for(var j=0; j<obj.p2Data.length; j++) {
-                if(obj.p1Data[i].leaderboard.difficulty.leaderboardId == obj.p2Data[j].leaderboard.difficulty.leaderboardId) {
+
+                if(obj.p1Data[i].leaderboardId == obj.p2Data[j].leaderboardId) {
                     isDuplicate = true;
-
-                    var mapInfo = mapList.find(x => x.uid === obj.p1Data[i].leaderboard.difficulty.leaderboardId);
-                    if(mapInfo != undefined && mapInfo != null) {
-                        resultData["stars"] = mapInfo.stars + "★";
-                    } else {
-                        resultData["stars"] = 0 + "★";
-                    }
-
-                    resultData["leaderboardId"] = obj.p1Data[i].leaderboard.difficulty.leaderboardId;
-                    resultData["songName"] = obj.p1Data[i].leaderboard.songName;
-                    resultData["songAuthorName"] = obj.p1Data[i].leaderboard.songAuthorName;
-                    resultData["diff"] = obj.p1Data[i].diff;
-                    if(obj.p1Data[i].score.rank < obj.p2Data[j].score.rank) {
-                        resultData["winner"] = obj.p1Nickname;
-                        p1WinCount++;
-                    } else {
+                    
+                    resultData["id"] = obj.p2Data[j].leaderboardId;
+                    resultData["stars"] = obj.p2Data[j].stars;
+                    resultData["leaderboardId"] = obj.p2Data[j].leaderboardId;
+                    resultData["songName"] = obj.p2Data[j].songName;
+                    resultData["mapper"] = obj.p2Data[j].mapper;
+                    resultData["diff"] = obj.p2Data[j].diff;
+                    resultData["modifiers_1"] = obj.p1Data[i].modifiers;
+                    resultData["modifiers_2"] = obj.p2Data[j].modifiers;
+                    resultData["accRating"] = obj.p2Data[j].accRating;
+                    resultData["techRating"] = obj.p2Data[j].techRating;
+                    resultData["passRating"] = obj.p2Data[j].passRating;
+                    resultData["timeset_1"] = obj.p1Data[i].timeset;
+                    resultData["timeset_2"] = obj.p2Data[j].timeset;
+                    
+                    if(obj.p1Data[i].acc < obj.p2Data[j].acc) {
                         resultData["winner"] = obj.p2Nickname;
                         p1LoseCount++;
+                    } else {
+                        resultData["winner"] = obj.p1Nickname;
+                        p1WinCount++;
                     }
-                    resultData["p1_rank"] = obj.p1Data[i].score.rank;
-                    resultData["p2_rank"] = obj.p2Data[j].score.rank;
-                    resultData["rank_gap"] = obj.p2Data[j].score.rank - obj.p1Data[i].score.rank;
-                    p1RankGap += obj.p2Data[j].score.rank - obj.p1Data[i].score.rank;
 
-                    resultData["p1_accuracy"] = obj.p1Data[i].accuracy;
-                    resultData["p2_accuracy"] = obj.p2Data[j].accuracy;
-                    resultData["accuracy_gap"] = (obj.p1Data[i].accuracy - obj.p2Data[j].accuracy).toFixed(2);
-                    p1AccuracyGap += parseFloat(obj.p1Data[i].accuracy - obj.p2Data[j].accuracy);
+                    resultData["accuracy_1"] = obj.p1Data[i].acc;
+                    resultData["accuracy_2"] = obj.p2Data[j].acc;
+                    resultData["accuracy_gap"] = obj.p1Data[i].acc - obj.p2Data[j].acc;
+                    p1AccuracyGap += parseFloat(obj.p1Data[i].acc - obj.p2Data[j].acc);
                     
-                    resultData["p1_pp"] = obj.p1Data[i].score.pp;
-                    resultData["p2_pp"] = obj.p2Data[j].score.pp;
-                    resultData["pp_gap"] = (obj.p1Data[i].score.pp - obj.p2Data[j].score.pp).toFixed(2);
-                    p1PPGap += parseFloat(obj.p1Data[i].score.pp - obj.p2Data[j].score.pp);
-
-                    var p1Date = new Date(obj.p1Data[i].score.timeSet).toISOString().
-                        replace(/T/, ' ').      // replace T with a space
-                        replace(/\..+/, '');
-                    var p2Date = new Date(obj.p2Data[j].score.timeSet).toISOString().
-                        replace(/T/, ' ').      // replace T with a space
-                        replace(/\..+/, '');
-                    resultData["p1_timeSet"] = p1Date;
-                    resultData["p2_timeSet"] = p2Date;
-                    
-                    obj.compareContainer.jqGrid("addRowData", resultData["leaderboardId"], resultData);
+                    obj.compareContainer.jqGrid("addRowData", resultData["id"], resultData);
                 }
             }
             if (!isDuplicate) {
                 
-                var mapInfo = mapList.find(x => x.uid === obj.p1Data[i].leaderboard.difficulty.leaderboardId);
-                if(mapInfo != undefined && mapInfo != null) {
-                    resultData["stars"] = mapInfo.stars + "★";
-                } else {
-                    resultData["stars"] = 0 + "★";
-                }
-                
-                resultData["leaderboardId"] = obj.p1Data[i].leaderboard.difficulty.leaderboardId;
-                resultData["songName"] = obj.p1Data[i].leaderboard.songName;
-                resultData["songAuthorName"] = obj.p1Data[i].leaderboard.songAuthorName;
+                resultData["id"] = obj.p1Data[i].leaderboardId;
+                resultData["stars"] = obj.p1Data[i].stars;
+                resultData["leaderboardId"] = obj.p1Data[i].leaderboardId;
+                resultData["songName"] = obj.p1Data[i].songName;
+                resultData["mapper"] = obj.p1Data[i].mapper;
                 resultData["diff"] = obj.p1Data[i].diff;
+                resultData["modifiers_1"] = obj.p1Data[i].modifiers;
+                resultData["modifiers_2"] = "";
                 resultData["winner"] = "-";
                 p1OnlyPlayCount++;
-                resultData["p1_rank"] = obj.p1Data[i].score.rank;
-                resultData["p2_rank"] = 0;
-                resultData["rank_gap"] = 0;
-
-                resultData["p1_accuracy"] = obj.p1Data[i].accuracy;
-                resultData["p2_accuracy"] = 0;
+                resultData["accuracy_1"] = obj.p1Data[i].acc;
+                resultData["accuracy_2"] = 0;
                 resultData["accuracy_gap"] = 0;
-                
-                resultData["p1_pp"] = obj.p1Data[i].score.pp;
-                resultData["p2_pp"] = 0;
-                resultData["pp_gap"] = 0;
-
-                var p1Date = new Date(obj.p1Data[i].score.timeSet).toISOString().
-                    replace(/T/, ' ').      // replace T with a space
-                    replace(/\..+/, '');
-                resultData["p1_timeSet"] = p1Date;
-                // var p2Date = new Date(obj.p2Data[i].score.timeSet).toISOString().
-                //     replace(/T/, ' ').      // replace T with a space
-                //     replace(/\..+/, '');
-                resultData["p2_timeSet"] = "-";
+                resultData["accRating"] = obj.p1Data[i].accRating;
+                resultData["techRating"] = obj.p1Data[i].techRating;
+                resultData["passRating"] = obj.p1Data[i].passRating;
+                resultData["timeset_1"] = obj.p1Data[i].timeset;
+                resultData["timeset_2"] = "";
                 
                 obj.compareContainer.jqGrid("addRowData", resultData["leaderboardId"], resultData);
             }
@@ -318,40 +317,31 @@ function Compare(controlData) {
         for(var i=0; i<obj.p2Data.length; i++) {
             var isDuplicate = false;
             for(var j=0; j<obj.p1Data.length; j++) {
-                if(obj.p2Data[i].leaderboard.difficulty.leaderboardId == obj.p1Data[j].leaderboard.difficulty.leaderboardId) {
+                if(obj.p2Data[i].leaderboardId == obj.p1Data[j].leaderboardId) {
                     isDuplicate = true;
                 }
             }
             if (!isDuplicate) {
-                                
-                var mapInfo = mapList.find(x => x.uid === obj.p2Data[i].leaderboard.difficulty.leaderboardId);
-                if(mapInfo != undefined && mapInfo != null) {
-                    resultData["stars"] = mapInfo.stars + "★";
-                } else {
-                    resultData["stars"] = 0 + "★";
-                }
 
-                resultData["leaderboardId"] = obj.p2Data[i].leaderboard.difficulty.leaderboardId;
-                resultData["songName"] = obj.p2Data[i].leaderboard.songName;
-                resultData["songAuthorName"] = obj.p2Data[i].leaderboard.songAuthorName;
+                resultData["id"] = obj.p2Data[i].leaderboardId;
+                resultData["stars"] = obj.p2Data[i].stars;
+                resultData["leaderboardId"] = obj.p2Data[i].leaderboardId;
+                resultData["songName"] = obj.p2Data[i].songName;
+                resultData["mapper"] = obj.p2Data[i].mapper;
                 resultData["diff"] = obj.p2Data[i].diff;
+                resultData["modifiers_1"] = "";
+                resultData["modifiers_2"] = obj.p2Data[i].modifiers;
                 resultData["winner"] = "-";
                 p2OnlyPlayCount++;
-                resultData["p1_rank"] = 0;
-                resultData["p2_rank"] = obj.p2Data[i].score.rank;
-                resultData["rank_gap"] = 0;
-                resultData["p1_accuracy"] = 0;
-                resultData["p2_accuracy"] = obj.p2Data[i].accuracy;
+                resultData["accuracy_1"] = 0;
+                resultData["accuracy_2"] = obj.p2Data[i].acc;
                 resultData["accuracy_gap"] = 0;
-                resultData["p1_pp"] = 0;
-                resultData["p2_pp"] = obj.p2Data[i].score.pp;
-                resultData["pp_gap"] = 0;
-                resultData["p1_timeSet"] = "-";
-                var p2Date = new Date(obj.p2Data[i].score.timeSet).toISOString().
-                    replace(/T/, ' ').      // replace T with a space
-                    replace(/\..+/, '');
-                resultData["p2_timeSet"] = p2Date;
-                
+                resultData["accRating"] = obj.p2Data[i].accRating;
+                resultData["techRating"] = obj.p2Data[i].techRating;
+                resultData["passRating"] = obj.p2Data[i].passRating;
+                resultData["timeset_1"] = "";
+                resultData["timeset_2"] = obj.p2Data[i].timeset;
+
                 obj.compareContainer.jqGrid("addRowData", resultData["leaderboardId"], resultData);
             }
         }
@@ -363,7 +353,7 @@ function Compare(controlData) {
         var html = '<hr>';
         html += '<h4><font color="green"><b>' + obj.p1Nickname + '</b></font> Summary Info(Versus : <font color="blue">' + obj.p2Nickname + '</font>)</h4>';
         html += "<h4><b><font color='green'>" + obj.p1Nickname + "</font> is <font color='blue'>" + p1WinCount + "</font> win <font color='red'>" + p1LoseCount + "</font> lose.</b></h4>";
-        html += '<h4><b>- Rank Gap : ' + p1RankGap + '<br/>- Accuracy Gap : ' + p1AccuracyGap.toFixed(2) + '<br/>- PP Gap : ' + p1PPGap.toFixed(2) + '</b></h4>';
+        html += '<h4><b>- Accuracy Gap : ' + p1AccuracyGap.toFixed(2) + '</b></h4>';
         html += "<h4>Only <b><font color='green'>" + obj.p1Nickname + "</font> Play Count : <font color='red'>" + p1OnlyPlayCount + "</font></b></h4>";
         html += "<h4>Only <b><font color='blue'>" + obj.p2Nickname + "</font> Play Count : <font color='red'>" + p2OnlyPlayCount + "</font></b></h4>";
         $("#dvtitleArea").append(html).trigger("create");
@@ -431,17 +421,36 @@ function Compare(controlData) {
     }
 
     obj.displayData = function (index, data) {
-        //"<a href='https://scoresaber.com/u/76561198830502286" + page + "' target='_blank'>" + cellValue + "</a>"
-        //https://scoresaber.com/global/2&country=kr
+        //"<a href='https://www.beatleader.xyz/u/76561198830502286" + page + "' target='_blank'>" + cellValue + "</a>"
+        //https://www.beatleader.xyz/global/2&country=kr
         var globalRankPage = parseInt((data.rank - 1) / 50) + 1;
         var countryRankPage = parseInt((data.countryRank - 1) / 50) + 1;
+        var globalRankGap = (data.lastWeekRank-data.rank) > 0 ? '↑'+(data.lastWeekRank-data.rank) : (data.lastWeekRank-data.rank) < 0 ? '↓'+(data.rank-data.lastWeekRank) : '-';
+        var countryRankGap = (data.lastWeekCountryRank-data.countryRank) > 0 ? '↑'+(data.lastWeekCountryRank-data.countryRank) : (data.lastWeekCountryRank-data.countryRank) < 0 ? '↓'+(data.countryRank-data.lastWeekCountryRank) : '-';
+        var globalPPGap = (data.pp-data.lastWeekPp) > 0 ? '↑'+(data.pp-data.lastWeekPp).toFixed(2)+"pp" : (data.pp-data.lastWeekPp) < 0 ? '↓'+(data.lastWeekPp-data.pp).toFixed(2)+"pp" : '-';
+        var clansHtml = '';
+        for(var i=0;i<data.clans.length;i++) {
+            clansHtml += '<a href="https://www.beatleader.xyz/clan/' + data.clans[i].tag + '" target="_blank"><font color="' + data.clans[i].color + '">' + data.clans[i].tag + '</font></a> ';
+        }
         html = '<hr>';
-        //html += '<h4><b><font color="red">P' + index + '</font> : <a href="https://scoresaber.com/u/' + data.playerId + '" target="_blank"><font color="green">' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
-        html += '<h4><b><a href="https://scoresaber.com/u/' + data.id + '" target="_blank">'+ "<img src='" + data.profilePicture + "' width=50 height=50 boarder=0 />" + '<font color="green"> ' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
-        html += '<h4><b>Global Rank : <a href="https://scoresaber.com/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '</font></a>' + ' (<a href="https://scoresaber.com/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '</font></a>)</b></h4>';
-        html += '<h4><b>PP : ' + data.pp + ', Avg Accuracy : ' + data.scoreStats.averageRankedAccuracy.toFixed(2) + '</b></h4>';
-        html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';
+        html += '<h4><b>P' + index + ' : <a href="https://www.beatleader.xyz/u/' + data.id + '" target="_blank">'+ "<img src='" + data.avatar + "' width=50 height=50 boarder=0 />" + '<font color="green"> ' + data.name + '</font></a> <a href="https://www.beatleader.xyz/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a> ' + clansHtml + '</b></h4>';
+        html += '<h4><b><font color="darkgray">Global / Country Rank</font> : <a href="https://www.beatleader.xyz/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '(' + globalRankGap + ')</font></a>' + ' / <a href="https://www.beatleader.xyz/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '(' + countryRankGap + ')</font></a></b></h4>';
+        html += '<h4><b><font color="darkgray">PP</font> : <font color="red">' + data.pp + 'pp</font>(<font color="green">' + globalPPGap + '</font>) (Acc : <font color="#ff7300">' + data.accPp.toFixed(2) + '</font> , Tech : <font color="orange">' + data.techPp.toFixed(2) + '</font> , Pass : <font color="blue">' + data.passPp.toFixed(2) + '</font>)</b></h4>';
+        html += '<h4><b><font color="darkgray">Avg Accuracy</font> : <font color="red">' + (data.scoreStats.averageRankedAccuracy*100).toFixed(2) + '%</font> (SS+:<font color="#ff7300">' + data.scoreStats.sspPlays + '</font>, SS:<font color="orange">' + data.scoreStats.ssPlays + '</font>, S+:<font color="blue">' + data.scoreStats.spPlays + '</font>, S:<font color="green">' + data.scoreStats.sPlays + '</font>, A:<font color="gray">' + data.scoreStats.aPlays + '</font>)</b></h4>';
+        html += '<h4><b><font color="darkgray">Play Count(Rank Count)</font> : <font color="red">' + data.scoreStats.totalPlayCount + '</font>(<font color="green">' + data.scoreStats.rankedPlayCount + '</font>)</b></h4>';
         $("#dvtitleArea").append(html).trigger("create");
+
+        // //"<a href='https://scoresaber.com/u/76561198830502286" + page + "' target='_blank'>" + cellValue + "</a>"
+        // //https://scoresaber.com/global/2&country=kr
+        // var globalRankPage = parseInt((data.rank - 1) / 50) + 1;
+        // var countryRankPage = parseInt((data.countryRank - 1) / 50) + 1;
+        // html = '<hr>';
+        // //html += '<h4><b><font color="red">P' + index + '</font> : <a href="https://scoresaber.com/u/' + data.playerId + '" target="_blank"><font color="green">' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
+        // html += '<h4><b><a href="https://scoresaber.com/u/' + data.id + '" target="_blank">'+ "<img src='" + data.profilePicture + "' width=50 height=50 boarder=0 />" + '<font color="green"> ' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
+        // html += '<h4><b>Global Rank : <a href="https://scoresaber.com/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '</font></a>' + ' (<a href="https://scoresaber.com/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '</font></a>)</b></h4>';
+        // html += '<h4><b>PP : ' + data.pp + ', Avg Accuracy : ' + data.scoreStats.averageRankedAccuracy.toFixed(2) + '</b></h4>';
+        // html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';
+        // $("#dvtitleArea").append(html).trigger("create");
     }
 
     // #region Call APIs
@@ -476,164 +485,122 @@ function Compare(controlData) {
         };
 
         // #region 개발자 영역 > API callback 함수
-		var callback_get_full1 = function(data) {
-            var pages = Number(obj.txtGetPages.val());
-            obj.statusAllSearch1 = "ready";
-            obj.p1Nickname = data.name;
-            obj.country = data.country;
-            obj.max_page1 = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
-            obj.max_page1 = (obj.max_page1 > pages) ? pages : obj.max_page1;
-            obj.total_count = data.scoreStats.totalPlayCount
-            obj.displayData(1, data);
-            
-            if (obj.statusAllSearch1 == "ready") {
-                // obj.setGrid(); //Grid 조회 시 주석 해제
-                obj.pageIndex1 = 1;
-			    obj.compareApiCall("get_all_player1");
-            } else if (obj.statusAllSearch1 == "process") {
-                obj.statusAllSearch1 = "stop";
-                //obj.max_page1 = 0;
-            } else if (obj.statusAllSearch1 == "resume") {
-			    obj.compareApiCall("get_all_player1");
-            } else if (obj.statusAllSearch1 == "complete") {
-            } else {
-                
-            }
-        };
+
         
-		var callback_get_full2 = function(data) {
-            var pages = Number(obj.txtGetPages.val());
-            obj.statusAllSearch2 = "ready";
-            obj.p2Nickname = data.name;
-            obj.max_page2 = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
-            obj.max_page2 = (obj.max_page2 > pages) ? pages : obj.max_page2;
-            obj.total_count = data.scoreStats.totalPlayCount
-            obj.displayData(2, data);
-            
-            if (obj.statusAllSearch2 == "ready") {
-                //obj.setGrid(); //Grid 조회 시 주석 해제
-                obj.pageIndex2 = 1;
-			    obj.compareApiCall("get_all_player2");
-            } else if (obj.statusAllSearch2 == "process") {
-                obj.statusAllSearch2 = "stop";
-                //obj.max_page2 = 0;
-            } else if (obj.statusAllSearch2 == "resume") {
-			    obj.compareApiCall("get_all_player2");
-            } else if (obj.statusAllSearch2 == "complete") {
+        var callback_get_ranking1 = function(data) {
+            obj.userDataCount1 = (data != undefined) ? data.data.length : 0;
+            obj.user1_max_page = parseInt((data.metadata.total - 1) / data.metadata.itemsPerPage) + 1;
+            obj.user_total_count1 = data.metadata.total;//(data.metadata.total * data.metadata.itemsPerPage);
+            if (obj.userDataCount1 > 0) {
+                var iterHtml = "";
+                iterHtml += "<option value='' selected='selected'>select</option>";
+                for (var i = 0; i < data.data.length; i++) {
+                    iterHtml += "<option value='" + data.data[i].id + "'>(" + data.data[i].rank + ") " + data.data[i].name + "</option>";
+                }
+                obj.selUserList1.append(iterHtml).trigger('create');
+                obj.pageUserIndex1++;
             } else {
-                
+                return null
+            }
+		};
+        
+        var callback_get_ranking2 = function(data) {
+            obj.userDataCount2 = (data != undefined) ? data.data.length : 0;
+            obj.user2_max_page = parseInt((data.metadata.total - 1) / data.metadata.itemsPerPage) + 1;
+            obj.user_total_count2 = data.metadata.total;//(data.metadata.total * data.metadata.itemsPerPage);
+            if (obj.userDataCount2 > 0) {
+                var iterHtml = "";
+                iterHtml += "<option value='' selected='selected'>select</option>";
+                for (var i = 0; i < data.data.length; i++) {
+                    iterHtml += "<option value='" + data.data[i].id + "'>(" + data.data[i].rank + ") " + data.data[i].name + "</option>";
+                }
+                obj.selUserList2.append(iterHtml).trigger('create');
+                obj.pageUserIndex2++;
+            } else {
+                return null
             }
 		};
 
-        // #region 개발자 영역 > API callback 함수
-		var callback_get_all_player1 = function(data) {
-            obj.dataCount1 = (data.playerScores != undefined) ? data.playerScores.length : 0;
-            if (obj.dataCount1 > 0) {
-                for(var i=0; i<data.playerScores.length; i++) {
-                    data.playerScores[i].accuracy = (data.playerScores[i].leaderboard.maxScore > 0) ? 
-                        ((data.playerScores[i].score.baseScore * 100) / data.playerScores[i].leaderboard.maxScore).toFixed(2) : 
-                        0;
-                    data.playerScores[i].mypp = (data.playerScores[i].score.pp * data.playerScores[i].score.weight).toFixed(2);
-                    console.log("data.playerScores[i].leaderboard.difficulty.difficulty", data.playerScores[i].leaderboard.difficulty.difficulty)
-                    data.playerScores[i].diff = (data.playerScores[i].leaderboard.difficulty.difficulty == 1) ? "Easy" : 
-                        (data.playerScores[i].leaderboard.difficulty.difficulty == 3) ? "Normal" : 
-                        (data.playerScores[i].leaderboard.difficulty.difficulty == 5) ? "Hard" : 
-                        (data.playerScores[i].leaderboard.difficulty.difficulty == 7) ? "Expert" : 
-                        (data.playerScores[i].leaderboard.difficulty.difficulty == 9) ? "Expert+" : 
-                        data.playerScores[i].leaderboard.difficulty.difficulty;
-                    // #region 개발자 영역 > paging(more) 처리를 위한 셋팅
-                    obj.p1Data.push(data.playerScores[i]);
-                    if(i == data.playerScores.length - 1) {
-                        obj.pageIndex1++;
-                    }
-                    // #endregion
-                }
-                //obj.bindGrid(data.scores);
-            } else {
-                return null
-            }
-            var pages = Number(obj.txtGetPages.val());
-            var processCount = (obj.pageIndex1 > pages) ? pages : obj.pageIndex1;
-            var gridCaption = "Searched <font color='red'><b>" + processCount + " / " + pages + "</b></font> Completed.";
-            obj.compareContainer.jqGrid("setCaption", gridCaption);
-
-            if (obj.statusAllSearch1 == "ready" || obj.statusAllSearch1 == "process" || obj.statusAllSearch1 == "resume") {
-                if (obj.pageIndex1 <= obj.max_page1) {
-                    obj.statusAllSearch1 = "process";
-                    obj.compareApiCall("get_all_player1");
-                } else {
-                    obj.statusAllSearch1 = "complete";
-                    if (obj.statusAllSearch1 == "complete" && obj.statusAllSearch2 == "complete") {
-                        obj.bindGrid();
-                    }
-                    return null
-                }
-            } else if (obj.statusAllSearch1 == "stop") {
-                obj.statusAllSearch1 = "resume";
-                return null;
-            } else {
-
-            }
-
-            // if (obj.pageIndex2 <= obj.max_page2) {
-            //     obj.statusAllSearch2 = "process";
-            //     obj.compareApiCall("get_all_player");
+		var callback_get_full1 = function(data) {
+            obj.p1Nickname = data.name;
+            obj.country = data.country;
+            // obj.max_page1 = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
+            // obj.max_page1 = (obj.max_page1 > pages) ? pages : obj.max_page1;
+            obj.total_count = data.scoreStats.totalPlayCount
+            obj.displayData(1, data);
+            
+            obj.pageIndex1 = 1;
+            obj.compareApiCall("get_player_accgraph1");
+            // if (obj.statusAllSearch1 == "ready") {
+            //     // obj.setGrid(); //Grid 조회 시 주석 해제
+            //     obj.pageIndex1 = 1;
+			//     obj.compareApiCall("get_all_player1");
+            // } else if (obj.statusAllSearch1 == "process") {
+            //     obj.statusAllSearch1 = "stop";
+            //     //obj.max_page1 = 0;
+            // } else if (obj.statusAllSearch1 == "resume") {
+			//     obj.compareApiCall("get_all_player1");
+            // } else if (obj.statusAllSearch1 == "complete") {
+            // } else {
+                
             // }
         };
         
+		var callback_get_full2 = function(data) {
+            obj.p2Nickname = data.name;
+            // obj.max_page2 = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
+            // obj.max_page2 = (obj.max_page2 > pages) ? pages : obj.max_page2;
+            obj.total_count = data.scoreStats.totalPlayCount
+            obj.displayData(2, data);
+            
+            obj.pageIndex2 = 1;
+            obj.compareApiCall("get_player_accgraph2");
+            // if (obj.statusAllSearch2 == "ready") {
+            //     //obj.setGrid(); //Grid 조회 시 주석 해제
+            //     obj.pageIndex2 = 1;
+			//     obj.compareApiCall("get_all_player2");
+            // } else if (obj.statusAllSearch2 == "process") {
+            //     obj.statusAllSearch2 = "stop";
+            //     //obj.max_page2 = 0;
+            // } else if (obj.statusAllSearch2 == "resume") {
+			//     obj.compareApiCall("get_all_player2");
+            // } else if (obj.statusAllSearch2 == "complete") {
+            // } else {
+                
+            // }
+		};
+
         // #region 개발자 영역 > API callback 함수
-		var callback_get_all_player2 = function(data) {
-            obj.dataCount2 = (data.playerScores != undefined) ? data.playerScores.length : 0;
-            if (obj.dataCount2 > 0) {
-                for(var i=0; i<data.playerScores.length; i++) {
-                    data.playerScores[i].accuracy = (data.playerScores[i].leaderboard.maxScore > 0) ? 
-                        ((data.playerScores[i].score.baseScore * 100) / data.playerScores[i].leaderboard.maxScore).toFixed(2) : 
-                        0;
-                    data.playerScores[i].mypp = (data.playerScores[i].score.pp * data.playerScores[i].score.weight).toFixed(2);
-                    data.playerScores[i].diff = (data.playerScores[i].leaderboard.difficulty.difficulty == 1) ? "Easy" : 
-                        (data.playerScores[i].leaderboard.difficulty.difficulty == 3) ? "Normal" : 
-                        (data.playerScores[i].leaderboard.difficulty.difficulty == 5) ? "Hard" : 
-                        (data.playerScores[i].leaderboard.difficulty.difficulty == 7) ? "Expert" : 
-                        (data.playerScores[i].leaderboard.difficulty.difficulty == 9) ? "Expert+" : 
-                        data.playerScores[i].leaderboard.difficulty.difficulty;
-                    // #region 개발자 영역 > paging(more) 처리를 위한 셋팅
-                    obj.p2Data.push(data.playerScores[i]);
-                    if(i == data.playerScores.length - 1) {
-                        obj.pageIndex2++;
-                    }
+		var callback_get_player_accgraph1 = function(data) {
+            obj.dataCount1 = (data != undefined) ? data.length : 0;
+            if (obj.dataCount1 > 0) {
+                for(var i=0; i<data.length; i++) {
+                    obj.p1Data.push(data[i]);
                     // #endregion
                 }
                 //obj.bindGrid(data.scores);
             } else {
                 return null
             }
-            var pages = Number(obj.txtGetPages.val());
-            var processCount = (obj.pageIndex2 > pages) ? pages : obj.pageIndex2;
-            var gridCaption = "Searched <font color='red'><b>" + processCount + " / " + pages + "</b></font> Completed.";
-            obj.compareContainer.jqGrid("setCaption", gridCaption);
-
-            if (obj.statusAllSearch2 == "ready" || obj.statusAllSearch2 == "process" || obj.statusAllSearch2 == "resume") {
-                if (obj.pageIndex2 <= obj.max_page2) {
-                    obj.statusAllSearch2 = "process";
-                    obj.compareApiCall("get_all_player2");
-                } else {
-                    obj.statusAllSearch2 = "complete";
-                    if (obj.statusAllSearch1 == "complete" && obj.statusAllSearch2 == "complete") {
-                        obj.bindGrid();
-                    }
-                    return null
+        };
+        
+        // #region 개발자 영역 > API callback 함수
+		var callback_get_player_accgraph2 = function(data) {
+            obj.dataCount2 = (data != undefined) ? data.length : 0;
+            if (obj.dataCount2 > 0) {
+                for(var i=0; i<data.length; i++) {
+                    obj.p2Data.push(data[i]);
+                    // #endregion
                 }
-            } else if (obj.statusAllSearch2 == "stop") {
-                obj.statusAllSearch2 = "resume";
-                return null;
+                //obj.bindGrid(data.scores);
             } else {
-
+                return null
             }
-
-            // if (obj.pageIndex2 <= obj.max_page2) {
-            //     obj.statusAllSearch2 = "process";
-            //     obj.compareApiCall("get_all_player");
-            // }
+            var gridCaption = "<font color='red'>" + obj.dataCount2 + "</font> Completed.";
+            obj.compareContainer.jqGrid("setCaption", gridCaption);
+            setTimeout(function() {
+                obj.bindGrid();
+            }, 3000);
 		};
 
         // #endregion

@@ -233,7 +233,10 @@ function Compare(controlData) {
             }
         };
         $.fn.fmatter.convertTime = function (cellValue,rowObject,options) {
-			return ConvertToString("timestamp", cellValue);
+			if (cellValue != "") {
+                return ConvertToString("timestamp", cellValue);
+            }
+            return cellValue;
         };
         // #endregion
         
@@ -260,7 +263,8 @@ function Compare(controlData) {
                     isDuplicate = true;
                     
                     resultData["id"] = obj.p2Data[j].leaderboardId;
-                    resultData["stars"] = obj.p2Data[j].stars;
+                    resultData["stars_1"] = obj.p1Data[i].stars;
+                    resultData["stars_2"] = obj.p2Data[j].stars;
                     resultData["leaderboardId"] = obj.p2Data[j].leaderboardId;
                     resultData["songName"] = obj.p2Data[j].songName;
                     resultData["mapper"] = obj.p2Data[j].mapper;
@@ -273,12 +277,14 @@ function Compare(controlData) {
                     resultData["timeset_1"] = obj.p1Data[i].timeset;
                     resultData["timeset_2"] = obj.p2Data[j].timeset;
                     
-                    if(obj.p1Data[i].acc < obj.p2Data[j].acc) {
-                        resultData["winner"] = obj.p2Nickname;
-                        p1LoseCount++;
-                    } else {
-                        resultData["winner"] = obj.p1Nickname;
-                        p1WinCount++;
+                    if (obj.p1Data[i].stars == obj.p2Data[j].stars) {
+                        if(obj.p1Data[i].acc < obj.p2Data[j].acc) {
+                            resultData["winner"] = obj.p2Nickname;
+                            p1LoseCount++;
+                        } else {
+                            resultData["winner"] = obj.p1Nickname;
+                            p1WinCount++;
+                        }
                     }
 
                     resultData["accuracy_1"] = obj.p1Data[i].acc;
@@ -292,7 +298,8 @@ function Compare(controlData) {
             if (!isDuplicate) {
                 
                 resultData["id"] = obj.p1Data[i].leaderboardId;
-                resultData["stars"] = obj.p1Data[i].stars;
+                resultData["stars_1"] = obj.p1Data[i].stars;
+                resultData["stars_2"] = "";
                 resultData["leaderboardId"] = obj.p1Data[i].leaderboardId;
                 resultData["songName"] = obj.p1Data[i].songName;
                 resultData["mapper"] = obj.p1Data[i].mapper;
@@ -322,9 +329,9 @@ function Compare(controlData) {
                 }
             }
             if (!isDuplicate) {
-
                 resultData["id"] = obj.p2Data[i].leaderboardId;
-                resultData["stars"] = obj.p2Data[i].stars;
+                resultData["stars_1"] = "";
+                resultData["stars_2"] = obj.p2Data[i].stars;
                 resultData["leaderboardId"] = obj.p2Data[i].leaderboardId;
                 resultData["songName"] = obj.p2Data[i].songName;
                 resultData["mapper"] = obj.p2Data[i].mapper;
@@ -531,19 +538,6 @@ function Compare(controlData) {
             
             obj.pageIndex1 = 1;
             obj.compareApiCall("get_player_accgraph1");
-            // if (obj.statusAllSearch1 == "ready") {
-            //     // obj.setGrid(); //Grid 조회 시 주석 해제
-            //     obj.pageIndex1 = 1;
-			//     obj.compareApiCall("get_all_player1");
-            // } else if (obj.statusAllSearch1 == "process") {
-            //     obj.statusAllSearch1 = "stop";
-            //     //obj.max_page1 = 0;
-            // } else if (obj.statusAllSearch1 == "resume") {
-			//     obj.compareApiCall("get_all_player1");
-            // } else if (obj.statusAllSearch1 == "complete") {
-            // } else {
-                
-            // }
         };
         
 		var callback_get_full2 = function(data) {
@@ -555,19 +549,6 @@ function Compare(controlData) {
             
             obj.pageIndex2 = 1;
             obj.compareApiCall("get_player_accgraph2");
-            // if (obj.statusAllSearch2 == "ready") {
-            //     //obj.setGrid(); //Grid 조회 시 주석 해제
-            //     obj.pageIndex2 = 1;
-			//     obj.compareApiCall("get_all_player2");
-            // } else if (obj.statusAllSearch2 == "process") {
-            //     obj.statusAllSearch2 = "stop";
-            //     //obj.max_page2 = 0;
-            // } else if (obj.statusAllSearch2 == "resume") {
-			//     obj.compareApiCall("get_all_player2");
-            // } else if (obj.statusAllSearch2 == "complete") {
-            // } else {
-                
-            // }
 		};
 
         // #region 개발자 영역 > API callback 함수
@@ -582,6 +563,8 @@ function Compare(controlData) {
             } else {
                 return null
             }
+            var gridCaption = "<font color='blue'>Processing Player1 Records : </font><font color='red'>" + obj.dataCount1 + "</font>";
+            obj.compareContainer.jqGrid("setCaption", gridCaption);
         };
         
         // #region 개발자 영역 > API callback 함수
@@ -596,7 +579,7 @@ function Compare(controlData) {
             } else {
                 return null
             }
-            var gridCaption = "<font color='red'>" + obj.dataCount2 + "</font> Completed.";
+            var gridCaption = "<font color='blue'>Processing Player2 Records : </font><font color='red'>" + obj.dataCount2 + "</font>";
             obj.compareContainer.jqGrid("setCaption", gridCaption);
             setTimeout(function() {
                 obj.bindGrid();

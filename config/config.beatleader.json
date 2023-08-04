@@ -29,6 +29,35 @@
                     "success": "",
                     "error": "An error occurred during ranking inquiry."
                 }
+            },{
+                "id": "get_player_accgraph",
+                "path": "/player/{user_id}/accgraph",
+                "method": "GET",
+                "content_type": "application/x-www-form-urlencoded",
+                "callback": "callback_get_player_accgraph",
+                "parameters": [
+                    "ctrl.user_id"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            },{
+                "id": "get_ranking",
+                "path": "/players?mapsType=ranked&ppType=general&sortBy=pp&order=desc",
+                "method": "GET",
+                "content_type": "application/x-www-form-urlencoded",
+                "callback": "callback_get_ranking",
+                "parameters": [
+                    "ctrl.country",
+                    "var.user_page_index"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
             }
         ],
         "player": [
@@ -1932,6 +1961,11 @@
                     "selMapSortValue",
                     "selPageCount",
                     "{newline}",
+                    "selCountryList",
+                    "selUserList",
+                    "btnUserMoreSearch",
+                    "txtUserID",
+                    "{newline}",
                     "btnMapSearch"
                 ]
             },
@@ -1984,6 +2018,31 @@
                             "index": "diff", 
                             "width": 60,
                             "text": "diff"
+                        },
+                        { 
+                            "name": "modifiers", 
+                            "index": "modifiers", 
+                            "width": 100,
+                            "text": "mod"
+                        },
+                        { 
+                            "name": "accuracy", 
+                            "index": "accuracy", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "accuracy",
+                            "formatter": "convertAccuracy"
+                        },
+                        { 
+                            "name": "timeset", 
+                            "index": "timeset", 
+                            "width": 120,
+                            "text": "Record Date(UTC)",
+                            "formatter": "convertTime"
                         },
                         { 
                             "name": "accRating", 
@@ -2133,6 +2192,20 @@
                             },
                             "text": "rankedTime",
                             "formatter": "convertTime"
+                        },
+                        { 
+                            "name": "hash", 
+                            "index": "hash", 
+                            "width": 0,
+                            "text": "hash",
+                            "hidden": true
+                        },
+                        { 
+                            "name": "difficulties", 
+                            "index": "difficulties", 
+                            "width": 0,
+                            "text": "difficulties",
+                            "hidden": true
                         }
                     ],
                     "toolbar": {
@@ -2151,12 +2224,12 @@
                                 "position": "last",
                                 "callback": "callback_navButton_search"
                             },{
-                                "id": "download",
-                                "caption": "download",
-                                "title": "download",
+                                "id": "playlist",
+                                "caption": "playlist",
+                                "title": "playlist",
                                 "buttonicon": "ui-icon-disk",
                                 "position": "last",
-                                "callback": "callback_navButton_download"
+                                "callback": "callback_navButton_playlist"
                             },{
                                 "id": "more",
                                 "caption": "more",
@@ -2491,6 +2564,27 @@
                             "width": 250,
                             "text": "ytb title",
                             "formatter": "convertYoutube"
+                        },
+                        { 
+                            "name": "hash", 
+                            "index": "hash", 
+                            "width": 0,
+                            "text": "hash",
+                            "hidden": true
+                        },
+                        { 
+                            "name": "levelAuthorName", 
+                            "index": "levelAuthorName", 
+                            "width": 0,
+                            "text": "levelAuthorName",
+                            "hidden": true
+                        },
+                        { 
+                            "name": "difficulties", 
+                            "index": "difficulties", 
+                            "width": 0,
+                            "text": "difficulties",
+                            "hidden": true
                         }
                     ],
                     "toolbar": {
@@ -2509,12 +2603,12 @@
                                 "position": "last",
                                 "callback": "callback_navButton_search"
                             },{
-                                "id": "download",
-                                "caption": "download",
-                                "title": "download",
+                                "id": "playlist",
+                                "caption": "playlist",
+                                "title": "playlist",
                                 "buttonicon": "ui-icon-disk",
                                 "position": "last",
-                                "callback": "callback_navButton_download"
+                                "callback": "callback_navButton_playlist"
                             },{
                                 "id": "more",
                                 "caption": "more",
@@ -2910,7 +3004,8 @@
                             "name": "diff", 
                             "index": "diff", 
                             "width": 70,
-                            "text": "Difficulty"
+                            "text": "Difficulty",
+                            "formatter": "convertDifficulty"
                         },
                         { 
                             "name": "mapper", 
@@ -3052,6 +3147,27 @@
                             "width": 120,
                             "text": "Record Date(UTC)",
                             "formatter": "convertTime"
+                        },
+                        { 
+                            "name": "hash", 
+                            "index": "hash", 
+                            "width": 0,
+                            "text": "hash",
+                            "hidden": true
+                        },
+                        { 
+                            "name": "levelAuthorName", 
+                            "index": "levelAuthorName", 
+                            "width": 0,
+                            "text": "levelAuthorName",
+                            "hidden": true
+                        },
+                        { 
+                            "name": "difficulties", 
+                            "index": "difficulties", 
+                            "width": 0,
+                            "text": "difficulties",
+                            "hidden": true
                         }
                     ],
                     "toolbar": {
@@ -3070,12 +3186,12 @@
                                 "position": "last",
                                 "callback": "callback_navButton_search"
                             },{
-                                "id": "download",
-                                "caption": "download",
-                                "title": "download",
+                                "id": "playlist",
+                                "caption": "playlist",
+                                "title": "playlist",
                                 "buttonicon": "ui-icon-disk",
                                 "position": "last",
-                                "callback": "callback_navButton_download"
+                                "callback": "callback_navButton_playlist"
                             }
                         ]
                     }

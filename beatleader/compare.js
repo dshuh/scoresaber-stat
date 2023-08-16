@@ -298,17 +298,16 @@ function Compare(controlData) {
                             p1WinCount++;
                         }
                     } else {
-                        resultData["winner"] = "-";
+                        if(obj.p1Data[i].stars < obj.p2Data[j].stars && obj.p1Data[i].acc < obj.p2Data[j].acc) {
+                            resultData["winner"] = obj.p2Nickname;
+                            p1LoseCount++;
+                        } else if(obj.p1Data[i].stars > obj.p2Data[j].stars && obj.p1Data[i].acc > obj.p2Data[j].acc) {
+                            resultData["winner"] = obj.p1Nickname;
+                            p1WinCount++;
+                        } else {
+                            resultData["winner"] = "-";
+                        }
                     }
-                    // else {
-                    //     if(obj.p1Data[i].stars < obj.p2Data[j].stars && obj.p1Data[i].acc < obj.p2Data[j].acc) {
-                    //         resultData["winner"] = obj.p2Nickname;
-                    //         p1LoseCount++;
-                    //     } else if(obj.p1Data[i].stars > obj.p2Data[j].stars && obj.p1Data[i].acc > obj.p2Data[j].acc) {
-                    //         resultData["winner"] = obj.p1Nickname;
-                    //         p1WinCount++;
-                    //     }
-                    // }
 
                     resultData["accuracy_1"] = obj.p1Data[i].acc;
                     resultData["accuracy_2"] = obj.p2Data[j].acc;
@@ -351,7 +350,11 @@ function Compare(controlData) {
                 p1OnlyPlayCount++;
                 resultData["accuracy_1"] = obj.p1Data[i].acc;
                 resultData["accuracy_2"] = 0;
-                // p1AccRange["r"+Math.trunc(obj.p1Data[i].acc*100).toString()] += 1;
+                if(obj.p1Data[i].acc*100 < 80) {
+                    p1AccRange["r79"] += 1;
+                } else {
+                    p1AccRange["r"+Math.trunc(obj.p1Data[i].acc*100).toString()] += 1;
+                }
                 resultData["accuracy_gap"] = 0;
                 resultData["accRating"] = obj.p1Data[i].accRating;
                 resultData["techRating"] = obj.p1Data[i].techRating;
@@ -394,6 +397,11 @@ function Compare(controlData) {
                 resultData["accuracy_1"] = 0;
                 resultData["accuracy_2"] = obj.p2Data[i].acc;
                 // p2AccRange["r"+Math.trunc(obj.p2Data[i].acc*100).toString()] += 1;
+                if(obj.p2Data[i].acc*100 < 80) {
+                    p2AccRange["r79"] += 1;
+                } else {
+                    p2AccRange["r"+Math.trunc(obj.p2Data[i].acc*100).toString()] += 1;
+                }
                 resultData["accuracy_gap"] = 0;
                 resultData["accRating"] = obj.p2Data[i].accRating;
                 resultData["techRating"] = obj.p2Data[i].techRating;
@@ -541,7 +549,7 @@ function Compare(controlData) {
         var p1Total = 0;
         var p2Total = 0;
         var gapTotal = 0;
-        for(var i=79;i<100;i++) {
+        for(var i=99;i>=79;i--) {
             var p1Count = data1["r"+i.toString()];
             var p2Count = data2["r"+i.toString()];
             var gapCount = p1Count - p2Count;

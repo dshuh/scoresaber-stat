@@ -15,6 +15,8 @@ function Player(controlData) {
     obj.total_count = 0;
     obj.statusAllSearch = "none";
     obj.country = "KR";
+
+    obj.pData = [];
     // #endregion
 
     // 서비스 활성화를 위한 초기화 설정을 담당한다.
@@ -84,6 +86,7 @@ function Player(controlData) {
 		});
 		obj.btnSearch.click(function () {
             obj.pageIndex = 1;
+            obj.pData = [];
 
             // if (obj.statusAllSearch == "none") {
                 obj.playerApiCall("get_full"); 
@@ -268,7 +271,7 @@ function Player(controlData) {
         };
         $.fn.fmatter.convertYoutube = function (cellValue,rowObject,options) {
             var title = "Beat Saber " + options.stars + " " + options.songName + " - " + options.songAuthorName + " by " + options.levelAuthorName + " " +
-            options.diff + " " + options.accuracy + "% #" + options.rank + " " + options.beatSaverKey;
+            options.diff + " " + options.accuracy.toFixed(2) + "% #" + options.rank + " " + options.beatSaverKey;
 			return title;
         };
         $.fn.fmatter.convertAccRating = function (cellValue,rowObject,options) {
@@ -507,6 +510,42 @@ function Player(controlData) {
         $("#dvtitleArea").empty().append(html).trigger("create");
     }
 
+    obj.accRange = function (data) {
+        var pAccRange = {};
+        for(var i=0;i<100;i++) {
+            pAccRange["r"+i.toString()] = 0;
+        }
+        for(var i=0; i<data.length; i++) {
+            if(data[i].acc*100 < 80) {
+                pAccRange["r79"] += 1;
+            } else {
+                pAccRange["r"+Math.trunc(data[i].acc*100).toString()] += 1;
+            }
+        }
+
+        var html = '</hr><table border=1><tr><td width="150"><b>Ranked Acc Range</b></td><td width="150"><b>' + obj.nickname + '</b></td></tr>';
+        var color = ["red","#ff7300","orange","blue","green"];
+        var pTotal = 0;
+        for(var i=99;i>=79;i--) {
+            var pCount = pAccRange["r"+i.toString()];
+            html += '<tr>';
+            if(i==79) {
+                html += '<td><b><font color="gray">0-79.99%</b></td>';
+            } else {
+                html += '<td><b><font color="' + color[i%color.length] + '">' + i.toString() + '%</b></td>';
+            }
+            html += '<td><b><font color="' + color[i%color.length] + '">' + pCount + '</font></b></td>';
+            html += '</tr>';
+            pTotal += pCount;
+        }
+        html += '<tr>';
+        html += '<td><b><font color="red">Total</b></td>';
+        html += '<td><b><font color="red">' + pTotal + '</font></b></td>';
+        html += '</tr>';
+        html += '</table>';
+        $("#dvtitleArea").append(html).trigger("create");
+    }
+
     // #region Call APIs
     obj.playerApiCall = function (apiID) {
         var apiObj = obj.apiConfig.find(x => x.id === apiID);
@@ -545,10 +584,28 @@ function Player(controlData) {
             obj.max_page = parseInt((data.scoreStats.totalPlayCount - 1) / 8) + 1;
             obj.total_count = data.scoreStats.totalPlayCount;
             obj.country = data.country;
+            obj.nickname = data.name;
             obj.displayData(data);
+            obj.playerApiCall("get_player_accgraph");
 		};
 
-        // #region 개발자 영역 > API callback 함수
+        var callback_get_player_accgraph = function(data) {
+            obj.totalCount = (data != undefined) ? data.length : 0;
+            if (obj.totalCount > 0) {
+                for(var i=0; i<data.length; i++) {
+                    obj.pData.push(data[i]);
+                    // #endregion
+                }
+                //obj.bindGrid(data.scores);
+            } else {
+                return null
+            }
+            // var gridCaption = "<font color='blue'>Processing Player Records : </font><font color='red'>" + obj.totalCount + "</font>";
+            // obj.playerContainer.jqGrid("setCaption", gridCaption);
+            
+            obj.accRange(data);
+        };
+
 		var callback_get_player = function(data) {
             obj.dataCount = (data != undefined) ? data.data.length : 0;
             if (obj.dataCount > 0) {
@@ -558,8 +615,6 @@ function Player(controlData) {
             }
 		};
 
-
-        // #region 개발자 영역 > API callback 함수
 		var callback_get_all_player = function(data) {
             obj.dataCount = (data.data != undefined) ? data.data.length : 0;
             if (obj.dataCount > 0) {

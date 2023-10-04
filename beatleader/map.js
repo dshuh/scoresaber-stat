@@ -310,12 +310,16 @@ function Map(controlData) {
             data[i].hash = data[i].song.hash;
             // data[i].difficulties = data[i].song.difficulties;
             data[i].difficulties = [];
-            for(var j=0;j<data[i].song.difficulties.length;j++){
-                var difficult = {};
-                difficult.name = data[i].song.difficulties[j].difficultyName;
-                difficult.characteristic = data[i].song.difficulties[j].modeName;
-                data[i].difficulties.push(difficult);
-            }
+            var difficult = {};
+            difficult.name = data[i].difficulty.difficultyName;
+            difficult.characteristic = data[i].difficulty.modeName;
+            data[i].difficulties.push(difficult);
+            // for(var j=0;j<data[i].difficulty.length;j++){
+            //     var difficult = {};
+            //     difficult.name = data[i].difficulty[j].difficultyName;
+            //     difficult.characteristic = data[i].difficulty[j].modeName;
+            //     data[i].difficulties.push(difficult);
+            // }
 
 			// #region 개발자 영역 > paging(more) 처리를 위한 셋팅
 			if(i == data.length - 1) {

@@ -294,9 +294,9 @@ function createLeftMenuLayer(obj) {
     var html = '\
         <ul data-role="listview">\
             <li><a data-role="button">Game Tools</a></li>\
-            <li><a href="../scoresaber/index.html">ScoreSaber</a></li>\
-            <li><a href="../scoresaber2/index.html">ScoreSaber2</a></li>\
-            <li><a href="../beatleader/index.html">BeatLeader</a></li>\
+            <li><a href="../scoresaber/index.html" target="_blank">ScoreSaber</a></li>\
+            <li><a href="../scoresaber2/index.html" target="_blank">ScoreSaber2</a></li>\
+            <li><a href="../beatleader/index.html" target="_blank">BeatLeader</a></li>\
             <li></li>\
         </ul>\
     ';

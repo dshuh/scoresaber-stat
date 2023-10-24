@@ -184,8 +184,8 @@
                 "callback": "callback_get_clan",
                 "parameters": [
                     "ctrl.txtClanTag",
-                    "ctrl.selRankSortBy",
-                    "ctrl.selRankOrder",
+                    "ctrl.selClanRankSortBy",
+                    "ctrl.selClanRankOrder",
                     "var.page_index"
                 ],
                 "message": {
@@ -202,8 +202,6 @@
                 "callback": "callback_get_clan_ranking",
                 "parameters": [
                     "ctrl.selClanList",
-                    "ctrl.selRankSortBy",
-                    "ctrl.selRankOrder",
                     "var.page_index"
                 ],
                 "message": {
@@ -354,6 +352,20 @@
                 "type": "string",
                 "in": "query",
                 "required": true
+            },{
+                "id": "ctrl.selClanRankSortBy",
+                "name": "sortBy",
+                "value_type": "control",
+                "value": "selClanRankSortBy",
+                "type": "string",
+                "in": "query"
+            },{
+                "id": "ctrl.selClanRankOrder",
+                "name": "order",
+                "value_type": "control",
+                "value": "selClanRankOrder",
+                "type": "string",
+                "in": "query"
             },{
                 "id": "ctrl.txtClanTag",
                 "name": "search",
@@ -803,6 +815,46 @@
         },{
             "id": "selRankOrder",
             "name": "selRankOrder",
+            "tag": "select",
+            "title": "Order Type",
+            "options": [
+                {
+                    "value": "desc",
+                    "text": "desc",
+                    "selected": "selected"
+                },
+                {
+                    "value": "asc",
+                    "text": "asc"
+                }
+            ]
+        },{
+            "id": "selClanRankSortBy",
+            "name": "selClanRankSortBy",
+            "tag": "select",
+            "title": "Sort Type",
+            "options": [
+                {
+                    "value": "pp",
+                    "text": "PP",
+                    "selected": "selected"
+                },
+                {
+                    "value": "acc",
+                    "text": "acc"
+                },
+                {
+                    "value": "rank",
+                    "text": "rank"
+                },
+                {
+                    "value": "count",
+                    "text": "count"
+                }
+            ]
+        },{
+            "id": "selClanRankOrder",
+            "name": "selClanRankOrder",
             "tag": "select",
             "title": "Order Type",
             "options": [
@@ -3086,8 +3138,8 @@
                 "controls": [
                     "selClanList",
                     "txtClanTag",
-                    "selRankSortBy",
-                    "selRankOrder",
+                    "selClanRankSortBy",
+                    "selClanRankOrder",
                     "{newline}",
                     "btnClanRankingSearch"
                 ]

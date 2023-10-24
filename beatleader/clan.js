@@ -55,8 +55,8 @@ function Clan(controlData) {
     obj.defineElements = function() {
 		obj.txtClanTag = $("#txtClanTag");
         obj.selClanList = $("#selClanList");
-		obj.selRankSortBy = $("#selRankSortBy");
-		obj.selRankOrder = $("#selRankOrder");
+		obj.selClanRankSortBy = $("#selClanRankSortBy");
+		obj.selClanRankOrder = $("#selClanRankOrder");
 		obj.btnClanRankingSearch = $("#btnClanRankingSearch");
 		obj.clanContainer = $("#clanContainer");
 		obj.clanPager = $("#clanPager");
@@ -78,11 +78,11 @@ function Clan(controlData) {
                 panelAlertLayer("Please select clan.", "alert");
             }
 		});
-        obj.selRankSortBy.change(function(){
-            obj.btnClanRankingSearch.click();
+        obj.selClanRankSortBy.change(function(){
+            obj.clanApiCall("get_clan");
 		});
-        obj.selRankOrder.change(function(){
-            obj.btnClanRankingSearch.click();
+        obj.selClanRankOrder.change(function(){
+            obj.clanApiCall("get_clan");
 		});
 
 		obj.btnClanRankingSearch.click(function () {
@@ -262,8 +262,8 @@ function Clan(controlData) {
         //https://www.beatleader.xyz/global/2&country=kr
         html = '<hr>';
         html += '<h4><b><a href="https://www.beatleader.xyz/clan/' + data.tag + '" target="_blank">'+ "<img src='" + data.icon + "' width=50 height=50 boarder=0 />" + '<font color="'+ data.color +'"> ' + data.tag + '</font></a></b></h4>';
-        html += '<h4><b><font color="blue">' + data.name + '</font></b> - ' + data.description + '</h4>';
-        html += '<h4><b><font color="darkgray">Clan Player</font> : <font color="purple">' + data.playersCount + '</font></b></h4>';
+        html += '<h4><b><font color="blue">' + data.name + '</font></b> - <font color="gray">' + data.description + '</font></h4>';
+        html += '<h4><b><font color="darkgray">Clan Player</font> : <font color="red">' + data.playersCount + '</font></b></h4>';
         html += '<h4><b><font color="darkgray">Total PP</font> : <font color="red">' + data.pp.toFixed(2) + '</b> <b><font color="darkgray">Average Acc</font> : <font color="green">' + data.averageAccuracy.toFixed(2) + '</b> <b><font color="darkgray">Average Rank</font> : <font color="blue">' + data.averageRank.toFixed(2) + '</b></h4>';
         html += '<h4></h4>';
         $("#dvtitleArea").empty().append(html).trigger("create");

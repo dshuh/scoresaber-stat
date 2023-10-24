@@ -175,6 +175,44 @@
                 }
             }
         ],
+        "clan": [
+            {
+                "id": "get_clan",
+                "path": "/clans?leaderboardContext=general",
+                "method": "GET",
+                "content_type": "application/x-www-form-urlencoded",
+                "callback": "callback_get_clan",
+                "parameters": [
+                    "ctrl.txtClanTag",
+                    "ctrl.selRankSortBy",
+                    "ctrl.selRankOrder",
+                    "var.page_index"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during clan inquiry."
+                }
+            },
+            {
+                "id": "get_clan_ranking",
+                "path": "/clan/{clan_id}?leaderboardContext=general",
+                "method": "GET",
+                "content_type": "application/x-www-form-urlencoded",
+                "callback": "callback_get_clan_ranking",
+                "parameters": [
+                    "ctrl.selClanList",
+                    "ctrl.selRankSortBy",
+                    "ctrl.selRankOrder",
+                    "var.page_index"
+                ],
+                "message": {
+                    "confirm": "",
+                    "success": "",
+                    "error": "An error occurred during ranking inquiry."
+                }
+            }
+        ],
         "compare": [
             {
                 "id": "get_full1",
@@ -317,6 +355,13 @@
                 "in": "query",
                 "required": true
             },{
+                "id": "ctrl.txtClanTag",
+                "name": "search",
+                "value_type": "control",
+                "value": "txtClanTag",
+                "type": "string",
+                "in": "query"
+            },{
                 "id": "ctrl.selStartStar",
                 "name": "stars_from",
                 "value_type": "control",
@@ -359,6 +404,13 @@
                 "value": "selPageCount",
                 "type": "int",
                 "in": "query"
+            },{
+                "id": "ctrl.selClanList",
+                "name": "{clan_id}",
+                "value_type": "control",
+                "value": "selClanList",
+                "type": "string",
+                "in": "path"
             },{
                 "id": "ctrl.country",
                 "name": "countries",
@@ -612,6 +664,13 @@
             "title": "Search",
             "api": "get_ranking"
         },{
+            "id": "btnClanRankingSearch",
+            "name": "btnClanRankingSearch",
+            "tag": "button",
+            "value": "Search",
+            "title": "Search",
+            "api": "get_clan_ranking"
+        },{
             "id": "txtUserID",
             "name": "txtUserID",
             "tag": "text",
@@ -757,6 +816,13 @@
                     "text": "asc"
                 }
             ]
+        },{
+            "id": "txtClanTag",
+            "name": "txtClanTag",
+            "tag": "text",
+            "value": "",
+            "placeholder": "Clan Tag Name",
+            "title": "Clan Tag Name"
         },{
             "id": "selPageCount",
             "name": "selPageCount",
@@ -1040,6 +1106,54 @@
                 {"value": "YE", "text": "Yemen"},
                 {"value": "ZM", "text": "Zambia"},
                 {"value": "ZW", "text": "Zimbabwe"}
+            ]
+        },{
+            "id": "selClanList",
+            "name": "selClanList",
+            "tag": "select",
+            "title": "Clan List",
+            "options": [
+                {
+                    "value": "Select",
+                    "text": "Select",
+                    "selected": "selected"
+                },
+                {
+                    "value": "META",
+                    "text": "META"
+                },
+                {
+                    "value": "PPER",
+                    "text": "PPER"
+                },
+                {
+                    "value": "KAT",
+                    "text": "KAT"
+                },
+                {
+                    "value": "JML",
+                    "text": "JML"
+                },
+                {
+                    "value": "GP",
+                    "text": "GP"
+                },
+                {
+                    "value": "RAGE",
+                    "text": "RAGE"
+                },
+                {
+                    "value": "OEN",
+                    "text": "OEN"
+                },
+                {
+                    "value": "ART",
+                    "text": "ART"
+                },
+                {
+                    "value": "BAKA",
+                    "text": "BAKA"
+                }
             ]
         },{
             "id": "selCountryList1",
@@ -2930,6 +3044,207 @@
                     ],
                     "toolbar": {
                         "id": "rankingPager",
+                        "add": false, 
+                        "search": false, 
+                        "edit": false, 
+                        "del": false, 
+                        "refresh": true,
+                        "buttons":[
+                            {
+                                "id": "search",
+                                "caption": "search",
+                                "title": "search",
+                                "buttonicon": "ui-icon-pin-s",
+                                "position": "last",
+                                "callback": "callback_navButton_search"
+                            },{
+                                "id": "download",
+                                "caption": "download",
+                                "title": "download",
+                                "buttonicon": "ui-icon-disk",
+                                "position": "last",
+                                "callback": "callback_navButton_download"
+                            },{
+                                "id": "more",
+                                "caption": "more",
+                                "title": "more",
+                                "buttonicon": "ui-icon-seek-next",
+                                "position": "last",
+                                "callback": "callback_navButton_more"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "id": "clan",
+            "name": "Clan",
+            "desc": "Clans",
+            "search_area": {
+                "title": "Set search value for calling Global Clan lookup API.",
+                "controls": [
+                    "selClanList",
+                    "txtClanTag",
+                    "selRankSortBy",
+                    "selRankOrder",
+                    "{newline}",
+                    "btnClanRankingSearch"
+                ]
+            },
+            "contents_area": {
+                "title": "Global Clan results are inquired through Grid.<br/><b>If a timeout error occurs during search, you can search consecutively with the more button at the bottom of the page.</b>",
+                "controls": [
+                    "clanContainer",
+                    "clanPager"
+                ],
+                "grid": {
+                    "id": "clanContainer",
+                    "checkbox_name": "chk_columns",
+                    "columns" : [
+                        { 
+                            "name": "id", 
+                            "index": "id", 
+                            "width": 160,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "ID"
+                        },
+                        { 
+                            "name": "rank", 
+                            "index": "rank", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Rank"
+                        },
+                        { 
+                            "name": "globalRankGap", 
+                            "index": "globalRankGap", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "Gap",
+                            "formatter": "convertGap"
+                        },
+                        { 
+                            "name": "country", 
+                            "index": "country", 
+                            "width": 40,
+                            "text": "CTRY",
+                            "formatter": "convertCountry"
+                        },
+                        { 
+                            "name": "countryRank", 
+                            "index": "countryRank", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Rank"
+                        },
+                        { 
+                            "name": "countryRankGap", 
+                            "index": "countryRankGap", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Gap",
+                            "formatter": "convertGap"
+                        },
+                        { 
+                            "name": "avatar", 
+                            "index": "avatar", 
+                            "width": 30,
+                            "text": "AVT",
+                            "formatter": "convertAvartar"
+                        },
+                        { 
+                            "name": "name", 
+                            "index": "name", 
+                            "width": 150,
+                            "text": "Name",
+                            "formatter": "convertPlayerName"
+                        },
+                        { 
+                            "name": "pp", 
+                            "index": "pp", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "PP",
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "globalPPGap", 
+                            "index": "globalPPGap", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "PPGap",
+                            "formatter": "convertGap"
+                        },
+                        { 
+                            "name": "accPp", 
+                            "index": "accPp", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "AccPP",
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "techPp", 
+                            "index": "techPp", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "TechPP",
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "passPp", 
+                            "index": "passPp", 
+                            "width": 80,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "PassPP",
+                            "formatter": "convertPP"
+                        },
+                        { 
+                            "name": "platform", 
+                            "index": "platform", 
+                            "width": 80,
+                            "text": "Platform"
+                        }
+                    ],
+                    "toolbar": {
+                        "id": "clanPager",
                         "add": false, 
                         "search": false, 
                         "edit": false, 

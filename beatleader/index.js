@@ -17,6 +17,9 @@
 	obj.pageRankingLayer = $(controlData.pageRankingLayer);
 	obj.ranking = new Ranking({ pageRankingLayer: obj.pageRankingLayer });
     
+	obj.pageClanLayer = $(controlData.pageClanLayer);
+	obj.clan = new Clan({ pageClanLayer: obj.pageClanLayer });
+    
     obj.pageCompareLayer = $(controlData.pageCompareLayer);
 	obj.compare = new Compare({ pageCompareLayer: obj.pageCompareLayer });
 
@@ -86,6 +89,7 @@
                 <li><a id="hpMapLayer">Map</a></li>\
                 <li><a id="hpPlayerLayer">Player</a></li>\
                 <li><a id="hpRankingLayer">Ranking</a></li>\
+                <li><a id="hpClanLayer">Clan</a></li>\
                 <li><a id="hpCompareLayer">Compare</a></li>\
             </ul>\
         </div>\
@@ -96,12 +100,14 @@
 		obj.hpMapLayer = $("#hpMapLayer");
 		obj.hpPlayerLayer = $("#hpPlayerLayer");
 		obj.hpRankingLayer = $("#hpRankingLayer");
+		obj.hpClanLayer = $("#hpClanLayer");
 		obj.hpCompareLayer = $("#hpCompareLayer");
 
 		obj.allMenuReset = function () {
 			obj.map.reset();
 			obj.player.reset();
             obj.ranking.reset();
+            obj.clan.reset();
 			obj.compare.reset();
 		};
 
@@ -118,6 +124,11 @@
 		obj.hpRankingLayer.click(function () {
 			obj.allMenuReset();
 			obj.ranking.init();
+		});
+
+		obj.hpClanLayer.click(function () {
+			obj.allMenuReset();
+			obj.clan.init();
 		});
 
 		obj.hpCompareLayer.click(function () {

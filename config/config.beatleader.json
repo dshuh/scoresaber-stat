@@ -185,7 +185,6 @@
                 "parameters": [
                     "ctrl.txtClanTag",
                     "ctrl.selClanRankSortBy",
-                    "ctrl.selClanRankOrder",
                     "var.page_index"
                 ],
                 "message": {
@@ -357,13 +356,6 @@
                 "name": "sortBy",
                 "value_type": "control",
                 "value": "selClanRankSortBy",
-                "type": "string",
-                "in": "query"
-            },{
-                "id": "ctrl.selClanRankOrder",
-                "name": "order",
-                "value_type": "control",
-                "value": "selClanRankOrder",
                 "type": "string",
                 "in": "query"
             },{
@@ -853,21 +845,12 @@
                 }
             ]
         },{
-            "id": "selClanRankOrder",
-            "name": "selClanRankOrder",
-            "tag": "select",
-            "title": "Order Type",
-            "options": [
-                {
-                    "value": "desc",
-                    "text": "desc",
-                    "selected": "selected"
-                },
-                {
-                    "value": "asc",
-                    "text": "asc"
-                }
-            ]
+            "id": "btnClanMoreSearch",
+            "name": "btnClanMoreSearch",
+            "tag": "button",
+            "value": "more",
+            "title": "More",
+            "api": "get_clan"
         },{
             "id": "txtClanTag",
             "name": "txtClanTag",
@@ -3139,7 +3122,7 @@
                     "selClanList",
                     "txtClanTag",
                     "selClanRankSortBy",
-                    "selClanRankOrder",
+                    "btnClanMoreSearch",
                     "{newline}",
                     "btnClanRankingSearch"
                 ]

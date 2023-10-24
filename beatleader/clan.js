@@ -56,7 +56,7 @@ function Clan(controlData) {
 		obj.txtClanTag = $("#txtClanTag");
         obj.selClanList = $("#selClanList");
 		obj.selClanRankSortBy = $("#selClanRankSortBy");
-		obj.selClanRankOrder = $("#selClanRankOrder");
+		obj.btnClanMoreSearch = $("#btnClanMoreSearch");
 		obj.btnClanRankingSearch = $("#btnClanRankingSearch");
 		obj.clanContainer = $("#clanContainer");
 		obj.clanPager = $("#clanPager");
@@ -81,7 +81,8 @@ function Clan(controlData) {
         obj.selClanRankSortBy.change(function(){
             obj.clanApiCall("get_clan");
 		});
-        obj.selClanRankOrder.change(function(){
+        obj.btnClanMoreSearch.click(function(){
+            obj.pageIndex++;
             obj.clanApiCall("get_clan");
 		});
 
@@ -367,11 +368,11 @@ function Clan(controlData) {
         
 		var callback_get_clan = function(data) {
             var iterHtml = "";
-            iterHtml += "<option value='' selected='selected'>Select</option>";
+            iterHtml += "<option value=''>======================</option>";
             for (var i = 0; i < data.data.length; i++) {
-                iterHtml += "<option value='" + data.data[i].tag + "'>" + data.data[i].tag + "</option>";
+                iterHtml += "<option value='" + data.data[i].tag + "'>[" + data.data[i].tag + "] - " + data.data[i].name + "</option>";
             }
-            obj.selClanList.empty().append(iterHtml).trigger('create');
+            obj.selClanList.append(iterHtml).trigger('create');
             // obj.dataCount = (data != undefined) ? data.data.length : 0;
             // obj.max_page = parseInt((data.metadata.total - 1) / data.metadata.itemsPerPage) + 1;
             // obj.total_count = data.metadata.total;//(data.metadata.total * data.metadata.itemsPerPage);

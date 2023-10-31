@@ -171,7 +171,6 @@ function sortJSONArray(list, prop, asc) {
 }
 
 function removeBeatSaberKeyString(str) {
-    console.log(str);
     const regex = /x{2,}/;
     const match = str.match(regex);
     

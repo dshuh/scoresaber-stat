@@ -216,7 +216,6 @@ function Clan(controlData) {
 
     // Grid Data Binding
     obj.bindGrid = function(data) {
-        console.log(data.container.players.length);
 		for(var i=0; i<data.container.players.length; i++) {
             // var globalRankPage = parseInt((data.container.players[i].rank - 1) / 50) + 1;
             // var countryRankPage = parseInt((data.container.players[i].countryRank - 1) / 50) + 1;
@@ -247,7 +246,6 @@ function Clan(controlData) {
 			// }
 			// #endregion
 			// #region 개발자 영역 > Grid에 UUID Mapping
-            console.log(data.container.players[i].id, data.container.players[i]);
 			obj.clanContainer.jqGrid("addRowData", data.container.players[i].id, data.container.players[i]);
 			// #endregion
 		}

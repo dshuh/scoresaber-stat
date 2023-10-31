@@ -261,9 +261,7 @@ function Ranking(controlData) {
 
     // Grid Data Binding
     obj.bindGrid = function(data) {
-        console.log(data);
 		for(var i=0; i<data.length; i++) {
-            console.log(data[i]);
             var splitHistory = data[i].histories.split(",");
             //data[i].weekly_gap = data[i].difference;
             if (splitHistory[splitHistory.length - 7] > 900000) {
@@ -290,7 +288,6 @@ function Ranking(controlData) {
 			}
 			// #endregion
 			// #region 개발자 영역 > Grid에 UUID Mapping
-            console.log(data[i]);
 			obj.rankingContainer.jqGrid("addRowData", data[i].rank, data[i]);
 			// #endregion
 		}

@@ -534,7 +534,6 @@ function Compare(controlData) {
                         ((data.playerScores[i].score.baseScore * 100) / data.playerScores[i].leaderboard.maxScore).toFixed(2) : 
                         0;
                     data.playerScores[i].mypp = (data.playerScores[i].score.pp * data.playerScores[i].score.weight).toFixed(2);
-                    console.log("data.playerScores[i].leaderboard.difficulty.difficulty", data.playerScores[i].leaderboard.difficulty.difficulty)
                     data.playerScores[i].diff = (data.playerScores[i].leaderboard.difficulty.difficulty == 1) ? "Easy" : 
                         (data.playerScores[i].leaderboard.difficulty.difficulty == 3) ? "Normal" : 
                         (data.playerScores[i].leaderboard.difficulty.difficulty == 5) ? "Hard" : 

@@ -234,7 +234,6 @@ function Ranking(controlData) {
 
     // Grid Data Binding
     obj.bindGrid = function(data) {
-        console.log(data.length);
 		for(var i=0; i<data.length; i++) {
             // var globalRankPage = parseInt((data[i].rank - 1) / 50) + 1;
             // var countryRankPage = parseInt((data[i].countryRank - 1) / 50) + 1;

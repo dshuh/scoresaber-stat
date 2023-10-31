@@ -240,6 +240,12 @@ function Map(controlData) {
         $.fn.fmatter.convertStars = function (cellValue,rowObject,options) {
 			return ConvertToString("stars", options);
         };
+        $.fn.fmatter.convertSSStars = function (cellValue,rowObject,options) {
+			return cellValue + "★";
+        };
+        $.fn.fmatter.convertGap = function (cellValue,rowObject,options) {
+            return cellValue > 0 ? '▲'+ Math.abs(cellValue) : cellValue < 0 ? '▼'+ Math.abs(cellValue) : '-';
+        };
         $.fn.fmatter.convertAccRating = function (cellValue,rowObject,options) {
 			return options.accRating.toFixed(2) + "★";
         };
@@ -259,6 +265,13 @@ function Map(controlData) {
     // Grid Data Binding
     obj.bindGrid = function(data) {
 		for(var i=0; i<data.length; i++) {
+            var scoreSaberData = mapList.find(x => x.beatSaverKey === data[i].song.id && x.maxScore === data[i].difficulty.maxScore);
+            if (scoreSaberData != undefined) {
+                data[i].ss_stars = scoreSaberData.stars.toFixed(2);
+                data[i].stars_gap = (data[i].difficulty.stars - scoreSaberData.stars).toFixed(2);
+            } else {
+                data[i].ss_stars = "0";
+            }
             var userData = obj.pData.find(x => x.leaderboardId === data[i].id);
             if (userData == undefined) {
                 data[i].modifiers = "";

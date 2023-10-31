@@ -95,10 +95,16 @@
         var root;
         var mapList;
         
-        $.getJSON("../config/config.beatleader.json", function(data) {
+        $.when(
+            $.getJSON("../data/ranked_map.json", function(data) {
+            }),
+            $.getJSON("../config/config.beatleader.json", function(data) {
             })
-        .done(function(data) {
-            config = data;
+        ).done(function(data1, data2) {
+            config = data2[0];
+            sortJSONArray(data1[0].list, "uid", true);
+            mapList = data1[0].list;
+            // removeMapProperties();
             root = new TemplateLayer({
                 dvHeader: "#dvHeader",
                 dvFooter: "#dvFooter",
@@ -117,6 +123,29 @@
         .fail(function(data, textStatus, errorThrown){
             panelAlertLayer(textStatus + " > " + errorThrown, "error");
         });
+
+        // $.getJSON("../config/config.beatleader.json", function(data) {
+        //     })
+        // .done(function(data) {
+        //     config = data;
+        //     root = new TemplateLayer({
+        //         dvHeader: "#dvHeader",
+        //         dvFooter: "#dvFooter",
+        //         dvMenu: "#dvMenu",
+        //         dvMainContent: "#dvMainContent",
+		// 		pageMapLayer: "#pageMapLayer",
+		// 		pagePlayerLayer: "#pagePlayerLayer",
+        //         pageRankingLayer: "#pageRankingLayer",
+        //         pageClanLayer: "#pageClanLayer",
+		// 		pageCompareLayer: "#pageCompareLayer",
+
+        //         navpanel_left: "#navpanel_left"
+        //     });
+        //     root.init();
+        // })
+        // .fail(function(data, textStatus, errorThrown){
+        //     panelAlertLayer(textStatus + " > " + errorThrown, "error");
+        // });
 
     </script>
 </body>

@@ -332,10 +332,14 @@ function Player(controlData) {
     // Grid Data Binding
     obj.bindGrid = function(data) {
 		for(var i=0; i<data.length; i++) {
-            var scoreSaberData = mapList.find(x => x.beatSaverKey === data[i].leaderboard.song.id && x.maxScore === data[i].leaderboard.difficulty.maxScore);
-            if (scoreSaberData != undefined && data[i].leaderboard.difficulty.stars != null) {
+            var scoreSaberData = mapList.find(x => x.name === data[i].leaderboard.song.name && x.maxScore === data[i].leaderboard.difficulty.maxScore);
+            if (scoreSaberData != undefined) {
                 data[i].ss_stars = scoreSaberData.stars.toFixed(2);
-                data[i].stars_gap = (data[i].leaderboard.difficulty.stars - scoreSaberData.stars).toFixed(2);
+                if (data[i].leaderboard.difficulty.stars != null) {
+                    data[i].stars_gap = (data[i].leaderboard.difficulty.stars - scoreSaberData.stars).toFixed(2);
+                } else {
+                    data[i].stars_gap = "0";
+                }
             } else {
                 data[i].ss_stars = "0";
                 data[i].stars_gap = "0";

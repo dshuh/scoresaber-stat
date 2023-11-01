@@ -268,7 +268,11 @@ function Map(controlData) {
             var scoreSaberData = mapList.find(x => x.beatSaverKey === data[i].song.id && x.maxScore === data[i].difficulty.maxScore);
             if (scoreSaberData != undefined) {
                 data[i].ss_stars = scoreSaberData.stars.toFixed(2);
-                data[i].stars_gap = (data[i].difficulty.stars - scoreSaberData.stars).toFixed(2);
+                if (data[i].difficulty.stars != null) {
+                    data[i].stars_gap = (data[i].difficulty.stars - scoreSaberData.stars).toFixed(2);
+                } else {
+                    data[i].stars_gap = "0";
+                }
             } else {
                 data[i].ss_stars = "0";
                 data[i].stars_gap = "0";

@@ -271,6 +271,7 @@ function Map(controlData) {
                 data[i].stars_gap = (data[i].difficulty.stars - scoreSaberData.stars).toFixed(2);
             } else {
                 data[i].ss_stars = "0";
+                data[i].stars_gap = "0";
             }
             var userData = obj.pData.find(x => x.leaderboardId === data[i].id);
             if (userData == undefined) {

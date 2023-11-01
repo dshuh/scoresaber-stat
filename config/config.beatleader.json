@@ -3448,6 +3448,30 @@
                             "text": "mod_2"
                         },
                         { 
+                            "name": "ss_stars", 
+                            "index": "ss_stars", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "SS-stars",
+                            "formatter": "convertSSStars"
+                        },
+                        { 
+                            "name": "stars_gap", 
+                            "index": "stars_gap", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "SS-Gap",
+                            "formatter": "convertGap"
+                        },
+                        { 
                             "name": "winner", 
                             "index": "winner", 
                             "width": 80,

@@ -244,6 +244,13 @@ function Compare(controlData) {
             }
             return cellValue;
         };
+        
+        $.fn.fmatter.convertSSStars = function (cellValue,rowObject,options) {
+			return cellValue + "★";
+        };
+        $.fn.fmatter.convertGap = function (cellValue,rowObject,options) {
+            return cellValue > 0 ? '▲'+ Math.abs(cellValue) : cellValue < 0 ? '▼'+ Math.abs(cellValue) : '-';
+        };
         // #endregion
         
         obj.navGrid();
@@ -273,6 +280,14 @@ function Compare(controlData) {
 
                 if(obj.p1Data[i].leaderboardId == obj.p2Data[j].leaderboardId) {
                     resultData = {};
+                    var scoreSaberData = mapList.find(x => x.name === obj.p1Data[i].songName && x.diff === obj.p1Data[i].diff);
+                    if (scoreSaberData != undefined && obj.p1Data[i].stars != null) {
+                        resultData["ss_stars"] = scoreSaberData.stars.toFixed(2);
+                        resultData["stars_gap"] = (obj.p1Data[i].stars - scoreSaberData.stars).toFixed(2);
+                    } else {
+                        resultData["ss_stars"] = "0";
+                        resultData["stars_gap"] = "0";
+                    }
                     isDuplicate = true;
                     resultData["id"] = obj.p1Data[i].leaderboardId;
                     resultData["stars_1"] = obj.p1Data[i].stars;
@@ -336,7 +351,14 @@ function Compare(controlData) {
                 }
             }
             if (!isDuplicate) {
-                
+                var scoreSaberData = mapList.find(x => x.name === obj.p1Data[i].songName && x.diff === obj.p1Data[i].diff);
+                if (scoreSaberData != undefined && obj.p1Data[i].stars != null) {
+                    resultData["ss_stars"] = scoreSaberData.stars.toFixed(2);
+                    resultData["stars_gap"] = (obj.p1Data[i].stars - scoreSaberData.stars).toFixed(2);
+                } else {
+                    resultData["ss_stars"] = "0";
+                    resultData["stars_gap"] = "0";
+                }
                 resultData["id"] = obj.p1Data[i].leaderboardId;
                 resultData["stars_1"] = obj.p1Data[i].stars;
                 resultData["stars_2"] = "";
@@ -383,6 +405,16 @@ function Compare(controlData) {
                 }
             }
             if (!isDuplicate) {
+                
+                var scoreSaberData = mapList.find(x => x.name === obj.p2Data[i].songName && x.diff === obj.p2Data[i].diff);
+                if (scoreSaberData != undefined && obj.p2Data[i].stars != null) {
+                    resultData["ss_stars"] = scoreSaberData.stars.toFixed(2);
+                    resultData["stars_gap"] = (obj.p2Data[i].stars - scoreSaberData.stars).toFixed(2);
+                } else {
+                    resultData["ss_stars"] = "0";
+                    resultData["stars_gap"] = "0";
+                }
+
                 resultData["id"] = obj.p2Data[i].leaderboardId;
                 resultData["stars_1"] = "";
                 resultData["stars_2"] = obj.p2Data[i].stars;

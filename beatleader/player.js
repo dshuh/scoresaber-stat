@@ -338,6 +338,7 @@ function Player(controlData) {
                 data[i].stars_gap = (data[i].leaderboard.difficulty.stars - scoreSaberData.stars).toFixed(2);
             } else {
                 data[i].ss_stars = "0";
+                data[i].stars_gap = "0";
             }
             // var mapInfo = mapList.find(x => x.uid === data[i].leaderboard.id);
             // if(mapInfo != undefined && mapInfo != null) {

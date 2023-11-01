@@ -317,6 +317,13 @@ function Player(controlData) {
             }
         };
         
+        $.fn.fmatter.convertSSStars = function (cellValue,rowObject,options) {
+			return cellValue + "★";
+        };
+        $.fn.fmatter.convertGap = function (cellValue,rowObject,options) {
+            return cellValue > 0 ? '▲'+ Math.abs(cellValue) : cellValue < 0 ? '▼'+ Math.abs(cellValue) : '-';
+        };
+        
         // #endregion
         
         obj.navGrid();
@@ -325,6 +332,13 @@ function Player(controlData) {
     // Grid Data Binding
     obj.bindGrid = function(data) {
 		for(var i=0; i<data.length; i++) {
+            var scoreSaberData = mapList.find(x => x.beatSaverKey === data[i].leaderboard.song.id && x.maxScore === data[i].leaderboard.difficulty.maxScore);
+            if (scoreSaberData != undefined && data[i].leaderboard.difficulty.stars != null) {
+                data[i].ss_stars = scoreSaberData.stars.toFixed(2);
+                data[i].stars_gap = (data[i].leaderboard.difficulty.stars - scoreSaberData.stars).toFixed(2);
+            } else {
+                data[i].ss_stars = "0";
+            }
             // var mapInfo = mapList.find(x => x.uid === data[i].leaderboard.id);
             // if(mapInfo != undefined && mapInfo != null) {
             //     data[i].beatSaverKey = mapInfo.beatSaverKey;

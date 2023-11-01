@@ -2139,7 +2139,7 @@
                         { 
                             "name": "stars", 
                             "index": "stars", 
-                            "width": 50,
+                            "width": 60,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -2151,7 +2151,7 @@
                         { 
                             "name": "ss_stars", 
                             "index": "ss_stars", 
-                            "width": 50,
+                            "width": 60,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -2473,13 +2473,37 @@
                         { 
                             "name": "stars", 
                             "index": "stars", 
-                            "width": 50,
+                            "width": 60,
                             "sorttype":"int",
                             "text": "Stars",
                             "searchoptions": {
                                 "searchOperators": true,
                                 "sopt": ["lt", "eq"]
                             }
+                        },
+                        { 
+                            "name": "ss_stars", 
+                            "index": "ss_stars", 
+                            "width": 60,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "SS-stars",
+                            "formatter": "convertSSStars"
+                        },
+                        { 
+                            "name": "stars_gap", 
+                            "index": "stars_gap", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "eq"]
+                            },
+                            "text": "Gap",
+                            "formatter": "convertGap"
                         },
                         { 
                             "name": "coverImage", 

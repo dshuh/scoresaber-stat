@@ -561,74 +561,54 @@ function Compare(controlData) {
         html += '<h4><b><font color="darkgray">Avg Accuracy</font> : <font color="red">' + (data.scoreStats.averageRankedAccuracy*100).toFixed(2) + '%</font> (SS+:<font color="#ff7300">' + data.scoreStats.sspPlays + '</font>, SS:<font color="orange">' + data.scoreStats.ssPlays + '</font>, S+:<font color="blue">' + data.scoreStats.spPlays + '</font>, S:<font color="green">' + data.scoreStats.sPlays + '</font>, A:<font color="gray">' + data.scoreStats.aPlays + '</font>)</b></h4>';
         html += '<h4><b><font color="darkgray">Play Count(Rank Count)</font> : <font color="red">' + data.scoreStats.totalPlayCount + '</font>(<font color="green">' + data.scoreStats.rankedPlayCount + '</font>)</b></h4>';
         $("#dvtitleArea").append(html).trigger("create");
-
-        // //"<a href='https://scoresaber.com/u/76561198830502286" + page + "' target='_blank'>" + cellValue + "</a>"
-        // //https://scoresaber.com/global/2&country=kr
-        // var globalRankPage = parseInt((data.rank - 1) / 50) + 1;
-        // var countryRankPage = parseInt((data.countryRank - 1) / 50) + 1;
-        // html = '<hr>';
-        // //html += '<h4><b><font color="red">P' + index + '</font> : <a href="https://scoresaber.com/u/' + data.playerId + '" target="_blank"><font color="green">' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
-        // html += '<h4><b><a href="https://scoresaber.com/u/' + data.id + '" target="_blank">'+ "<img src='" + data.profilePicture + "' width=50 height=50 boarder=0 />" + '<font color="green"> ' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
-        // html += '<h4><b>Global Rank : <a href="https://scoresaber.com/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '</font></a>' + ' (<a href="https://scoresaber.com/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '</font></a>)</b></h4>';
-        // html += '<h4><b>PP : ' + data.pp + ', Avg Accuracy : ' + data.scoreStats.averageRankedAccuracy.toFixed(2) + '</b></h4>';
-        // html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';
-        // $("#dvtitleArea").append(html).trigger("create");
     }
 
     obj.accRange = function (data1, data2) {
-        var html = '</hr><table border=1><tr><td width="120"><b>Accuracy</b></td><td width="150"><b>' + obj.p1Nickname + '</b></td><td width="150"><b>' + obj.p2Nickname + '</b></td><td width="120"><b>Gap</b></td></tr>';
+        var html = '</hr><table border=1>';
         var color = ["red","#ff7300","orange","blue","green"];
         var p1Total = 0;
         var p2Total = 0;
-        var gapTotal = 0;
-        for(var i=99;i>=79;i--) {
-            var p1Count = data1["r"+i.toString()];
-            var p2Count = data2["r"+i.toString()];
-            var gapCount = p1Count - p2Count;
-            html += '<tr>';
-            if(i==79) {
-                html += '<td><b><font color="gray">0-79.99%</b></td>';
-            } else {
-                html += '<td><b><font color="' + color[i%color.length] + '">' + i.toString() + '%</b></td>';
-            }
-            html += '<td><b><font color="' + color[i%color.length] + '">' + p1Count + '</font></b></td>';
-            html += '<td><b><font color="' + color[i%color.length] + '">' + p2Count + '</font></b></td>';
-            html += '<td><b><font color="' + color[i%color.length] + '">' + gapCount + '</font></b></td>';
-            html += '</tr>';
-            p1Total += p1Count;
-            p2Total += p2Count;
-            gapTotal += gapCount;
-        }
         html += '<tr>';
-        html += '<td><b><font color="red">Total</b></td>';
-        html += '<td><b><font color="red">' + p1Total + '</font></b></td>';
-        html += '<td><b><font color="red">' + p2Total + '</font></b></td>';
-        html += '<td><b><font color="red">' + gapTotal + '</font></b></td>';
+        for(var i=100;i>=78;i--) {
+            if(i==100) {
+                html += '<td width="4%"><b>Acc Range</b></td>';
+            } else if(i==78) {
+                html += '<td width="4%"><b><font color="gray">Total</b></td>';
+            } else if(i==79) {
+                html += '<td width="4%"><b><font color="gray">0-79.99%</b></td>';
+            } else {
+                html += '<td width="4%"><b><font color="' + color[i%color.length] + '">' + i.toString() + '%</b></td>';
+            }
+        }
+        html += '</tr>';
+        html += '<tr>';
+        for(var i=100;i>=78;i--) {
+            if(i==100) {
+                html += '<td width="4%"><b>' + obj.p1Nickname + '</b></td>';
+            } else if(i==78) {
+                html += '<td width="4%"><b><font color="gray">' + p1Total + '</b></td>';
+            } else {
+                var p1Count = data1["r"+i.toString()];
+                p1Total += p1Count;
+                html += '<td width="4%"><b><font color="' + color[i%color.length] + '">' + p1Count + '</font></b></td>';
+            }
+        }
+        html += '</tr>';
+        html += '<tr>';
+        for(var i=100;i>=78;i--) {
+            if(i==100) {
+                html += '<td width="4%"><b>' + obj.p2Nickname + '</b></td>';
+            } else if(i==78) {
+                html += '<td width="4%"><b><font color="gray">' + p2Total + '</b></td>';
+            } else {
+                var p2Count = data2["r"+i.toString()];
+                p2Total += p2Count;
+                html += '<td width="4%"><b><font color="' + color[i%color.length] + '">' + p2Count + '</font></b></td>';
+            }
+        }
         html += '</tr>';
         html += '</table>';
-        // var html = '<h4><b>P' + index + ' <font color="darkgray">Acc Range</font></b></h4>';
-        // html += '<h4><b>';
-        // var color = ["red","#ff7300","orange","blue","green"];
-        // for(var i=80;i<100;i++) {
-        //     html += '<font color="' + color[i%color.length] + '">' + i.toString() + '%:' + data["r"+i.toString()] + '</font> ';
-        //     if(i%10 == 9) {
-        //         html += '</b></h4><h4><b>';
-        //     }
-        // }
-        // html += '</b></h4><hr />';
         $("#dvtitleArea").append(html).trigger("create");
-
-        // //"<a href='https://scoresaber.com/u/76561198830502286" + page + "' target='_blank'>" + cellValue + "</a>"
-        // //https://scoresaber.com/global/2&country=kr
-        // var globalRankPage = parseInt((data.rank - 1) / 50) + 1;
-        // var countryRankPage = parseInt((data.countryRank - 1) / 50) + 1;
-        // html = '<hr>';
-        // //html += '<h4><b><font color="red">P' + index + '</font> : <a href="https://scoresaber.com/u/' + data.playerId + '" target="_blank"><font color="green">' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
-        // html += '<h4><b><a href="https://scoresaber.com/u/' + data.id + '" target="_blank">'+ "<img src='" + data.profilePicture + "' width=50 height=50 boarder=0 />" + '<font color="green"> ' + data.name + '</font></a> <a href="https://scoresaber.com/rankings?page=1&countries=' + data.country + '" target="_blank"><font color="blue">(' + data.country + ')</font></a></b></h4>';
-        // html += '<h4><b>Global Rank : <a href="https://scoresaber.com/rankings?page=' + globalRankPage + '" target="_blank"><font color="red">' + data.rank + '</font></a>' + ' (<a href="https://scoresaber.com/rankings?page=' + countryRankPage + '&countries=' + data.country + '" target="_blank"><font color="orange">' + data.countryRank + '</font></a>)</b></h4>';
-        // html += '<h4><b>PP : ' + data.pp + ', Avg Accuracy : ' + data.scoreStats.averageRankedAccuracy.toFixed(2) + '</b></h4>';
-        // html += '<h4><b>Play Count(Rank Count) : ' + data.scoreStats.totalPlayCount + '(' + data.scoreStats.rankedPlayCount + ')</b></h4>';
-        // $("#dvtitleArea").append(html).trigger("create");
     }
 
     // #region Call APIs

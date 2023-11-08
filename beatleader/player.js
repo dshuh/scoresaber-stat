@@ -546,25 +546,39 @@ function Player(controlData) {
             }
         }
 
-        var html = '</hr><table border=1><tr><td width="150"><b>Ranked Acc Range</b></td><td width="150"><b>' + obj.nickname + '</b></td></tr>';
+        var html = '</hr><table border=1>';
         var color = ["red","#ff7300","orange","blue","green"];
         var pTotal = 0;
-        for(var i=99;i>=79;i--) {
-            var pCount = pAccRange["r"+i.toString()];
-            html += '<tr>';
-            if(i==79) {
-                html += '<td><b><font color="gray">0-79.99%</b></td>';
-            } else {
-                html += '<td><b><font color="' + color[i%color.length] + '">' + i.toString() + '%</b></td>';
-            }
-            html += '<td><b><font color="' + color[i%color.length] + '">' + pCount + '</font></b></td>';
-            html += '</tr>';
-            pTotal += pCount;
-        }
         html += '<tr>';
-        html += '<td><b><font color="red">Total</b></td>';
-        html += '<td><b><font color="red">' + pTotal + '</font></b></td>';
+        for(var i=100;i>=78;i--) {
+            if(i==100) {
+                html += '<td width="4%"><b>Acc Range</b></td>';
+            } else if(i==78) {
+                html += '<td width="4%"><b><font color="gray">Total</b></td>';
+            } else if(i==79) {
+                html += '<td width="4%"><b><font color="gray">0-79.99%</b></td>';
+            } else {
+                html += '<td width="4%"><b><font color="' + color[i%color.length] + '">' + i.toString() + '%</b></td>';
+            }
+        }
         html += '</tr>';
+        html += '<tr>';
+        for(var i=100;i>=78;i--) {
+            if(i==100) {
+                html += '<td width="4%"><b>' + obj.nickname + '</b></td>';
+            } else if(i==78) {
+                html += '<td width="4%"><b><font color="gray">' + pTotal + '</b></td>';
+            } else {
+                var pCount = pAccRange["r"+i.toString()];
+                pTotal += pCount;
+                html += '<td width="4%"><b><font color="' + color[i%color.length] + '">' + pCount + '</font></b></td>';
+            }
+        }
+        html += '</tr>';
+        // html += '<tr>';
+        // html += '<td><b><font color="red">Total</b></td>';
+        // html += '<td><b><font color="red">' + pTotal + '</font></b></td>';
+        // html += '</tr>';
         html += '</table>';
         $("#dvtitleArea").append(html).trigger("create");
     }

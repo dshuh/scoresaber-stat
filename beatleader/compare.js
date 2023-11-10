@@ -181,6 +181,22 @@ function Compare(controlData) {
             multiselect: true,
             beforeSelectRow: function(rowid, e){ 
                 // #region 개발자 영역 > Grid loadComplete Event 구현부
+                var $self = $(this),
+                $td = $(e.target).closest("td"),
+                iCol = $.jgrid.getCellIndex($td[0]),
+                cm = $self.jqGrid("getGridParam", "colModel"),
+                rowIndex = $self.jqGrid('getInd', rowid); // 현재 행의 index를 가져옴
+            
+                if (e.ctrlKey && cm[iCol].name === 'cb') { // Ctrl 키와 함께 체크박스를 클릭한 경우
+                    var i, startIndex, endIndex;
+                    startIndex = 1;
+                    endIndex = rowIndex;
+                    var rowIds = $self.getDataIDs(); // 모든 행의 id를 가져옴
+                    for (i = startIndex; i <= endIndex; i++) {
+                        $self.jqGrid('setSelection', rowIds[i-1], false); // 각 행 선택
+                    }
+                    return false; // 기본 선택 이벤트 제거
+                }
                 return ($.jgrid.getCellIndex(e.target) == 0)
                 // #endregion
             },

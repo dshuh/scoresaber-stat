@@ -2143,7 +2143,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "stars",
                             "formatter": "convertStars"
@@ -2155,7 +2155,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "SS-stars",
                             "formatter": "convertSSStars"
@@ -2167,7 +2167,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Gap",
                             "formatter": "convertGap"
@@ -2205,7 +2205,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "accuracy",
                             "formatter": "convertAccuracy"
@@ -2224,7 +2224,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Acc",
                             "formatter": "convertAccRating"
@@ -2236,7 +2236,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Tech",
                             "formatter": "convertTechRating"
@@ -2248,7 +2248,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Pass",
                             "formatter": "convertPassRating"
@@ -2272,7 +2272,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Playtime",
                             "formatter": "convertSongTime"
@@ -2284,7 +2284,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "notes"
                         },
@@ -2295,7 +2295,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["lt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "njs"
                         },
@@ -2306,7 +2306,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["lt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "nps"
                         },
@@ -2317,7 +2317,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "plays"
                         },
@@ -2328,7 +2328,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "votes"
                         },
@@ -2339,7 +2339,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "upvotes"
                         },
@@ -2350,7 +2350,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "downvotes"
                         },
@@ -2361,7 +2361,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "rankedTime",
                             "formatter": "convertTime"
@@ -2466,7 +2466,7 @@
                             "text": "Rank",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["lt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "formatter": "convertRank"
                         },
@@ -2478,7 +2478,7 @@
                             "text": "Stars",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["lt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             }
                         },
                         { 
@@ -2488,7 +2488,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "SS-stars",
                             "formatter": "convertSSStars"
@@ -2500,7 +2500,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Gap",
                             "formatter": "convertGap"
@@ -2544,7 +2544,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Accuracy",
                             "formatter": "convertAccuracy"
@@ -2556,7 +2556,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccLeft",
                             "formatter": "convertAccPoint"
@@ -2568,7 +2568,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccRight",
                             "formatter": "convertAccPoint"
@@ -2580,7 +2580,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AvgPoint",
                             "formatter": "convertAccPoint"
@@ -2592,7 +2592,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PP",
                             "formatter": "convertPP"
@@ -2604,7 +2604,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "My PP",
                             "formatter": "convertMyPP"
@@ -2616,7 +2616,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccStar",
                             "formatter": "convertAccRating"
@@ -2628,7 +2628,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccPP",
                             "formatter": "convertAccPP"
@@ -2640,7 +2640,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "TechStar",
                             "formatter": "convertTechRating"
@@ -2652,7 +2652,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "TechPP",
                             "formatter": "convertTechPP"
@@ -2664,7 +2664,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PassStar",
                             "formatter": "convertPassRating"
@@ -2676,7 +2676,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PassPP",
                             "formatter": "convertPassPP"
@@ -2697,7 +2697,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             }
                         },
                         { 
@@ -2736,7 +2736,7 @@
                             "text": "rating",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "hidden":true
                         },
@@ -2850,7 +2850,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Rank"
                         },
@@ -2876,7 +2876,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Rank"
                         },
@@ -2887,7 +2887,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Gap",
                             "formatter": "convertGap"
@@ -2934,7 +2934,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PP",
                             "formatter": "convertPP"
@@ -2946,7 +2946,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PPGap",
                             "formatter": "convertGap"
@@ -2958,7 +2958,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AvgAcc",
                             "formatter": "convertAccuracy"
@@ -2970,7 +2970,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "avgRank"
                         },
@@ -2981,7 +2981,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "topPp",
                             "formatter": "convertPP"
@@ -2993,7 +2993,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccPP",
                             "formatter": "convertPP"
@@ -3005,7 +3005,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "TechPP",
                             "formatter": "convertPP"
@@ -3017,7 +3017,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PassPP",
                             "formatter": "convertPP"
@@ -3030,7 +3030,7 @@
                             "text": "SS+",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             }
                         },
                         { 
@@ -3041,7 +3041,7 @@
                             "text": "SS",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             }
                         },
                         { 
@@ -3052,7 +3052,7 @@
                             "text": "S+",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             }
                         },
                         { 
@@ -3063,7 +3063,7 @@
                             "text": "S",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             }
                         },
                         { 
@@ -3074,7 +3074,7 @@
                             "text": "A",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             }
                         },
                         { 
@@ -3097,7 +3097,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "weightedAcc",
                             "formatter": "convertAccuracy"
@@ -3109,7 +3109,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "maxStreak"
                         },
@@ -3120,7 +3120,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "replays"
                         }
@@ -3192,7 +3192,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "ID"
                         },
@@ -3203,7 +3203,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Rank"
                         },
@@ -3229,7 +3229,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Rank"
                         },
@@ -3240,7 +3240,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Gap",
                             "formatter": "convertGap"
@@ -3266,7 +3266,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PP",
                             "formatter": "convertPP"
@@ -3278,7 +3278,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PPGap",
                             "formatter": "convertGap"
@@ -3290,7 +3290,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccPP",
                             "formatter": "convertPP"
@@ -3302,7 +3302,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "TechPP",
                             "formatter": "convertPP"
@@ -3314,7 +3314,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PassPP",
                             "formatter": "convertPP"
@@ -3419,7 +3419,7 @@
                             "text": "Stars_1",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["lt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "formatter": "convertStar"
                         },
@@ -3431,7 +3431,7 @@
                             "text": "Stars_2",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["lt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "formatter": "convertStar"
                         },
@@ -3454,7 +3454,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "SS-stars",
                             "formatter": "convertSSStars"
@@ -3466,7 +3466,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "SS-Gap",
                             "formatter": "convertGap"
@@ -3484,7 +3484,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Acc_1",
                             "formatter": "convertAccuracy"
@@ -3496,7 +3496,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "Acc_2",
                             "formatter": "convertAccuracy"
@@ -3508,7 +3508,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccGap",
                             "formatter": "convertAccuracy"
@@ -3520,7 +3520,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccStar",
                             "formatter": "convertStar"
@@ -3532,7 +3532,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "TechStar",
                             "formatter": "convertStar"
@@ -3544,7 +3544,7 @@
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
-                                "sopt": ["gt", "eq"]
+                                "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "PassStar",
                             "formatter": "convertStar"

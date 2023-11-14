@@ -426,8 +426,8 @@ function Player(controlData) {
             // data[i].difficulties = data[i].song.difficulties;
             data[i].difficulties = [];
             var difficult = {};
-            difficult.name = data[i].difficulty.difficultyName;
-            difficult.characteristic = data[i].difficulty.modeName;
+            difficult.name = data[i].leaderboard.difficulty.difficultyName;
+            difficult.characteristic = data[i].leaderboard.difficulty.modeName;
             data[i].difficulties.push(difficult);
             // for(var j=0;j<data[i].leaderboard.song.difficulties.length;j++){
             //     var difficult = {};
@@ -492,22 +492,32 @@ function Player(controlData) {
             var gridData = obj.playerContainer.getGridParam('data');
             // var playlistMap = [];
             var playListData = {};
-            playListData.playlistTitle = "beatleader_players";
+            playListData.playlistTitle = "player";
             playListData.playlistAuthor = "hudson";
             playListData.image = getPlaylistImage();
             playListData.songs = [];
-            for( var i=0;i<obj.selectedMapIDs.length;i++) {            
+            for( var i=0;i<obj.selectedMapIDs.length;i++) {         
                 // playlistMap.push(gridData.find(x => x.id === obj.selectedMapIDs[i]));
                 var playerData = gridData.find(x => x.id === obj.selectedMapIDs[i]);
-                var song = {};
-                song.hash = playerData.hash;
-                song.songName = playerData.songName;
-                song.levelAuthorName = playerData.levelAuthorName;
-                song.difficulties = playerData.difficulties;
-                // for (var j=0;j<playerData.difficulties.length;j++){
-                //     song.difficulties.push(playerData.difficulties[j]);
-                // }
-                playListData.songs.push(song);
+                var duplCheck = false;
+                for( var j=0;j<playListData.songs.length;j++) {
+                    if ( playerData.hash == playListData.songs[j].hash) {
+                        playListData.songs[j].difficulties.push(playerData.difficulties[0]);
+                        duplCheck = true;
+                        break;
+                    }
+                }
+                if (!duplCheck) {
+                    var song = {};
+                    song.hash = playerData.hash;
+                    song.songName = playerData.songName;
+                    song.levelAuthorName = playerData.levelAuthorName;
+                    song.difficulties = playerData.difficulties;
+                    // for (var j=0;j<playerData.difficulties.length;j++){
+                    //     song.difficulties.push(playerData.difficulties[j]);
+                    // }
+                    playListData.songs.push(song);
+                }
             }
 
             var str = JSON.stringify(playListData);

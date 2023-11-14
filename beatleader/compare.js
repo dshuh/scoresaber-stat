@@ -525,19 +525,36 @@ function Compare(controlData) {
             var gridData = obj.compareContainer.getGridParam('data');
             // var playlistMap = [];
             var playListData = {};
-            playListData.playlistTitle = "beatleader_compares";
+            playListData.playlistTitle = "compare";
             playListData.playlistAuthor = "hudson";
             playListData.image = getPlaylistImage();
             playListData.songs = [];
             for( var i=0;i<obj.selectedMapIDs.length;i++) {            
                 // playlistMap.push(gridData.find(x => x.id === obj.selectedMapIDs[i]));
                 var compareData = gridData.find(x => x.id === obj.selectedMapIDs[i]);
-                var song = {};
-                song.hash = compareData.hash;
-                song.songName = compareData.songName;
-                song.levelAuthorName = compareData.levelAuthorName;
-                song.difficulties = compareData.difficulties;
-                playListData.songs.push(song);
+                
+                var duplCheck = false;
+                for( var j=0;j<playListData.songs.length;j++) {
+                    if ( compareData.hash == playListData.songs[j].hash) {
+                        playListData.songs[j].difficulties.push(compareData.difficulties[0]);
+                        duplCheck = true;
+                        break;
+                    }
+                }
+                if (!duplCheck) {
+                    var song = {};
+                    song.hash = compareData.hash;
+                    song.songName = compareData.songName;
+                    song.levelAuthorName = compareData.levelAuthorName;
+                    song.difficulties = compareData.difficulties;
+                    playListData.songs.push(song);
+                }
+                // var song = {};
+                // song.hash = compareData.hash;
+                // song.songName = compareData.songName;
+                // song.levelAuthorName = compareData.levelAuthorName;
+                // song.difficulties = compareData.difficulties;
+                // playListData.songs.push(song);
             }
 
             var str = JSON.stringify(playListData);

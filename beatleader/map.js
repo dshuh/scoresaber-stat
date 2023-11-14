@@ -408,22 +408,34 @@ function Map(controlData) {
             var gridData = obj.mapContainer.getGridParam('data');
             // var playlistMap = [];
             var playListData = {};
-            playListData.playlistTitle = "beatleader_maps";
+            playListData.playlistTitle = "map";
             playListData.playlistAuthor = "hudson";
             playListData.image = getPlaylistImage();
             playListData.songs = [];
             for( var i=0;i<obj.selectedMapIDs.length;i++) {            
                 // playlistMap.push(gridData.find(x => x.id === obj.selectedMapIDs[i]));
                 var mapData = gridData.find(x => x.id === obj.selectedMapIDs[i]);
-                var song = {};
-                song.hash = mapData.hash;
-                song.songName = mapData.songName;
-                song.levelAuthorName = mapData.levelAuthorName;
-                song.difficulties = mapData.difficulties;
-                // for (var j=0;j<mapData.difficulties.length;j++){
-                //     song.difficulties.push(mapData.difficulties[j]);
-                // }
-                playListData.songs.push(song);
+                
+                var duplCheck = false;
+                for( var j=0;j<playListData.songs.length;j++) {
+                    if ( mapData.hash == playListData.songs[j].hash) {
+                        playListData.songs[j].difficulties.push(mapData.difficulties[0]);
+                        duplCheck = true;
+                        break;
+                    }
+                }
+                if (!duplCheck) {
+                    var song = {};
+                    song.hash = mapData.hash;
+                    song.songName = mapData.songName;
+                    song.levelAuthorName = mapData.levelAuthorName;
+                    song.difficulties = mapData.difficulties;
+                    // for (var j=0;j<mapData.difficulties.length;j++){
+                    //     song.difficulties.push(mapData.difficulties[j]);
+                    // }
+                    playListData.songs.push(song);
+                }
+                
             }
 
             var str = JSON.stringify(playListData);

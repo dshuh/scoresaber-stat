@@ -216,29 +216,29 @@ function Clan(controlData) {
 
     // Grid Data Binding
     obj.bindGrid = function(data) {
-		for(var i=0; i<data.container.players.length; i++) {
-            // var globalRankPage = parseInt((data.container.players[i].rank - 1) / 50) + 1;
-            // var countryRankPage = parseInt((data.container.players[i].countryRank - 1) / 50) + 1;
-            data.container.players[i].globalRankGap = data.container.players[i].lastWeekRank-data.container.players[i].rank;
-            data.container.players[i].countryRankGap = data.container.players[i].lastWeekCountryRank-data.container.players[i].countryRank;
-            data.container.players[i].globalPPGap = (data.container.players[i].pp-data.container.players[i].lastWeekPp).toFixed(2);
+		for(var i=0; i<data.data.length; i++) {
+            // var globalRankPage = parseInt((data.data[i].rank - 1) / 50) + 1;
+            // var countryRankPage = parseInt((data.data[i].countryRank - 1) / 50) + 1;
+            data.data[i].globalRankGap = data.data[i].lastWeekRank-data.data[i].rank;
+            data.data[i].countryRankGap = data.data[i].lastWeekCountryRank-data.data[i].countryRank;
+            data.data[i].globalPPGap = (data.data[i].pp-data.data[i].lastWeekPp).toFixed(2);
             // var clans = '';
             
             // data[i].clans = clans;
-            // data.container.players[i].averageRank = data[i].scoreStats.averageRank.toFixed(2);
+            // data.data[i].averageRank = data[i].scoreStats.averageRank.toFixed(2);
             // data[i].accuracy = (data[i].scoreStats.averageRankedAccuracy*100);
-            // data.container.players[i].weightedAccuracy = (data[i].scoreStats.averageWeightedRankedAccuracy*100);
-            // data.container.players[i].topPp = data[i].scoreStats.topPp;
-            // data.container.players[i].maxStreak = data[i].scoreStats.maxStreak;
-            // data.container.players[i].watchedReplays = data[i].scoreStats.anonimusReplayWatched;
-            // data.container.players[i].sspPlays = data[i].scoreStats.sspPlays;
-            // data.container.players[i].ssPlays = data[i].scoreStats.ssPlays;
-            // data.container.players[i].spPlays = data[i].scoreStats.spPlays;
-            // data.container.players[i].sPlays = data[i].scoreStats.sPlays;
-            // data.container.players[i].aPlays = data[i].scoreStats.aPlays;
-            // data.container.players[i].lastScoreTime = data[i].scoreStats.lastScoreTime.toString();
-            // data.container.players[i].totalPlayCount = data[i].scoreStats.totalPlayCount;
-            // data.container.players[i].rankedPlayCount = data[i].scoreStats.rankedPlayCount;
+            // data.data[i].weightedAccuracy = (data[i].scoreStats.averageWeightedRankedAccuracy*100);
+            // data.data[i].topPp = data[i].scoreStats.topPp;
+            // data.data[i].maxStreak = data[i].scoreStats.maxStreak;
+            // data.data[i].watchedReplays = data[i].scoreStats.anonimusReplayWatched;
+            // data.data[i].sspPlays = data[i].scoreStats.sspPlays;
+            // data.data[i].ssPlays = data[i].scoreStats.ssPlays;
+            // data.data[i].spPlays = data[i].scoreStats.spPlays;
+            // data.data[i].sPlays = data[i].scoreStats.sPlays;
+            // data.data[i].aPlays = data[i].scoreStats.aPlays;
+            // data.data[i].lastScoreTime = data[i].scoreStats.lastScoreTime.toString();
+            // data.data[i].totalPlayCount = data[i].scoreStats.totalPlayCount;
+            // data.data[i].rankedPlayCount = data[i].scoreStats.rankedPlayCount;
             
             // #region 개발자 영역 > paging(more) 처리를 위한 셋팅
 			// if(i == data.length - 1) {
@@ -246,7 +246,7 @@ function Clan(controlData) {
 			// }
 			// #endregion
 			// #region 개발자 영역 > Grid에 UUID Mapping
-			obj.clanContainer.jqGrid("addRowData", data.container.players[i].id, data.container.players[i]);
+			obj.clanContainer.jqGrid("addRowData", data.data[i].id, data.data[i]);
 			// #endregion
 		}
 		var gridCount = obj.clanContainer.getGridParam("reccount");
@@ -382,7 +382,7 @@ function Clan(controlData) {
 		};
         
 		var callback_get_clan_ranking = function(data) {
-            obj.dataCount = (data != undefined) ? data.container.players.length : 0;
+            obj.dataCount = (data != undefined) ? data.data.length : 0;
             obj.max_page = 1;//parseInt((data.metadata.total - 1) / data.metadata.itemsPerPage) + 1;
             obj.total_count = data.metadata.total;//(data.metadata.total * data.metadata.itemsPerPage);
             obj.displayData(data.container);

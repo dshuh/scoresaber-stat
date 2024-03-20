@@ -2540,7 +2540,7 @@
                         { 
                             "name": "accuracy", 
                             "index": "accuracy", 
-                            "width": 70,
+                            "width": 100,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
@@ -2552,26 +2552,26 @@
                         { 
                             "name": "accLeft", 
                             "index": "accLeft", 
-                            "width": 60,
+                            "width": 100,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
                                 "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccLeft",
-                            "formatter": "convertAccPoint"
+                            "formatter": "convertAccLeft"
                         },
                         { 
                             "name": "accRight", 
                             "index": "accRight", 
-                            "width": 60,
+                            "width": 100,
                             "sorttype":"int",
                             "searchoptions": {
                                 "searchOperators": true,
                                 "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AccRight",
-                            "formatter": "convertAccPoint"
+                            "formatter": "convertAccRight"
                         },
                         { 
                             "name": "accPoint", 
@@ -2583,7 +2583,8 @@
                                 "sopt": ["gt", "lt", "eq"]
                             },
                             "text": "AvgPoint",
-                            "formatter": "convertAccPoint"
+                            "formatter": "convertAccPoint",
+                            "hidden":true
                         },
                         { 
                             "name": "pp", 

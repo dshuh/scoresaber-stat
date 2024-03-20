@@ -269,10 +269,19 @@ function Player(controlData) {
 			return ConvertToString("difficulty", options);
         };
         $.fn.fmatter.convertAccuracy = function (cellValue,rowObject,options) {
-			return (cellValue == 0) ? "-" : cellValue.toFixed(2) + "%";
+			var improve = (options.scoreImprovement.accuracy == 0)? "" : "(" + (options.scoreImprovement.accuracy*100).toFixed(2) +"%)";
+            return (cellValue == 0) ? "-" : cellValue.toFixed(2) + "%"+improve;
+        };
+        $.fn.fmatter.convertAccLeft = function (cellValue,rowObject,options) {
+			var improve = (options.scoreImprovement.accLeft == 0)? "" : "(" + options.scoreImprovement.accLeft.toFixed(2) +")";
+            return (cellValue == 0) ? "-" : cellValue.toFixed(2)+improve;
+        };
+        $.fn.fmatter.convertAccRight = function (cellValue,rowObject,options) {
+			var improve = (options.scoreImprovement.accRight == 0)? "" : "(" + options.scoreImprovement.accRight.toFixed(2) +")";
+            return (cellValue == 0) ? "-" : cellValue.toFixed(2)+improve;
         };
         $.fn.fmatter.convertAccPoint = function (cellValue,rowObject,options) {
-			return (cellValue == 0) ? "-" : cellValue.toFixed(2);
+            return (cellValue == 0) ? "-" : cellValue.toFixed(2);
         };
         $.fn.fmatter.convertRating = function (cellValue,rowObject,options) {
 			return ConvertToString("rating", options) + "%";

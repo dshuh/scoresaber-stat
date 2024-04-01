@@ -1,0 +1,43 @@
+---
+  routes: 
+    - 
+      group: "template"
+      minversion: "v1.0"
+      maxversion: "v1.0"
+      list: 
+        - 
+          handler: "GetHealthCheck"
+          method: "get"
+          uri: "/healthcheck/_check"
+          precheck: false
+        - 
+          handler: "GetVersion"
+          method: "get"
+          uri: "/:apiver/version"
+          precheck: false
+        # Template APIs
+        - 
+          handler: "CreateTemplate"
+          method: "post"
+          uri: "/:apiver/template"
+          precheck: true
+        - 
+          handler: "UpdateTemplate"
+          method: "put"
+          uri: "/:apiver/template"
+          precheck: true
+        - 
+          handler: "DeleteTemplate"
+          method: "delete"
+          uri: "/:apiver/template"
+          precheck: true
+        - 
+          handler: "GetTemplate"
+          method: "get"
+          uri: "/:apiver/template"
+          precheck: true
+        - 
+          handler: "GetTemplates"
+          method: "get"
+          uri: "/:apiver/templates"
+          precheck: true

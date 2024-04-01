@@ -1,0 +1,2427 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  team: 공통플랫폼개발팀
+  title: Template(Secure Key Manager) Service Internal APIs
+  contact:
+    email: dshuh@smilegate.com
+  description: |
+    ## response Code  
+    | return | message  
+    | ---------|-------------
+    | 0   | OK
+    | 400 | Bad Request
+    | 500 | Internal Server Error
+    | 1201 | Invalid Access Token
+    | 1202 | Invalid Handshaking Ticket
+    | 1203 | DB is not initialized
+    | 1204 | Invalid application key/secret
+    | 1205 | Storage is not initialized
+    | 1206 | Invalid API Version
+    | 1207 | Invalid Application No 
+    | 1208 | Invalid Game No 
+    | 1209 | Do not have permission to access
+    | 1210 | Application context is nil
+    | 1251 | Parameter is invalid
+    | 1252 | Cannot find data
+    | 7700 | error occurs when connect to DB
+    | 7701 | error occurs when user invalid access token
+    | 7702 | error occurs when template exist same name
+    | 7703 | error occurs when template not found
+    | 7704 | error occurs when template create fail
+    | 7705 | access token is expired
+    | 7706 | invalid user id or password
+    | 7707 | not allowed client IP
+    | 7720 | check api parameter
+    | 7721 | check api parameter's default key
+    | 7722 | check api parameter body's data key
+    | 7723 | check api parameter's data type
+    | 7724 | build result json format error
+    | 7725 | check uri resource name
+    | 7726 | not found api (check method version)
+    | 7731 | error occured in membership infra token api
+    | 7732 | error occurs when invalid user id
+    | 7733 | user already exists
+    | 7734 | client already exists
+    | 7735 | data key already exists
+    | 7736 | data key exists
+    | 7737 | reg user does not exist
+    | 7738 | client does not exist
+    | 7739 | The search term must contain at least 2 characters.
+    | 7799 | Template System error
+servers:
+  - url: 'http://i-api-dev.onstove.com'
+    description: IDC Dev Server
+  - url: 'http://i-api-qa.onstove.com'
+    description: IDC QA Server
+  - url: 'http://i-api.gate8.com'
+    description: IDC Sandbox Server
+  - url: 'http://i-api.onstove.com'
+    description: IDC Live Server
+tags:
+  - name: System
+    description: Template System APIs
+  - name: User
+    description: Template User APIs
+  - name: Client
+    description: Template Client APIs
+  - name: DataKey
+    description: Template DataKey APIs
+  - name: Audit
+    description: Template Audit APIs
+  - name: Session
+    description: Template Session APIs
+paths:
+  /template/m1.0/user:
+    post:
+      summary: 01. 유저 등록
+      description: 유저를 등록합니다.
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+      requestBody:
+        $ref: '#/components/requestBodies/create_user'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+    put:
+      summary: 02. 유저 수정
+      description: 유저를 수정합니다.
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+      requestBody:
+        $ref: '#/components/requestBodies/update_user'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+    delete:
+      summary: 03. 유저 삭제
+      description: 유저를 삭제합니다. <br>- OpenAPI 3.0 Bug로 DELETE method는 Body문 지원이 안됩니다. <br>- request body에 파라미터 정보를 json으로 호출해야 합니다.<br>- content-type:application/json 입니다.
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/user_no'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+    get:
+      summary: 04. 유저 조회
+      description: 유저를 조회합니다.
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/user_no'
+        - $ref: '#/components/parameters/user.properties'
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_user'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/users:
+    get:
+      summary: 05. 유저 리스트 조회
+      description: 유저 리스트를 조회합니다.<br>department, company, description 은 like 방식으로 검색합니다. (나머지 필드는 equal 검색)
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/page_index'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/start_reg_at'
+        - $ref: '#/components/parameters/end_reg_at'
+        - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/user_name'
+        - $ref: '#/components/parameters/department'
+        - $ref: '#/components/parameters/company'
+        - $ref: '#/components/parameters/ip_addr'
+        - $ref: '#/components/parameters/role'
+        - $ref: '#/components/parameters/del_yn'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/user.properties'
+      tags:
+        - User
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_users'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/users/smilegate:
+    get:
+      summary: 05. 스마일게이트 조직도 리스트 조회
+      description: 스마일게이트 조직도 리스트를 조회합니다.<br/>검색어는 1개 이상 필드에 최소한 2자 이상 입력해야 하고, "검색어*" 조건의 like 방식으로 검색합니다.
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/user_id'
+        - $ref: '#/components/parameters/user_name'
+        - $ref: '#/components/parameters/department'
+        - $ref: '#/components/parameters/company'
+      tags:
+        - User
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_users_smilegate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/client:
+    post:
+      summary: 01. 클라이언트 등록
+      description: 클라이언트를 등록합니다.
+      tags:
+        - Client
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+      requestBody:
+        $ref: '#/components/requestBodies/create_client'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+    put:
+      summary: 02. 클라이언트 수정
+      description: 클라이언트를 수정합니다.
+      tags:
+        - Client
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+      requestBody:
+        $ref: '#/components/requestBodies/update_client'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+    delete:
+      summary: 03. 클라이언트 삭제
+      description: 클라이언트를 삭제합니다. <br>클라이언트에 등록된 데이터키를 모두 해야만 삭제할 수 있습니다.<br>- OpenAPI 3.0 Bug로 DELETE method는 Body문 지원이 안됩니다. <br>- request body에 파라미터 정보를 json으로 호출해야 합니다.<br>- content-type:application/json 입니다.
+      tags:
+        - Client
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/client_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+    get:
+      summary: 04. 클라이언트 조회
+      description: 클라이언트를 조회합니다.
+      tags:
+        - Client
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/client_id'
+        - $ref: '#/components/parameters/client.properties'
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_client'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/clients:
+    get:
+      summary: 05. 클라이언트 리스트 조회
+      description: 클라이언트 리스트를 조회합니다.<br>client_department, client_company, description 은 like 방식으로 검색합니다. (나머지 필드는 equal 검색)
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/page_index'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/start_reg_at'
+        - $ref: '#/components/parameters/end_reg_at'
+        - $ref: '#/components/parameters/client_id'
+        - $ref: '#/components/parameters/client_name'
+        - $ref: '#/components/parameters/client_user_name'
+        - $ref: '#/components/parameters/client_department'
+        - $ref: '#/components/parameters/client_company'
+        - $ref: '#/components/parameters/reg_user_no'
+        - $ref: '#/components/parameters/reg_user_id'
+        - $ref: '#/components/parameters/reg_user_name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/client.properties'
+      tags:
+        - Client
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_clients'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/client/cmk/refresh:
+    put:
+      summary: 06. 클라이언트 마스터키 갱신
+      description: 클라이언트 마스터키를 갱신합니다.
+      tags:
+        - Client
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+      requestBody:
+        $ref: '#/components/requestBodies/refresh_client_cmk'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/dk:
+    post:
+      summary: 01. 데이터키 등록
+      description: 데이터키를 등록합니다.<br>기존에 사용 중인 암호화키가 있다면 dk 필드에 입력하여 저장할 수 있습니다.<br>dk 를 입력하지 않으면, 랜덤키를 생성하여 저장합니다.
+      tags:
+        - DataKey
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+      requestBody:
+        $ref: '#/components/requestBodies/create_dk'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+    put:
+      summary: 02. 데이터키 수정
+      description: 데이터키를 수정합니다.
+      tags:
+        - DataKey
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+      requestBody:
+        $ref: '#/components/requestBodies/update_dk'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+    delete:
+      summary: 03. 데이터키 삭제
+      description: 데이터키를 삭제합니다. <br>- OpenAPI 3.0 Bug로 DELETE method는 Body문 지원이 안됩니다. <br>- request body에 파라미터 정보를 json으로 호출해야 합니다.<br>- content-type:application/json 입니다.
+      tags:
+        - DataKey
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/key_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+    get:
+      summary: 04. 데이터키 조회
+      description: 데이터키를 조회합니다.
+      tags:
+        - DataKey
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/key_id'
+        - $ref: '#/components/parameters/dk.properties'
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_dk'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/dks:
+    get:
+      summary: 05. 데이터키 리스트 조회
+      description: 데이터키 리스트를 조회합니다.<br>client_department, client_company, description 은 like 방식으로 검색합니다. (나머지 필드는 equal 검색)
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/page_index'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/start_reg_at'
+        - $ref: '#/components/parameters/end_reg_at'
+        - $ref: '#/components/parameters/key_id'
+        - $ref: '#/components/parameters/key_name'
+        - $ref: '#/components/parameters/client_id'
+        - $ref: '#/components/parameters/client_name'
+        - $ref: '#/components/parameters/client_user_name'
+        - $ref: '#/components/parameters/client_department'
+        - $ref: '#/components/parameters/client_company'
+        - $ref: '#/components/parameters/reg_user_no'
+        - $ref: '#/components/parameters/reg_user_id'
+        - $ref: '#/components/parameters/reg_user_name'
+        - $ref: '#/components/parameters/description'
+        - $ref: '#/components/parameters/dk.properties'
+      tags:
+        - DataKey
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_dks'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/dk/plain:
+    get:
+      summary: 06. 데이터키 원본 조회
+      description: 데이터키 원본을 조회합니다.<br>Application-Key, Application-Secret은 클라이언트 인증 정보를 입력해야 합니다.
+      tags:
+        - DataKey
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/key_id'
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_dk_plain'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/audits:
+    get:
+      summary: 01. 감사로그 리스트 조회
+      description: 감사로그 리스트를 조회합니다.
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/page_index'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/start_reg_at'
+        - $ref: '#/components/parameters/end_reg_at'
+        - $ref: '#/components/parameters/audit_no'
+        - $ref: '#/components/parameters/audit_type'
+        - $ref: '#/components/parameters/audit_user_type'
+        - $ref: '#/components/parameters/audit_user_id'
+        - $ref: '#/components/parameters/audit_user_name'
+        - $ref: '#/components/parameters/audit_ip_addr'
+        - $ref: '#/components/parameters/action'
+        - $ref: '#/components/parameters/method'
+        - $ref: '#/components/parameters/result'
+        - $ref: '#/components/parameters/audit.properties'
+      tags:
+        - Audit
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_audits'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/login:
+    post:
+      summary: 01. 로그인
+      description: 유저 로그인을 합니다.
+      tags:
+        - Session
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+      requestBody:
+        $ref: '#/components/requestBodies/create_login'
+      responses:
+        '200':
+          description: 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response_login'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+  /template/m1.0/logout:
+    get:
+      summary: 02. 로그아웃
+      description: 유저 로그아웃을 합니다.
+      tags:
+        - Session
+      parameters:
+        - $ref: '#/components/parameters/Application-Key'
+        - $ref: '#/components/parameters/Application-Secret'
+        - $ref: '#/components/parameters/Access-Token'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '1201':
+          $ref: '#/components/responses/InvalidAccessToken'
+        '1202':
+          $ref: '#/components/responses/InvalidHandshakingTicket'
+        '1203':
+          $ref: '#/components/responses/DBIsNotInitialized'
+        '1205':
+          $ref: '#/components/responses/StorageIsNotInitialized'
+        '1206':
+          $ref: '#/components/responses/InvalidAPIVersion'
+        '1207':
+          $ref: '#/components/responses/InvalidApplicationNo'
+        '1208':
+          $ref: '#/components/responses/InvalidGameNo'
+        '1209':
+          $ref: '#/components/responses/DoNotHavePermissionToAccess'
+        '1251':
+          $ref: '#/components/responses/ParameterIsInvalid'
+        '1252':
+          $ref: '#/components/responses/CannotFindData'
+        '7799':
+          $ref: '#/components/responses/ErrorTemplateSystem'
+      x-call-service-url: none
+      x-call-db:
+        - MySQL
+      x-use-language: golang
+      x-gateway-auth:
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: allow
+        - agent_id: STOVE_SERVER
+          svr_id: '*'
+          action: deny
+        - agent_id: USER
+          svr_id: '*'
+          action: deny
+
+  /template/healthcheck/_check:
+    get:
+      summary: 서버 상태 체크
+      tags:
+        - System
+      responses:
+        '200':
+          description: 상태(ok)
+          content:
+            application/json:
+              schema:
+                type: string
+      x-call-service-url: none
+      x-call-db:
+        - none
+      x-use-language: golang
+      x-gateway-auth: null
+  /template/m1.0/version:
+    get:
+      summary: API 버전 조회
+      tags:
+        - System
+      responses:
+        '200':
+          description: 서버빌드정보와 API 버전정보
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/version'
+      x-call-service-url: none
+      x-call-db:
+        - none
+      x-use-language: golang
+      x-gateway-auth: null
+  /template/m1.0/real_ip:
+    get:
+      summary: 접속 IP 조회
+      tags:
+        - System
+      responses:
+        '200':
+          description: 접속한 IP 정보
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/real_ip'
+      x-call-service-url: none
+      x-call-db:
+        - none
+      x-use-language: golang
+      x-gateway-auth: null
+components:
+  schemas:
+    code:
+      type: integer
+      description: '<pre>응답 코드</pre>'
+    message:
+      type: string
+      description: '<pre>응답 메세지</pre>'
+    response:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          type: object
+        error:
+          type: string
+    version:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          type: object
+          properties:
+            revision:
+              type: string
+              description: '<pre>git리비전.빌드일시</pre>'
+            version:
+              type: string
+              description: '<pre>API 버전</pre>'
+    real_ip:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          type: object
+          properties:
+            real_ip:
+              type: string
+              description: '<pre>IP 정보 (X-Real-IP)</pre>'
+    description:
+      type: string
+      description: '<pre>상세 설명</pre>'
+    last_login_at:
+      type: string
+      description: '<pre>최근 접속일(timestamp(13digit))</pre>'
+    reg_at:
+      type: string
+      description: '<pre>생성일(timestamp(13digit))</pre>'
+    upd_at:
+      type: string
+      description: '<pre>수정일(timestamp(13digit))</pre>'
+    del_at:
+      type: string
+      description: '<pre>삭제일(timestamp(13digit))</pre>'
+    total_count:
+      type: integer
+      description: '<pre>총 데이터 갯수</pre>'
+    user_no:
+      type: integer
+      description: '<pre>유저 번호</pre>'
+    user_id:
+      type: string
+      description: '<pre>유저 아이디</pre>'
+    password:
+      type: string
+      description: '<pre>관리자 비밀번호</pre>'
+    user_name:
+      type: string
+      description: '<pre>유저 이름</pre>'
+    department:
+      type: string
+      description: '<pre>소속 부서</pre>'
+    company:
+      type: string
+      description: '<pre>회사</pre>'
+    ip_addr:
+      type: string
+      description: '<pre>접속 IP</pre>'
+    role:
+      type: string
+      description: '<pre><pre>권한<br/> - admin > (관리자) 모든 권한<br/> - operator > (운영자) 유저 등록, 수정, 삭제를 제외한 모든 권한<br/> - user > (사용자) 조회만 허용</pre>'
+    user.properties:
+      type: string
+      description: '<pre>- 결과 셋에 포함될 필드리스트<br/> - All fields > ["user_no", "user_id", "user_name", "department", "company", "ip_addr", "role", "description", "last_login_at", "reg_at", "upd_at", "del_at"]</pre>'
+    user:
+      type: object
+      properties:
+        user_no:
+          $ref: '#/components/schemas/user_no'
+        user_id:
+          $ref: '#/components/schemas/user_id'
+        user_name:
+          $ref: '#/components/schemas/user_name'
+        department:
+          $ref: '#/components/schemas/department'
+        company:
+          $ref: '#/components/schemas/company'
+        ip_addr:
+          $ref: '#/components/schemas/ip_addr'
+        role:
+          $ref: '#/components/schemas/role'
+        description:
+          $ref: '#/components/schemas/description'
+        last_login_at:
+          $ref: '#/components/schemas/last_login_at'
+        reg_at:
+          $ref: '#/components/schemas/reg_at'
+        upd_at:
+          $ref: '#/components/schemas/upd_at'
+        del_at:
+          $ref: '#/components/schemas/del_at'
+    user_smilegate:
+      type: object
+      properties:
+        user_id:
+          $ref: '#/components/schemas/user_id'
+        user_name:
+          $ref: '#/components/schemas/user_name'
+        department:
+          $ref: '#/components/schemas/department'
+        company:
+          $ref: '#/components/schemas/company'
+    client_id:
+      type: string
+      description: '<pre>클라이언트 아이디</pre>'
+    client_secret:
+      type: string
+      description: '<pre>클라이언트 시크릿</pre>'
+    client_name:
+      type: string
+      description: '<pre>클라이언트 이름(서비스명)</pre>'
+    client_user_name:
+      type: string
+      description: '<pre>담당자 이름</pre>'
+    client_department:
+      type: string
+      description: '<pre>담당부서</pre>'
+    client_company:
+      type: string
+      description: '<pre>회사</pre>'
+    e_cmk:
+      type: string
+      description: '<pre>Encrypted Client Master Key(대칭키로 암호화된 CMK, AES-256)</pre>'
+    h_cmk:
+      type: string
+      description: '<pre>Hashed Client Master Key(CMK 검증을 위한 해쉬값, SHA-256)</pre>'
+    reg_user_no:
+      type: integer
+      description: '<pre>등록한 관리자 번호</pre>'
+    reg_user_id:
+      type: string
+      description: '<pre>등록한 관리자 아이디</pre>'
+    reg_user_name:
+      type: string
+      description: '<pre>등록한 관리자 이름</pre>'
+    client.properties:
+      type: string
+      description: '<pre>- 결과 셋에 포함될 필드리스트<br/> - All fields > ["client_id","client_secret","client_name","client_user_name","client_department","client_company","reg_user_no","reg_user_id","reg_user_name","e_cmk","h_cmk","description","reg_at","upd_at"]</pre>'
+    client:
+      type: object
+      properties:
+        client_id:
+          $ref: '#/components/schemas/client_id'
+        client_secret:
+          $ref: '#/components/schemas/client_secret'
+        client_name:
+          $ref: '#/components/schemas/client_name'
+        client_user_name:
+          $ref: '#/components/schemas/client_user_name'
+        client_department:
+          $ref: '#/components/schemas/client_department'
+        client_company:
+          $ref: '#/components/schemas/client_company'
+        reg_user_no:
+          $ref: '#/components/schemas/reg_user_no'
+        reg_user_id:
+          $ref: '#/components/schemas/reg_user_id'
+        reg_user_name:
+          $ref: '#/components/schemas/reg_user_name'
+        e_cmk:
+          $ref: '#/components/schemas/e_cmk'
+        h_cmk:
+          $ref: '#/components/schemas/h_cmk'
+        description:
+          $ref: '#/components/schemas/description'
+        reg_at:
+          $ref: '#/components/schemas/reg_at'
+        upd_at:
+          $ref: '#/components/schemas/upd_at'
+    key_id:
+      type: string
+      description: '<pre>데이터키 아이디</pre>'
+    key_name:
+      type: string
+      description: '<pre>데이터키 이름</pre>'
+    e_dk:
+      type: string
+      description: '<pre>Encrypted Data Key(대칭키로 암호화된 DK, AES-256)</pre>'
+    h_dk:
+      type: string
+      description: '<pre>Hashed Data Key(DK 검증을 위한 해쉬값, SHA-256)</pre>'
+    dk_data.properties:
+      type: string
+      description: '<pre>- 결과 셋에 포함될 필드리스트<br/> - All fields > ["key_id","key_name","client_id","client_name","client_user_name","client_department","client_company","reg_user_no","reg_user_id","reg_user_name","e_dk","h_dk","description","reg_at","upd_at"]</pre>'
+    dk_data:
+      type: object
+      properties:
+        key_id:
+          $ref: '#/components/schemas/key_id'
+        key_name:
+          $ref: '#/components/schemas/key_name'
+        client_id:
+          $ref: '#/components/schemas/client_id'
+        client_name:
+          $ref: '#/components/schemas/client_name'
+        client_user_name:
+          $ref: '#/components/schemas/client_user_name'
+        client_department:
+          $ref: '#/components/schemas/client_department'
+        client_company:
+          $ref: '#/components/schemas/client_company'
+        reg_user_no:
+          $ref: '#/components/schemas/reg_user_no'
+        reg_user_id:
+          $ref: '#/components/schemas/reg_user_id'
+        reg_user_name:
+          $ref: '#/components/schemas/reg_user_name'
+        e_dk:
+          $ref: '#/components/schemas/e_dk'
+        h_dk:
+          $ref: '#/components/schemas/h_dk'
+        description:
+          $ref: '#/components/schemas/description'
+        reg_at:
+          $ref: '#/components/schemas/reg_at'
+        upd_at:
+          $ref: '#/components/schemas/upd_at'
+    dk:
+      type: string
+      description: '<pre>원본 Data Key</pre>'
+    dk_plain:
+      type: object
+      properties:
+        dk:
+          $ref: '#/components/schemas/dk'
+    audit_no:
+      type: integer
+      description: '<pre>로그 번호</pre>'
+    audit_type:
+      type: string
+      description: '<pre>로그 타입</pre>'
+    user_type:
+      type: string
+      description: '<pre>유저 타입</pre>'
+    action:
+      type: string
+      description: '<pre>API 구분 (메뉴)</pre>'
+    method:
+      type: string
+      description: '<pre>이벤트 (CRUD)</pre>'
+    old_value:
+      type: string
+      description: '<pre>기존 데이터 (json 포맷)</pre>'
+    new_value:
+      type: string
+      description: '<pre>입력 데이터 (json 포맷)</pre>'
+    result:
+      type: string
+      description: '<pre>결과</pre>'
+    audit.properties:
+      type: string
+      description: '<pre>- 결과 셋에 포함될 필드리스트<br/> - All fields > ["audit_no","audit_type","user_type","user_id","user_name","ip_addr","action","method","old_value","new_value","result","reg_at"]</pre>'
+    audit:
+      type: object
+      properties:
+        audit_no:
+          $ref: '#/components/schemas/audit_no'
+        audit_type:
+          $ref: '#/components/schemas/audit_type'
+        user_type:
+          $ref: '#/components/schemas/user_type'
+        user_id:
+          $ref: '#/components/schemas/user_id'
+        user_name:
+          $ref: '#/components/schemas/user_name'
+        ip_addr:
+          $ref: '#/components/schemas/ip_addr'
+        action:
+          $ref: '#/components/schemas/action'
+        method:
+          $ref: '#/components/schemas/method'
+        old_value:
+          $ref: '#/components/schemas/old_value'
+        new_value:
+          $ref: '#/components/schemas/new_value'
+        result:
+          $ref: '#/components/schemas/result'
+        reg_at:
+          $ref: '#/components/schemas/reg_at'
+    access_token:
+      type: string
+      description: '<pre>엑세스 토큰</pre>'
+    access_exp_at:
+      type: string
+      description: '<pre>엑세스 토큰 만료일</pre>'
+    login:
+      type: object
+      properties:
+        access_token:
+          $ref: '#/components/schemas/access_token'
+        access_exp_at:
+          $ref: '#/components/schemas/access_exp_at'
+        last_login_at:
+          $ref: '#/components/schemas/last_login_at'
+    response_user:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          $ref: '#/components/schemas/user'
+        error:
+          type: string
+    response_users:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          type: object
+          properties:
+            total_count:
+              $ref: '#/components/schemas/total_count'
+            list:
+              type: array
+              items:
+                $ref: '#/components/schemas/user'
+        error:
+          type: string
+    response_users_smilegate:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          type: object
+          properties:
+            total_count:
+              $ref: '#/components/schemas/total_count'
+            list:
+              type: array
+              items:
+                $ref: '#/components/schemas/user_smilegate'
+        error:
+          type: string
+    response_client:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          $ref: '#/components/schemas/client'
+        error:
+          type: string
+    response_clients:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          type: object
+          properties:
+            total_count:
+              $ref: '#/components/schemas/total_count'
+            list:
+              type: array
+              items:
+                $ref: '#/components/schemas/client'
+        error:
+          type: string
+    response_dk:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          $ref: '#/components/schemas/dk_data'
+        error:
+          type: string
+    response_dks:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          type: object
+          properties:
+            total_count:
+              $ref: '#/components/schemas/total_count'
+            list:
+              type: array
+              items:
+                $ref: '#/components/schemas/dk_data'
+        error:
+          type: string
+    response_dk_plain:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          $ref: '#/components/schemas/dk_plain'
+        error:
+          type: string
+    response_audits:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          type: object
+          properties:
+            total_count:
+              $ref: '#/components/schemas/total_count'
+            list:
+              type: array
+              items:
+                $ref: '#/components/schemas/audit'
+        error:
+          type: string
+    response_login:
+      type: object
+      required:
+        - code
+        - message
+        - value
+      properties:
+        code:
+          $ref: '#/components/schemas/code'
+        message:
+          $ref: '#/components/schemas/message'
+        value:
+          $ref: '#/components/schemas/login'
+        error:
+          type: string
+    create_user:
+      type: object
+      required:
+        - user_id
+        - user_name
+        - role
+      properties:
+        user_id:
+          $ref: '#/components/schemas/user_id'
+        user_name:
+          $ref: '#/components/schemas/user_name'
+        department:
+          $ref: '#/components/schemas/department'
+        company:
+          $ref: '#/components/schemas/company'
+        ip_addr:
+          $ref: '#/components/schemas/ip_addr'
+        role:
+          $ref: '#/components/schemas/role'
+        description:
+          $ref: '#/components/schemas/description'
+    update_user:
+      type: object
+      required:
+        - user_no
+      properties:
+        user_no:
+          $ref: '#/components/schemas/user_no'
+        user_name:
+          $ref: '#/components/schemas/user_name'
+        department:
+          $ref: '#/components/schemas/department'
+        company:
+          $ref: '#/components/schemas/company'
+        ip_addr:
+          $ref: '#/components/schemas/ip_addr'
+        role:
+          $ref: '#/components/schemas/role'
+        description:
+          $ref: '#/components/schemas/description'
+    create_client:
+      type: object
+      required:
+        - client_id
+        - client_name
+        - reg_user_no
+      properties:
+        client_id:
+          $ref: '#/components/schemas/client_id'
+        client_name:
+          $ref: '#/components/schemas/client_name'
+        client_user_name:
+          $ref: '#/components/schemas/client_user_name'
+        client_department:
+          $ref: '#/components/schemas/client_department'
+        client_company:
+          $ref: '#/components/schemas/client_company'
+        reg_user_no:
+          $ref: '#/components/schemas/reg_user_no'
+        description:
+          $ref: '#/components/schemas/description'
+    update_client:
+      type: object
+      required:
+        - client_id
+      properties:
+        client_id:
+          $ref: '#/components/schemas/client_id'
+        client_name:
+          $ref: '#/components/schemas/client_name'
+        client_user_name:
+          $ref: '#/components/schemas/client_user_name'
+        client_department:
+          $ref: '#/components/schemas/client_department'
+        client_company:
+          $ref: '#/components/schemas/client_company'
+        description:
+          $ref: '#/components/schemas/description'
+    refresh_client_cmk:
+      type: object
+      required:
+        - client_id
+      properties:
+        client_id:
+          $ref: '#/components/schemas/client_id'
+    create_dk:
+      type: object
+      required:
+        - client_id
+        - key_name
+        - reg_user_no
+      properties:
+        client_id:
+          $ref: '#/components/schemas/client_id'
+        key_name:
+          $ref: '#/components/schemas/key_name'
+        dk:
+          $ref: '#/components/schemas/dk'
+        reg_user_no:
+          $ref: '#/components/schemas/reg_user_no'
+        description:
+          $ref: '#/components/schemas/description'
+    update_dk:
+      type: object
+      required:
+        - key_id
+      properties:
+        key_id:
+          $ref: '#/components/schemas/key_id'
+        key_name:
+          $ref: '#/components/schemas/key_name'
+        description:
+          $ref: '#/components/schemas/description'
+    create_login:
+      type: object
+      required:
+        - user_id
+        - password
+      properties:
+        user_id:
+          $ref: '#/components/schemas/user_id'
+        password:
+          $ref: '#/components/schemas/password'
+
+  parameters:
+    Application-Key:
+      name: Application-Key
+      in: header
+      description: '<pre>Application Key<br />-sample : 23b08cff946790ac16e1357ec8972aeeb48a2f9b278187c2b1bb3732207e2233</pre>'
+      required: true
+      schema:
+        type: string
+    Application-Secret:
+      name: Application-Secret
+      in: header
+      description: '<pre>Application Secret<br />-sample : dd3d2dbe81cd15ad1e1fdbf4d3a967e19bfa78afdde4002164b9123a206680844b2bd3b41a5a6494e1615d8d64f1880b</pre>'
+      required: true
+      schema:
+        type: string
+    Access-Token:
+      name: Access-Token
+      in: header
+      description: '<pre>Access-Token<br />login API 리턴값의 access_token 입력</pre>'
+      required: true
+      schema:
+        type: string
+    page_index:
+      name: page_index
+      in: query
+      description: '<pre>검색할 페이지 번호</pre>'
+      schema:
+        type: integer
+        default: 1
+    page_size:
+      name: page_size
+      in: query
+      description: '<pre>한 번에 가져올 개수를 지정한다.</pre>'
+      schema:
+        type: integer
+        default: 100
+    sort:
+      name: sort
+      in: query
+      description: '<pre>정렬 순서<br/> - asc > reg_at 기준 오름차순<br/> - desc > reg_at 기준 내림차순</pre>'
+      schema:
+        type: string
+        default: 'asc'
+    start_reg_at:
+      name: start_reg_at
+      in: query
+      description: '<pre>생성일(reg_at) 시작 시간 (timestamp(13digit))</pre>'
+      schema:
+        type: string
+    end_reg_at:
+      name: end_reg_at
+      in: query
+      description: '<pre>생성일(reg_at) 종료 시간 (timestamp(13digit))</pre>'
+      schema:
+        type: string
+    description:
+      name: description
+      in: query
+      description: '<pre>상세 설명 (like 검색)</pre>'
+      schema:
+        type: string
+    user_no:
+      name: user_no
+      in: query
+      description: '<pre>관리자 번호</pre>'
+      required: true
+      schema:
+        type: integer
+    user_id:
+      name: user_id
+      in: query
+      description: '<pre>관리자 아이디</pre>'
+      schema:
+        type: string
+    user_name:
+      name: user_name
+      in: query
+      description: '<pre>관리자 이름</pre>'
+      schema:
+        type: string
+    department:
+      name: department
+      in: query
+      description: '<pre>소속 부서 (like 검색)</pre>'
+      schema:
+        type: string
+    company:
+      name: company
+      in: query
+      description: '<pre>회사 (like 검색)</pre>'
+      schema:
+        type: string
+    ip_addr:
+      name: ip_addr
+      in: query
+      description: '<pre>접속 허용 IP</pre>'
+      schema:
+        type: string
+    role:
+      name: role
+      in: query
+      description: '<pre>권한<br/> - admin > (관리자) 모든 권한<br/> - operator > (운영자) 유저 등록, 수정, 삭제를 제외한 모든 권한<br/> - user > (사용자) 조회만 허용</pre>'
+      schema:
+        type: string
+    del_yn:
+      name: del_yn
+      in: query
+      description: '<pre>삭제 여부 옵션<br/> - y > 삭제된 유저만 검색<br/> - n > 삭제안된 유저만 검색<br/> - all > 모든 유저 검색</pre>'
+      schema:
+        type: string
+        default: 'all'
+    user.properties:
+      name: properties
+      in: query
+      description: '<pre>결과셋에 포함될 필드리스트<br/> - All fields ><br/>["user_no", "user_id", "user_name", "department", "company", "ip_addr", "role", "description", "last_login_at", "reg_at", "upd_at", "del_at"]</pre>'
+      schema:
+        type: string
+    client_id:
+      name: client_id
+      in: query
+      description: '<pre>클라이언트 아이디</pre>'
+      schema:
+        type: string
+    client_name:
+      name: client_name
+      in: query
+      description: '<pre>클라이언트 이름(서비스명)</pre>'
+      schema:
+        type: string
+    client_user_name:
+      name: client_user_name
+      in: query
+      description: '<pre>담당자 이름</pre>'
+      schema:
+        type: string
+    client_department:
+      name: client_department
+      in: query
+      description: '<pre>담당부서 (like 검색)</pre>'
+      schema:
+        type: string
+    client_company:
+      name: client_company
+      in: query
+      description: '<pre>회사 (like 검색)</pre>'
+      schema:
+        type: string
+    reg_user_no:
+      name: reg_user_no
+      in: query
+      description: '<pre>등록하는 관리자 번호</pre>'
+      schema:
+        type: integer
+    reg_user_id:
+      name: reg_user_id
+      in: query
+      description: '<pre>등록하는 관리자 아이디</pre>'
+      schema:
+        type: string
+    reg_user_name:
+      name: reg_user_name
+      in: query
+      description: '<pre>등록하는 관리자 이름</pre>'
+      schema:
+        type: string
+    client.properties:
+      name: properties
+      in: query
+      description: '<pre>결과셋에 포함될 필드리스트<br/> - All fields ><br/>["client_id","client_secret","client_name","client_user_name","client_department","client_company","reg_user_no","reg_user_id","reg_user_name","e_cmk","h_cmk","description","reg_at","upd_at"]</pre>'
+      schema:
+        type: string
+    key_id:
+      name: key_id
+      in: query
+      description: '<pre>데이터키 아이디</pre>'
+      schema:
+        type: string
+    key_name:
+      name: key_name
+      in: query
+      description: '<pre>데이터키 이름</pre>'
+      schema:
+        type: string
+    dk.properties:
+      name: properties
+      in: query
+      description: '<pre>결과셋에 포함될 필드리스트<br/> - All fields ><br/>["key_id","key_name","client_id","client_name","client_user_name","client_department","client_company","reg_user_no","reg_user_id","reg_user_name","e_dk","h_dk","description","reg_at","upd_at"]</pre>'
+      schema:
+        type: string
+    audit_no:
+      name: audit_no
+      in: query
+      description: '<pre>로그 번호</pre>'
+      schema:
+        type: string
+    audit_type:
+      name: audit_type
+      in: query
+      description: '<pre>로그 타입<br/> - login > 로그인 (login api - get)<br/> - access > 접근 이력 (all api - get)<br/> - use > 사용 이력 (all api - post, put, delete, refresh)</pre>'
+      schema:
+        type: string
+    audit_user_type:
+      name: user_type
+      in: query
+      description: '<pre>접속 유저 타입<br/> - admin > 관리자 (admin api)<br/> - client > 클라이언트 (client api)</pre>'
+      schema:
+        type: string
+    audit_user_id:
+      name: user_id
+      in: query
+      description: '<pre>접속 유저 아이디<br/> - admin api > user_id 입력<br/> - client api > client_id 입력</pre>'
+      schema:
+        type: string
+    audit_user_name:
+      name: user_name
+      in: query
+      description: '<pre>접속 유저 이름<br/> - admin api > user_name 입력<br/> - client api > client_name 입력</pre>'
+      schema:
+        type: string
+    audit_ip_addr:
+      name: ip_addr
+      in: query
+      description: '<pre>접속 유저 IP 정보</pre>'
+      schema:
+        type: string
+    action:
+      name: action
+      in: query
+      description: '<pre>API 구분 (메뉴)<br/> - login > 로그인<br/> - user > 관리자<br/> - client > 클라이언트<br/> - dk > 데이터키<br/> - audit > 감사로그</pre>'
+      schema:
+        type: string
+    method:
+      name: method
+      in: query
+      description: '<pre>이벤트 (CRUD)<br/> - post > 생성<br/> - put > 수정<br/> - delete > 삭제<br/> - get > 검색<br/> - refresh > 갱신</pre>'
+      schema:
+        type: string
+    result:
+      name: result
+      in: query
+      description: '<pre>API 호출 결과<br/> - ok > 성공<br/> - error > 실패</pre>'
+      schema:
+        type: string
+    audit.properties:
+      name: properties
+      in: query
+      description: '<pre>결과셋에 포함될 필드리스트<br/> - All fields ><br/>["audit_no","audit_type","user_type","user_id","user_name","ip_addr","action","method","old_value","new_value","result","reg_at"]</pre>'
+      schema:
+        type: string
+  requestBodies:
+    create_user:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/create_user'
+      required: true
+    update_user:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/update_user'
+      required: true
+    create_client:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/create_client'
+      required: true
+    update_client:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/update_client'
+      required: true
+    refresh_client_cmk:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/refresh_client_cmk'
+      required: true
+    create_dk:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/create_dk'
+      required: true
+    update_dk:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/update_dk'
+      required: true
+    create_login:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/create_login'
+      required: true
+  responses:
+    OK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: OK
+            code: 0
+    BadRequest:
+      description: BadRequest
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Bad Request
+            code: 400
+    InternalServerError:
+      description: InternalServerError
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Internal Sever Error
+            code: 500
+    InvalidAccessToken:
+      description: InvalidAccessToken
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Invalid access token
+            code: 1201
+    InvalidHandshakingTicket:
+      description: InvalidHandshakingTicket
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Invalid Handshaking ticket
+            code: 1202
+    DBIsNotInitialized:
+      description: DBIsNotInitialized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: DB is not initialized
+            code: 1203
+    StorageIsNotInitialized:
+      description: StorageIsNotInitialized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            messasge: Storage is not initialized
+            code: 1205
+    InvalidAPIVersion:
+      description: InvalidAPIVersion
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Invalid API version
+            code: 1206
+    InvalidApplicationNo:
+      description: InvalidApplicationNo
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Invalid Application No
+            code: 1207
+    InvalidGameNo:
+      description: InvalidGameNo
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Invalid Game No
+            code: 1208
+    DoNotHavePermissionToAccess:
+      description: DoNotHavePermissionToAccess
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: You do not have permission to access the resource
+            code: 1209
+    ParameterIsInvalid:
+      description: ParameterIsInvalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Parameter is invalid
+            code: 1251
+    CannotFindData:
+      description: CannotFindData
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Cannot find data
+            code: 1252
+    ErrorTemplateSystem:
+      description: ErrorTemplateSystem
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response'
+          example:
+            message: Template System error
+            code: 7799

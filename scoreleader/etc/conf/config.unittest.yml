@@ -1,0 +1,65 @@
+---
+  db_type: "mysql"
+  db_prefix: ""
+  database:
+    mysql:
+      host: "localhost"
+      port: "3306"
+      id: "root"
+      password: "qwer!234"
+      database: "template"
+      poolsize: "25"
+      idlesize: "20"
+    mongo:
+      host: "localhost"
+      port: "27017"
+      id: ""
+      password: ""
+      database: "template"
+      timeout: "3"  # seconds
+      readpref: "3" # PrimaryPreferred
+    redis:
+      host: "localhost"
+      port: 6379
+      id: ""
+      password: ""
+      database: 0
+      poolsize: 30
+  template: 
+    application_name: "template"
+    application_key: "template_app_key"
+    application_secret: "template_app_secret"
+    api_docs: true
+    api_docs_path: ""
+    env_name: "local"
+    env_owner: "stove"
+    application_no: "SGS90100"
+  api_servers:
+    - name: "Internal API"
+      port: 10473
+      disable: false
+      routes: "internal_api.yml"
+    - name: "External API"
+      port: 20473
+      disable: false
+      routes: "external_api.yml"
+  log:
+    service_name: "template"
+    path: "logs/template"
+    level: "debug"
+    formatter: "json"
+    rotation: true
+    console: true
+    with_module: true
+    with_function: true
+    with_line: true
+    custom_field:
+      use: true
+      msg: "message"
+    apitrace:
+      service_name: "template"
+      use: true
+      path: "logs/apitrace"
+      console: true
+      exclude_url: ["/healthcheck/_check"]
+      include_body_for: ["application/json", "application/x-www-form-urlencoded", "text/plain", "text/html"]

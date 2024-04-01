@@ -1,0 +1,131 @@
+stages:
+  - build
+  - publish
+  - deploy-dev
+  - deploy-qa
+  - image-update
+
+include:
+  - project: 'sgsinfra/gitlab-ci-template'
+    ref: master
+    file:
+      - '/build/.build_common.yml'
+      - '/build/.publish_common.yml'
+      - '/deploy/.deploy_common.yml'
+
+build:
+  stage: build
+  extends:
+    - .go1.19-build
+  script:
+    - git config --global credential.helper cache
+    - git clone http://$STOVE_GITLAB_USERNAME:$STOVE_ACCESS_TOKEN@stove-gitlab.sginfra.net/amigo/amigoaws.git
+    - rm -rf amigoaws
+    - git config --global url."https://x-access-token:$STOVE_ACCESS_TOKEN@stove-gitlab.sginfra.net/".insteadOf "https://stove-gitlab.sginfra.net/"
+    - go mod vendor
+    - buildTime=$(date -u "+%Y%m%d%H%M")
+    - revVersion=$(git rev-parse --short HEAD)
+    - tagVersion=$(git describe --tags)
+    - go build -ldflags "-X stove-gitlab.sginfra.net/backend/template/constant.RevVersion=$revVersion.$buildTime -X stove-gitlab.sginfra.net/backend/template/constant.TagVersion=$tagVersion" -o bin/template main.go
+    - cp etc/conf/config.idc.dev.yml bin/config.yml
+    - cp etc/conf/internal_api.yml bin/internal_api.yml
+    - cp etc/conf/external_api.yml bin/external_api.yml
+    - mkdir -p bin/config bin/docs/int bin/docs/ext
+    - cp -R etc/conf/* bin/config
+    - cp -R etc/swagger/int/* bin/docs/int/
+    - cp -R etc/web/* bin/web/
+    - ls -al bin
+  artifacts:
+    paths:
+      - bin
+  variables:
+    CGO_ENABLED: 0
+
+
+publish:
+  stage: publish
+  extends:
+    - .publish_common
+  variables:
+    ENV: 'dev'
+    IMAGE_NAME: 'template'
+  dependencies:
+    - build
+  only:
+    - develop
+    - master
+    - tags
+
+
+deploy-dev:
+  stage: deploy-dev
+  extends:
+    - .deploy_common
+  variables:
+    ENV: 'dev'
+    IMAGE_NAME: 'template'
+  only:
+    - develop
+    - master
+    - tags
+
+deploy-dev2:
+  stage: deploy-dev
+  extends:
+    - .deploy_common
+  variables:
+    ENV: 'dev2'
+    IMAGE_NAME: 'template'
+  only:
+    - develop
+    - master
+    - tags
+
+deploy-qa:
+  stage: deploy-qa
+  extends:
+    - .deploy_common
+  variables:
+    ENV: 'qa'
+    IMAGE_NAME: 'template'
+  only:
+    - develop
+    - master
+    - tags
+  when: manual
+
+deploy-qa2:
+  stage: deploy-qa
+  extends:
+    - .deploy_common
+  variables:
+    ENV: 'qa2'
+    IMAGE_NAME: 'template'
+  only:
+    - develop
+    - master
+    - tags
+  when: manual
+
+sandbox-update:
+  stage: image-update
+  extends:
+    - .deploy_common
+  variables:
+    ENV: 'sandbox'
+    IMAGE_NAME: 'template'
+  only:
+    - tags
+  when: manual
+
+
+live-update:
+  stage: image-update
+  extends:
+    - .deploy_common
+  variables:
+    ENV: 'live'
+    IMAGE_NAME: 'template'
+  only:
+    - tags
+  when: manual

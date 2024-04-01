@@ -1,0 +1,1956 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>app: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">stove-gitlab.sginfra.net/backend/template/app/template_app.go (89.7%)</option>
+				
+				<option value="file1">stove-gitlab.sginfra.net/backend/template/config/template_config.go (85.7%)</option>
+				
+				<option value="file2">stove-gitlab.sginfra.net/backend/template/controllers/commonapi/api.go (91.7%)</option>
+				
+				<option value="file3">stove-gitlab.sginfra.net/backend/template/controllers/commonapi/template_api.go (98.2%)</option>
+				
+				<option value="file4">stove-gitlab.sginfra.net/backend/template/controllers/context/context.go (95.8%)</option>
+				
+				<option value="file5">stove-gitlab.sginfra.net/backend/template/controllers/externalapi/api.go (95.7%)</option>
+				
+				<option value="file6">stove-gitlab.sginfra.net/backend/template/controllers/internalapi/api.go (97.5%)</option>
+				
+				<option value="file7">stove-gitlab.sginfra.net/backend/template/controllers/resultcode/resultcode.go (100.0%)</option>
+				
+				<option value="file8">stove-gitlab.sginfra.net/backend/template/models/db.go (84.0%)</option>
+				
+				<option value="file9">stove-gitlab.sginfra.net/backend/template/models/template.go (97.6%)</option>
+				
+				<option value="file10">stove-gitlab.sginfra.net/backend/template/models/template_db.go (100.0%)</option>
+				
+				<option value="file11">stove-gitlab.sginfra.net/backend/template/models/template_mysql.go (80.4%)</option>
+				
+				<option value="file12">stove-gitlab.sginfra.net/backend/template/models/template_redis.go (64.9%)</option>
+				
+				<option value="file13">stove-gitlab.sginfra.net/backend/template/utils/util.go (96.2%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package app
+
+import (
+        "flag"
+        "fmt"
+        "sync"
+
+        "stove-gitlab.sginfra.net/backend/template/controllers/resultcode"
+
+        "stove-gitlab.sginfra.net/amigo/amigoapp/v4/base"
+        amigoconf "stove-gitlab.sginfra.net/amigo/amigoapp/v4/config"
+        "stove-gitlab.sginfra.net/backend/template/config"
+        "stove-gitlab.sginfra.net/backend/template/controllers/context"
+        "stove-gitlab.sginfra.net/backend/template/controllers/externalapi"
+        "stove-gitlab.sginfra.net/backend/template/controllers/internalapi"
+        "stove-gitlab.sginfra.net/backend/template/models"
+)
+
+var (
+        command     = flag.String("cmd", "", "cmd")
+        serviceType = flag.String("service_type", "", "service_type")
+        serviceID   = flag.String("service_id", "", "service_id")
+)
+
+// TemplateApp Template 서버 구동을 위한 구조체
+type TemplateApp struct {
+        base.BaseApp
+        conf       *config.TemplateConfig
+        configFile string
+}
+
+// Init TemplateApp Init
+func (o *TemplateApp) Init(configFile string) error <span class="cov8" title="1">{
+        // 싱글턴 객체 초기화
+        o.conf = config.GetInstance(configFile)
+        //o.conf.Version = o.Version
+
+        // 결과코드 등록
+        base.AppendResultCodeText(&amp;resultcode.TemplateResultCodeMap)
+        // API Request Paramter 등록
+        context.AppendRequestParameter()
+
+        return nil
+}</span>
+
+// Run TemplateApp Run
+func (o *TemplateApp) Run(wg *sync.WaitGroup) error <span class="cov8" title="1">{
+        return nil
+}</span>
+
+// GetConfig TemplateApp Config 로드
+func (o *TemplateApp) GetConfig() *amigoconf.Config <span class="cov8" title="1">{
+        return &amp;o.conf.Config
+}</span>
+
+// CreateTable ./Template -cli -cmd=createtable -c config.yml
+func (o *TemplateApp) CreateTable() error <span class="cov8" title="1">{
+        if err := models.CreateTable(); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// InitTable ./Template -cli -cmd=inittable -c config.yml
+func (o *TemplateApp) InitTable() error <span class="cov8" title="1">{
+        if err := models.InitTable(); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// Execute TemplateApp Execute
+func (o *TemplateApp) Execute() error <span class="cov8" title="1">{
+
+        if *command == "createtable" </span><span class="cov8" title="1">{
+                fmt.Println("createtable start")
+                o.CreateTable()
+                fmt.Println("createtable end")
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">if *command == "inittable" </span><span class="cov8" title="1">{
+                fmt.Println("inittable start")
+                o.InitTable()
+                fmt.Println("inittable end")
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// NewApp TemplateApp NewApp
+func NewApp(version string) (*TemplateApp, error) <span class="cov8" title="1">{
+        app := &amp;TemplateApp{}
+        //app.Version = version
+        intAPI := internalapi.NewAPI()
+        extAPI := externalapi.NewAPI()
+
+        // 실행 매개변수를 추가하려면 이 곳에서 구현
+        // test := flag.String("t", "hello", "test parameter")
+        // fmt.Println(*test)
+
+        if err := app.BaseApp.Init(app, intAPI, extAPI); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return app, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package config
+
+import (
+        "sync"
+
+        amigoconf "stove-gitlab.sginfra.net/amigo/amigoapp/v4/config"
+)
+
+// Template 공통 설정
+type Template struct {
+        ApplicationName   string `json:"application_name" yaml:"application_name"`
+        ApplicationKey    string `json:"application_key" yaml:"application_key"`
+        ApplicationSecret string `json:"application_secret" yaml:"application_secret"`
+        Debug             bool   `json:"debug" yaml:"debug"`
+        APIDocs           bool   `json:"api_docs" yaml:"api_docs"`
+        APIDocsPath       string `json:"api_docs_path" yaml:"api_docs_path"`
+        EnvName           string `json:"env_name" yaml:"env_name"`
+        EnvOwner          string `json:"env_owner" yaml:"env_owner"`
+        RKCredencialLocal string `json:"rk_credencial_local" yaml:"rk_credencial_local"`
+        RKCredencialS3    string `json:"rk_credencial_s3" yaml:"rk_credencial_s3"`
+        JWTSecret         string `json:"jwt_secret" yaml:"jwt_secret"`
+        JWTTimeout        int    `json:"jwt_timeout" yaml:"jwt_timeout"`
+        LdapUrlPrimary    string `json:"ldap_url_primary" yaml:"ldap_url_primary"`
+        LdapUrlSecondary  string `json:"ldap_url_secondary" yaml:"ldap_url_secondary"`
+        LdapBaseDN        string `json:"ldap_base_dn" yaml:"ldap_base_dn"`
+        LdapUsername      string `json:"ldap_username" yaml:"ldap_username"`
+        LdapPassword      string `json:"ldap_password" yaml:"ldap_password"`
+}
+
+// TemplateConfig 는 어플리케이션의 설정을 처리한다.
+type TemplateConfig struct {
+        amigoconf.Config `yaml:",inline"`
+        Template         Template `json:"template" yaml:"template"`
+        Version          string
+}
+
+// currentConfig 는 전역 Config 싱글턴 객체이다.
+// GetInstance 함수에 의해 싱글턴 객체를 참조할 수 있다.
+var currentConfig *TemplateConfig
+var once sync.Once
+
+// GetInstance 함수는 Config 싱글턴 객체를 참조한다.
+func GetInstance(filepath ...string) *TemplateConfig <span class="cov8" title="1">{
+        once.Do(func() </span><span class="cov8" title="1">{
+                if len(filepath) &lt;= 0 </span><span class="cov0" title="0">{
+                        panic(amigoconf.ErrInitConfigFailed)</span>
+                }
+                <span class="cov8" title="1">currentConfig = &amp;TemplateConfig{}
+                if err := amigoconf.Load(filepath[0], currentConfig); err != nil </span><span class="cov8" title="1">{
+                        currentConfig = nil
+                }</span>
+        })
+
+        <span class="cov8" title="1">return currentConfig</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package commonapi
+
+import (
+        "net/http"
+        "strconv"
+
+        "stove-gitlab.sginfra.net/amigo/amigoapp/v4/base"
+
+        "stove-gitlab.sginfra.net/amigo/amigoutil/v3/psutil"
+        "stove-gitlab.sginfra.net/backend/template/config"
+        "stove-gitlab.sginfra.net/backend/template/constant"
+        "stove-gitlab.sginfra.net/backend/template/models"
+
+        "github.com/labstack/echo/v4"
+)
+
+const (
+        headerContentType = "Content-Type"
+        headerOctetStream = "application/octet-stream"
+)
+
+// GetHealthCheck 서버 상태 체크
+func GetHealthCheck(c echo.Context) error <span class="cov8" title="1">{
+        return c.String(http.StatusOK, "ok")
+}</span>
+
+// GetStatus 서비스 상태 체크
+func GetStatus(c echo.Context) error <span class="cov8" title="1">{
+        conf := config.GetInstance()
+        resp := base.Response{}
+
+        getServerDetail := func() map[string]interface{} </span><span class="cov8" title="1">{
+                server := psutil.GetProcessInfo()
+                result := map[string]interface{}{
+                        "hostname":          server.HostInfo.Hostname,
+                        "create_time":       server.ProcessInfo.CreateTime,
+                        "cmd_line":          server.ProcessInfo.Cmdline,
+                        "cpu_count":         server.CPUCount,
+                        "cpu_count_logical": server.CPUCountLogical,
+                        "cpu_percent":       server.CPUPercent,
+                        "disk_percent":      server.DiskPercent,
+                        "memory_percent":    server.MemoryPercent,
+                }
+                return result
+        }</span>
+
+        <span class="cov8" title="1">getConfigDetail := func() map[string]interface{} </span><span class="cov8" title="1">{
+                result := map[string]interface{}{
+                        "environment": conf.Template.EnvName,
+                        "revision":    constant.RevVersion,
+                        "release":     constant.TagVersion,
+                }
+                return result
+        }</span>
+
+        <span class="cov8" title="1">getDBDetail := func() (bool, map[string]interface{}) </span><span class="cov8" title="1">{
+                result := map[string]interface{}{
+                        "type":      conf.DBType,
+                        "host":      conf.DBAuth.Host,
+                        "status_ok": false,
+                }
+                err := models.GetDBStatus()
+                if err != nil </span><span class="cov0" title="0">{
+                        return false, result
+                }</span>
+                <span class="cov8" title="1">result["status_ok"] = true
+                return true, result</span>
+        }
+
+        <span class="cov8" title="1">status := true
+        dbStatus, dbDetail := getDBDetail()
+        if !dbStatus </span><span class="cov0" title="0">{
+                status = false
+        }</span>
+
+        <span class="cov8" title="1">redisCheck, err := models.PingRedis()
+        if err != nil </span><span class="cov0" title="0">{
+                redisCheck = false
+        }</span>
+
+        <span class="cov8" title="1">statusRedis := struct {
+                Host     string `json:"host"`
+                Port     string `json:"port"`
+                DB       string `json:"db"`
+                StatusOK bool   `json:"status_ok"`
+        }{
+                Host:     conf.Cache.Host,
+                Port:     strconv.Itoa(conf.Cache.Port),
+                DB:       strconv.Itoa(conf.Cache.DefaultDB),
+                StatusOK: redisCheck,
+        }
+
+        resp.Value = map[string]interface{}{
+                "status_ok": status,
+                "status_detail": map[string]interface{}{
+                        "server": getServerDetail(),
+                        "config": getConfigDetail(),
+                        "db":     dbDetail,
+                        "redis":  statusRedis,
+                },
+        }
+
+        resp.OK()
+
+        return c.JSON(http.StatusOK, resp)</span>
+}
+
+// GetVersion API 버전 조회
+func GetVersion(c echo.Context, maxVersion string) error <span class="cov8" title="1">{
+        resp := base.Response{}
+        resp.Value = map[string]interface{}{
+                "version":  maxVersion,
+                "revision": constant.RevVersion,
+                "release":  constant.TagVersion,
+        }
+        resp.OK()
+
+        return c.JSON(http.StatusOK, resp)
+}</span>
+
+// GetRealIP Real IP 조회
+func GetRealIP(c echo.Context) error <span class="cov8" title="1">{
+        resp := base.Response{}
+        resp.Value = map[string]interface{}{
+                "real_ip": c.Request().Header.Get(echo.HeaderXRealIP)}
+        resp.OK()
+
+        return c.JSON(http.StatusOK, resp)
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package commonapi
+
+import (
+        "encoding/json"
+        "net/http"
+        "strconv"
+
+        "stove-gitlab.sginfra.net/amigo/amigoapp/v4/base"
+        "stove-gitlab.sginfra.net/backend/template/controllers/context"
+        "stove-gitlab.sginfra.net/backend/template/models"
+)
+
+// CreateTemplate Template/01. 유저 생성
+func CreateTemplate(ctx *context.TemplateContext) error <span class="cov8" title="1">{
+        resp := base.Response{}
+
+        template := models.NewTemplate()
+        // RequestBody Decoding
+        if err := json.NewDecoder(ctx.EchoContext.Request().Body).Decode(&amp;template); err != nil </span><span class="cov8" title="1">{
+                return base.JSONInternalServerError(ctx.EchoContext, base.MakeError(base.ResultParameterIsInvalid, err))
+        }</span>
+
+        // 유저 생성
+        <span class="cov8" title="1">if err := models.CreateTemplate(template); err != nil </span><span class="cov8" title="1">{
+                return base.JSONInternalServerError(ctx.EchoContext, err)
+        }</span>
+
+        <span class="cov8" title="1">resp.OK()
+        return ctx.EchoContext.JSON(http.StatusOK, resp)</span>
+}
+
+// UpdateTemplate Template/02. 유저 수정
+func UpdateTemplate(ctx *context.TemplateContext) error <span class="cov8" title="1">{
+        resp := base.Response{}
+
+        template := models.NewTemplate()
+        // RequestBody Decoding
+        if err := json.NewDecoder(ctx.EchoContext.Request().Body).Decode(&amp;template); err != nil </span><span class="cov8" title="1">{
+                return base.JSONInternalServerError(ctx.EchoContext, base.MakeError(base.ResultParameterIsInvalid, err))
+        }</span>
+
+        // 유저 수정
+        <span class="cov8" title="1">if err := models.UpdateTemplate(template); err != nil </span><span class="cov8" title="1">{
+                return base.JSONInternalServerError(ctx.EchoContext, err)
+        }</span>
+
+        <span class="cov8" title="1">resp.OK()
+        return ctx.EchoContext.JSON(http.StatusOK, resp)</span>
+}
+
+// DeleteTemplate Template/03. 유저 삭제
+func DeleteTemplate(ctx *context.TemplateContext) error <span class="cov8" title="1">{
+        resp := base.Response{}
+
+        template := models.NewTemplate()
+        // RequestBody Decoding
+        if err := json.NewDecoder(ctx.EchoContext.Request().Body).Decode(&amp;template); err != nil </span><span class="cov8" title="1">{
+                return base.JSONInternalServerError(ctx.EchoContext, base.MakeError(base.ResultParameterIsInvalid, err))
+        }</span>
+
+        // 유저 삭제
+        <span class="cov8" title="1">if err := models.DeleteTemplate(template); err != nil </span><span class="cov8" title="1">{
+                return base.JSONInternalServerError(ctx.EchoContext, err)
+        }</span>
+
+        <span class="cov8" title="1">resp.OK()
+        return ctx.EchoContext.JSON(http.StatusOK, resp)</span>
+}
+
+// GetTemplate Template/04. 유저 조회
+func GetTemplate(ctx *context.TemplateContext) error <span class="cov8" title="1">{
+        resp := base.Response{}
+
+        template := models.NewTemplate()
+        template.Key = ctx.TemplateKey()
+
+        // 유저 조회
+        if err := models.GetTemplate(template); err != nil </span><span class="cov8" title="1">{
+                return base.JSONInternalServerError(ctx.EchoContext, err)
+        }</span>
+
+        <span class="cov8" title="1">resp.Value = make(map[string]interface{}, 10)
+
+        templateConvParam := models.NewTemplateConvParam()
+        templateConvParam.Properties = ctx.Properties()
+        if !json.Valid([]byte(templateConvParam.Properties)) </span><span class="cov8" title="1">{
+                templateConvParam.Properties = "[]"
+        }</span>
+        <span class="cov8" title="1">templateConvParam.Data = &amp;resp.Value
+
+        template.ConvertTo(templateConvParam)
+
+        resp.OK()
+        return ctx.EchoContext.JSON(http.StatusOK, resp)</span>
+}
+
+// GetTemplate Template/04. 유저 조회
+func GetTemplates(ctx *context.TemplateContext) error <span class="cov8" title="1">{
+        resp := base.Response{}
+
+        templateList := models.NewTemplateList()
+        templateList.Key = ctx.TemplateKey()
+        templateList.Value = ctx.TemplateValue()
+        templateList.PageIndex, _ = strconv.Atoi(ctx.PageIndex())
+        templateList.PageSize, _ = strconv.Atoi(ctx.PageSize())
+
+        // 유저 조회
+        if err := models.GetTemplates(templateList); err != nil </span><span class="cov0" title="0">{
+                return base.JSONInternalServerError(ctx.EchoContext, err)
+        }</span>
+
+        <span class="cov8" title="1">resp.Value = make(map[string]interface{}, 10)
+
+        templateConvParam := models.NewTemplateConvParam()
+        templateConvParam.Properties = ctx.Properties()
+        if !json.Valid([]byte(templateConvParam.Properties)) </span><span class="cov8" title="1">{
+                templateConvParam.Properties = "[]"
+        }</span>
+        <span class="cov8" title="1">templateConvParam.Data = &amp;resp.Value
+
+        templateList.ConvertTo(templateConvParam)
+
+        resp.Value["total_count"] = templateList.TotalCount
+        resp.OK()
+        return ctx.EchoContext.JSON(http.StatusOK, resp)</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package context
+
+import (
+        "github.com/labstack/echo/v4"
+        "stove-gitlab.sginfra.net/amigo/amigoapp/v4/base"
+)
+
+const (
+        // ParamFieldID id 입력 파라미터 Key
+        TemplateID = iota + base.ParamFieldBaseMax + 1
+        TemplateKey
+        TemplateValue
+        Properties
+        PageIndex
+        PageSize
+        SortOrder
+        StartRegAt
+        EndRegAt
+)
+
+// TemplateContext Template API의 Request Context
+type TemplateContext struct {
+        *base.AmigoContext
+        userID   string
+        userName string
+}
+
+// NewTemplateContext 새로운 Template Context 생성
+func NewTemplateContext(baseCtx *base.AmigoContext) interface{} <span class="cov8" title="1">{
+        if baseCtx == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">ctx := new(TemplateContext)
+        ctx.AmigoContext = baseCtx
+
+        return ctx</span>
+}
+
+// AppendRequestParameter AmigoContext에 이미 정의되어 있는 ReqeustParameters 배열에 등록
+func AppendRequestParameter() <span class="cov8" title="1">{
+        base.SetParamMeta(TemplateID, base.NewParamMeta(base.ParamTypeFormValue, "id"))
+        base.SetParamMeta(TemplateKey, base.NewParamMeta(base.ParamTypeFormValue, "key"))
+        base.SetParamMeta(TemplateValue, base.NewParamMeta(base.ParamTypeFormValue, "value"))
+        base.SetParamMeta(Properties, base.NewParamMeta(base.ParamTypeFormValue, "properties"))
+        base.SetParamMeta(PageIndex, base.NewParamMeta(base.ParamTypeFormValue, "page_index"))
+        base.SetParamMeta(PageSize, base.NewParamMeta(base.ParamTypeFormValue, "page_size"))
+        base.SetParamMeta(SortOrder, base.NewParamMeta(base.ParamTypeFormValue, "sort"))
+        base.SetParamMeta(StartRegAt, base.NewParamMeta(base.ParamTypeFormValue, "start_reg_at"))
+        base.SetParamMeta(EndRegAt, base.NewParamMeta(base.ParamTypeFormValue, "end_reg_at"))
+}</span>
+
+func (o TemplateContext) TemplateID() string <span class="cov8" title="1">{
+        return o.GetParam(TemplateID)
+}</span>
+
+func (o TemplateContext) TemplateKey() string <span class="cov8" title="1">{
+        return o.GetParam(TemplateKey)
+}</span>
+
+func (o TemplateContext) TemplateValue() string <span class="cov8" title="1">{
+        return o.GetParam(TemplateValue)
+}</span>
+func (o TemplateContext) Properties() string <span class="cov8" title="1">{
+        return o.GetParam(Properties)
+}</span>
+
+func (o TemplateContext) PageIndex() string <span class="cov8" title="1">{
+        return o.GetParam(PageIndex)
+}</span>
+
+func (o TemplateContext) PageSize() string <span class="cov8" title="1">{
+        return o.GetParam(PageSize)
+}</span>
+
+func (o TemplateContext) SortOrder() string <span class="cov8" title="1">{
+        return o.GetParam(SortOrder)
+}</span>
+
+func (o TemplateContext) StartRegAt() string <span class="cov8" title="1">{
+        return o.GetParam(StartRegAt)
+}</span>
+
+func (o TemplateContext) EndRegAt() string <span class="cov8" title="1">{
+        return o.GetParam(EndRegAt)
+}</span>
+
+func (o TemplateContext) GetRealIP() string <span class="cov0" title="0">{
+        return o.AmigoContext.EchoContext.Request().Header.Get(echo.HeaderXRealIP)
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package externalapi
+
+import (
+        "net/http"
+
+        "stove-gitlab.sginfra.net/amigo/amigoapp/v4/base"
+        amigoconf "stove-gitlab.sginfra.net/amigo/amigoapp/v4/config"
+        "stove-gitlab.sginfra.net/amigo/amigoapp/v4/token"
+        "stove-gitlab.sginfra.net/backend/template/config"
+        "stove-gitlab.sginfra.net/backend/template/controllers/commonapi"
+        "stove-gitlab.sginfra.net/backend/template/controllers/context"
+        "stove-gitlab.sginfra.net/backend/template/utils"
+
+        "github.com/labstack/echo/v4"
+)
+
+// ExternalAPI External 통신을 위한 구조체
+type ExternalAPI struct {
+        base.BaseController
+
+        conf    *config.TemplateConfig
+        echo    *echo.Echo
+        apiConf *amigoconf.APIServer
+}
+
+// PreCheck PreCheck
+func PreCheck(c echo.Context) base.PreCheckResponse <span class="cov8" title="1">{
+        var result base.PreCheckResponse
+        if c == nil </span><span class="cov8" title="1">{
+                result = base.PreCheckResponse{
+                        IsSucceed: false,
+                }
+        }</span> else<span class="cov8" title="1"> {
+                conf := config.GetInstance()
+                if err := base.SetContext(c, &amp;conf.Config, context.NewTemplateContext); err == nil </span><span class="cov8" title="1">{
+                        ctx := base.GetContext(c).(*context.TemplateContext)
+
+                        method := c.Request().Method
+                        path := c.Request().URL.Path
+                        header := c.Request().Header
+
+                        ctx.EchoContext.Set("caller-id", conf.Template.ApplicationName)
+                        ctx.EchoContext.Set("caller-detail", header.Get("caller-detail"))
+
+                        version := utils.GetCurrentAPIVersion(c.Path())
+                        majorVersion := utils.GetCurrentMajorVersion(version)
+                        ctx.EchoContext.Set("version", version)
+                        ctx.EchoContext.Set("major_version", majorVersion)
+
+                        result = checkAuth(ctx, method, path, header)
+                }</span>
+                // base.SetContext(c, &amp;conf.Config, context.NewTemplateContext)
+                // result = base.PreCheckResponse{
+                //         IsSucceed: true,
+                // }
+        }
+        <span class="cov8" title="1">return result</span>
+}
+
+// checkAuth 인증을 체크한다.
+func checkAuth(ctx *context.TemplateContext, method, path string, header http.Header) base.PreCheckResponse <span class="cov8" title="1">{
+        var resp token.TokenResponse
+        var err error
+
+        if resp, err = token.ParseToken(header); err != nil </span><span class="cov0" title="0">{
+                return base.PreCheckResponse{
+                        IsSucceed: false,
+                        Response:  resp,
+                }
+        }</span>
+
+        <span class="cov8" title="1">if resp.Code == base.ResultOK </span><span class="cov0" title="0">{
+                ctx.EchoContext.Set("member_no", resp.Data.MemberNo)
+        }</span>
+
+        <span class="cov8" title="1">return base.PreCheckResponse{
+                IsSucceed: true,
+        }</span>
+}
+
+// Init External API 초기화 함수
+func (o *ExternalAPI) Init(e *echo.Echo) error <span class="cov8" title="1">{
+        var err error
+        o.echo = e
+        o.BaseController.PreCheck = PreCheck
+
+        if err := o.MapRoutes(o, e, o.apiConf.Routes); err == nil </span><span class="cov8" title="1">{
+                // serving documents for RESTful APIs
+                if o.conf.Template.APIDocs </span><span class="cov8" title="1">{
+                        e.Static("/docs", "docs/ext")
+                }</span>
+        }
+        <span class="cov8" title="1">return err</span>
+}
+
+// GetConfig APIServer 정보를 반환한다.
+func (o *ExternalAPI) GetConfig() *amigoconf.APIServer <span class="cov8" title="1">{
+        o.conf = config.GetInstance()
+        o.apiConf = &amp;o.conf.APIServers[1]
+        return o.apiConf
+}</span>
+
+// NewAPI ExternalAPI 인스턴스를 생성한다.
+func NewAPI() *ExternalAPI <span class="cov8" title="1">{
+        return &amp;ExternalAPI{}
+}</span>
+
+// GetHealthCheck API 서버의 상태를 검사하는 용도로 사용한다.
+func (o *ExternalAPI) GetHealthCheck(c echo.Context) error <span class="cov8" title="1">{
+        return commonapi.GetHealthCheck(c)
+}</span>
+
+// GetVersion 함수는 ExternalAPI의 버전정보를 반환한다.
+func (o *ExternalAPI) GetVersion(c echo.Context) error <span class="cov8" title="1">{
+        return commonapi.GetVersion(c, o.BaseController.MaxVersion)
+}</span>
+
+// CreateTemplate Template/01. Template 생성
+func (o *ExternalAPI) CreateTemplate(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.CreateTemplate(ctx)
+}</span>
+
+// UpdateTemplate Template/02. Template 수정
+func (o *ExternalAPI) UpdateTemplate(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.UpdateTemplate(ctx)
+}</span>
+
+// DeleteTemplate Template/03. Template 삭제
+func (o *ExternalAPI) DeleteTemplate(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.DeleteTemplate(ctx)
+}</span>
+
+// GetTemplate Template/04. Template 조회
+func (o *ExternalAPI) GetTemplate(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.GetTemplate(ctx)
+}</span>
+
+// GetTemplates Template/05. Template 목록 조회
+func (o *ExternalAPI) GetTemplates(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.GetTemplates(ctx)
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package internalapi
+
+import (
+        "github.com/labstack/echo/v4"
+        "stove-gitlab.sginfra.net/amigo/amigoapp/v4/base"
+        amigoconf "stove-gitlab.sginfra.net/amigo/amigoapp/v4/config"
+        "stove-gitlab.sginfra.net/backend/template/config"
+        "stove-gitlab.sginfra.net/backend/template/controllers/commonapi"
+        "stove-gitlab.sginfra.net/backend/template/controllers/context"
+        "stove-gitlab.sginfra.net/backend/template/utils"
+)
+
+// InternalAPI InternalAPI 통신을 위한 구조체
+type InternalAPI struct {
+        base.BaseController
+
+        conf    *config.TemplateConfig
+        apiConf *amigoconf.APIServer
+        echo    *echo.Echo
+}
+
+// PreCheck PreCheck
+func PreCheck(c echo.Context) base.PreCheckResponse <span class="cov8" title="1">{
+        var result base.PreCheckResponse
+        if c == nil </span><span class="cov8" title="1">{
+                result = base.PreCheckResponse{
+                        IsSucceed: false,
+                }
+        }</span> else<span class="cov8" title="1"> {
+                conf := config.GetInstance()
+                if err := base.SetContext(c, &amp;conf.Config, context.NewTemplateContext); err == nil </span><span class="cov8" title="1">{
+                        // log.Debugf("http.request.header: %v", c.Request().Header)
+                        ctx := base.GetContext(c).(*context.TemplateContext)
+
+                        ctx.EchoContext.Set("caller-id", conf.Template.ApplicationName)
+                        ctx.EchoContext.Set("caller-detail", c.Request().Header.Get("caller-detail"))
+
+                        version := utils.GetCurrentAPIVersion(c.Path())
+                        majorVersion := utils.GetCurrentMajorVersion(version)
+                        ctx.EchoContext.Set("version", version)
+                        ctx.EchoContext.Set("major_version", majorVersion)
+
+                        result = checkAuth(ctx)
+                }</span>
+        }
+        <span class="cov8" title="1">return result</span>
+}
+
+// checkAuth 인증을 체크한다.
+func checkAuth(ctx *context.TemplateContext) base.PreCheckResponse <span class="cov8" title="1">{
+        // conf := config.GetInstance()
+        // //cerberus := libcerberus.GetInstance()
+        // cerberus := libcerberus.GetInstance(&amp;conf.Cerberus,
+        //         nil,
+        //         conf.Template.ApplicationKey,
+        //         conf.Template.ApplicationSecret)
+        // resp, _ := cerberus.AuthInternal(ctx.ApplicationKey(), ctx.ApplicationSecret())
+        // if resp.Result != "000" {
+        //         return base.PreCheckResponse{
+        //                 IsSucceed: false,
+        //                 Response:  resp,
+        //         }
+        // }
+
+        return base.PreCheckResponse{
+                IsSucceed: true,
+        }
+}</span>
+
+// Init Internal API 초기화 함수
+func (o *InternalAPI) Init(e *echo.Echo) error <span class="cov8" title="1">{
+        var err error
+        //o.conf = config.GetInstance()
+        o.echo = e
+        o.BaseController.PreCheck = PreCheck
+
+        if err = o.MapRoutes(o, e, o.apiConf.Routes); err == nil </span><span class="cov8" title="1">{
+                // serving documents for RESTful APIs
+                if o.conf.Template.APIDocs </span><span class="cov8" title="1">{
+                        e.Static("/docs", "docs/int")
+                }</span>
+        }
+        <span class="cov8" title="1">return err</span>
+}
+
+// GetConfig APIServer 정보를 반환한다.
+func (o *InternalAPI) GetConfig() *amigoconf.APIServer <span class="cov8" title="1">{
+        o.conf = config.GetInstance()
+        o.apiConf = &amp;o.conf.APIServers[0]
+        return o.apiConf
+}</span>
+
+// NewAPI InternalAPI 인스턴스를 생성한다.
+func NewAPI() *InternalAPI <span class="cov8" title="1">{
+        return &amp;InternalAPI{}
+}</span>
+
+// GetHealthCheck API 서버의 상태를 검사하는 용도로 사용한다.
+func (o *InternalAPI) GetHealthCheck(c echo.Context) error <span class="cov8" title="1">{
+        return commonapi.GetHealthCheck(c)
+}</span>
+
+// GetStatus 서비스 상태 체크 정보를 반환한다.
+func (o *InternalAPI) GetStatus(c echo.Context) error <span class="cov0" title="0">{
+        return commonapi.GetStatus(c)
+}</span>
+
+// GetVersion 함수는 InternalAPI의 버전정보를 반환한다.
+func (o *InternalAPI) GetVersion(c echo.Context) error <span class="cov8" title="1">{
+        return commonapi.GetVersion(c, o.BaseController.MaxVersion)
+}</span>
+
+// GetRealIP 접속한 사용자의 Real IP 정보를 반환한다.
+func (o *InternalAPI) GetRealIP(c echo.Context) error <span class="cov8" title="1">{
+        return commonapi.GetRealIP(c)
+}</span>
+
+// CreateTemplate Template/01. Template 생성
+func (o *InternalAPI) CreateTemplate(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.CreateTemplate(ctx)
+}</span>
+
+// UpdateTemplate Template/02. Template 수정
+func (o *InternalAPI) UpdateTemplate(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.UpdateTemplate(ctx)
+}</span>
+
+// DeleteTemplate Template/03. Template 삭제
+func (o *InternalAPI) DeleteTemplate(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.DeleteTemplate(ctx)
+}</span>
+
+// GetTemplate Template/04. Template 조회
+func (o *InternalAPI) GetTemplate(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.GetTemplate(ctx)
+}</span>
+
+// GetTemplates Template/05. Template 목록 조회
+func (o *InternalAPI) GetTemplates(c echo.Context) error <span class="cov8" title="1">{
+        ctx := base.GetContext(c).(*context.TemplateContext)
+        return commonapi.GetTemplates(ctx)
+}</span>
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package resultcode
+
+const (
+        // For Template
+        ResultErrorRedisConnection      = 77900
+        ResultErrorAccessToken          = 77901
+        ResultErrorTemplateExistName    = 77902
+        ResultErrorTemplateNotFound     = 77903
+        ResultErrorTemplateCreate       = 77904
+        ResultErrorAccessTokenExpired   = 77905
+        ResultErrorInvalidCredentials   = 77906
+        ResultErrorNotAllowedClientIP   = 77907
+        ResultErrorAPIParam             = 77920
+        ResultErrorAPIParamKey          = 77921
+        ResultErrorAPIParamValue        = 77922
+        ResultErrorAPIParamDataType     = 77923
+        ResultErrorBuildResultJSON      = 77924
+        ResultErrorURIResource          = 77925
+        ResultErrorNotFoundAPIVersion   = 77926
+        ResultErrorMembershipAPI        = 77931
+        ResultErrorNotFoundUserID       = 77932
+        ResultErrorUserAlreadyExists    = 77933
+        ResultErrorClientAlreadyExists  = 77934
+        ResultErrorDataKeyAlreadyExists = 77935
+        ResultErrorDataKeyExists        = 77936
+        ResultErrorRegUserNotExists     = 77937
+        ResultErrorClientNotExists      = 77938
+        ResultErrorRequired2Characters  = 77939
+        ResultErrorTemplateSystem       = 77999
+)
+
+var TemplateResultCodeMap = map[int]string{
+        // For Template
+        ResultErrorRedisConnection:      "error occurs when connect to DB",
+        ResultErrorAccessToken:          "error occurs when user invalid access token",
+        ResultErrorTemplateExistName:    "error occurs when template exist same name",
+        ResultErrorTemplateNotFound:     "error occurs when template not found",
+        ResultErrorTemplateCreate:       "error occurs when template create fail",
+        ResultErrorAccessTokenExpired:   "access token is expired",
+        ResultErrorInvalidCredentials:   "invalid user id or password",
+        ResultErrorNotAllowedClientIP:   "not allowed client IP",
+        ResultErrorAPIParam:             "check api parameter",
+        ResultErrorAPIParamKey:          "check api parameter's default key",
+        ResultErrorAPIParamValue:        "check api parameter body's data key",
+        ResultErrorAPIParamDataType:     "check api parameter's data type",
+        ResultErrorBuildResultJSON:      "build result json format error",
+        ResultErrorURIResource:          "check uri resource name",
+        ResultErrorNotFoundAPIVersion:   "not found api (check method version)",
+        ResultErrorMembershipAPI:        "error occured in membership infra token api",
+        ResultErrorNotFoundUserID:       "error occurs when invalid user id",
+        ResultErrorUserAlreadyExists:    "user already exists",
+        ResultErrorClientAlreadyExists:  "client already exists",
+        ResultErrorDataKeyAlreadyExists: "data key already exists",
+        ResultErrorDataKeyExists:        "data key exists",
+        ResultErrorRegUserNotExists:     "reg user does not exist",
+        ResultErrorClientNotExists:      "client does not exist",
+        ResultErrorRequired2Characters:  "The search term must contain at least 2 characters.",
+        ResultErrorTemplateSystem:       "Template System error",
+}
+
+// GetResultCodeMap Get ResultCodeMap
+func GetResultCodeMap() map[int]string <span class="cov8" title="1">{
+        return TemplateResultCodeMap
+}</span>
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package models
+
+import (
+        "database/sql"
+        "strconv"
+        "sync"
+
+        "github.com/go-sql-driver/mysql"
+        "stove-gitlab.sginfra.net/amigo/amigodb/v3"
+        "stove-gitlab.sginfra.net/amigo/amigoutil/v3/log"
+        "stove-gitlab.sginfra.net/backend/template/config"
+)
+
+const (
+        templateTable = "TB_TEMPLATE"
+
+        errRedisNil           = "redis: nil"
+        errNotFound           = "no rows in result set"
+        errRedisPipeLineEmpty = "redis: pipeline is empty"
+        errTemplateNotFound   = "template not found"
+
+        sortRegAtDesc = "reg_at desc"
+        sortRegAtAsc  = "reg_at asc"
+)
+
+func getTemplateTable() string <span class="cov8" title="1">{
+        conf := config.GetInstance()
+        return conf.DBPrefix + templateTable
+}</span>
+
+// TemplateServiceDB Template 관련 구조체 정보
+type TemplateServiceDB struct {
+        conf    *config.TemplateConfig
+        redisdb *amigodb.Redis
+        mysqldb *amigodb.Mysql
+}
+
+/*
+        Public Functions
+*/
+
+// TemplateDB Template Mysql 통신을 위한 인터페이스
+type TemplateDB interface {
+        Init() error
+        GetStatus() error
+
+        CreateTable() error
+        InitTable() error
+        PingRedis() (bool, error)
+
+        // Template Meta 관리
+        CreateTemplate(template *Template) error
+        UpdateTemplate(template *Template) error
+        DeleteTemplate(template *Template) error
+        GetTemplate(template *Template) error
+        GetTemplates(templateList *TemplateList) error
+
+        SetTemplateRedis(template *Template) error
+        GetTemplateRedis(template *Template) error
+        RemoveTemplateRedis(template *Template) error
+        RefreshRedis(templateList *TemplateList) error
+}
+
+var templateDB TemplateDB
+var onceDB sync.Once
+
+func getDB() TemplateDB <span class="cov8" title="1">{
+        onceDB.Do(func() </span><span class="cov8" title="1">{
+                conf := config.GetInstance()
+                templateDB = createDB(conf.DBType)
+        }</span>)
+
+        <span class="cov8" title="1">return templateDB</span>
+}
+
+func createDB(dbtype string) TemplateDB <span class="cov8" title="1">{
+        templateDB := &amp;TemplateServiceDB{}
+        if err := templateDB.Init(); err != nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+
+        <span class="cov8" title="1">return templateDB</span>
+}
+
+// Init 초기화 함수
+func (o *TemplateServiceDB) Init() error <span class="cov8" title="1">{
+        o.conf = config.GetInstance()
+
+        var err error
+
+        port := strconv.Itoa(o.conf.Cache.Port)
+        database := strconv.Itoa(o.conf.Cache.DefaultDB)
+        poolSize := strconv.Itoa(o.conf.Cache.PoolSize)
+        timeout := strconv.Itoa(o.conf.Cache.TimeoutSec)
+        if o.redisdb, err = amigodb.GetRedis(
+                o.conf.Cache.Host,
+                port,
+                o.conf.Cache.Password,
+                database,
+                poolSize,
+                timeout,
+        ); err != nil </span><span class="cov0" title="0">{
+                log.Errorf("[Init] Redis err: %v", err)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if o.mysqldb, err = amigodb.GetMysql(
+                o.conf.DBAuth.Host,
+                o.conf.DBAuth.ID,
+                o.conf.DBAuth.Password,
+                o.conf.DBAuth.Database,
+                o.conf.DBAuth.PoolSize,
+                o.conf.DBAuth.IdleSize,
+        ); err != nil </span><span class="cov0" title="0">{
+                log.Errorf("[Init] Mysql err: %v", err)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// GetDBStatus DB 접속이 가능한지 확인한다.
+func GetDBStatus() error <span class="cov8" title="1">{
+        db := getDB()
+        return db.GetStatus()
+}</span>
+
+// GetStatus DB 접속 확인
+func (o *TemplateServiceDB) GetStatus() error <span class="cov8" title="1">{
+        connStr := mysql.NewConfig()
+        connStr.Net = "tcp"
+        connStr.Addr = o.conf.DBAuth.Host
+        connStr.User = o.conf.DBAuth.ID
+        connStr.Passwd = o.conf.DBAuth.Password
+        connStr.DBName = o.conf.DBAuth.Database
+        mysqlDsn := connStr.FormatDSN()
+
+        db, err := sql.Open("mysql", mysqlDsn)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">err = db.Ping()
+        if err != nil </span><span class="cov0" title="0">{
+                db.Close()
+                return err
+        }</span>
+        <span class="cov8" title="1">db.Close()
+        return nil</span>
+}
+
+// CreateTable Template에 사용하는 Mysql의 Table들을 생성한다.
+func CreateTable() error <span class="cov8" title="1">{
+        db := getDB()
+        return db.CreateTable()
+}</span>
+
+// InitTable Template에 사용하는 모든 데이터를 삭제한다.
+func InitTable() error <span class="cov8" title="1">{
+        db := getDB()
+        return db.InitTable()
+}</span>
+
+// PingRedis Reids 통신 여부 체크
+func PingRedis() (bool, error) <span class="cov8" title="1">{
+        db := getDB()
+        return db.PingRedis()
+}</span>
+
+// CreateTable 테이블 생성
+func (o *TemplateServiceDB) CreateTable() error <span class="cov8" title="1">{
+        return o.CreateTemplateTable()
+}</span>
+
+// InitTable 테이블 생성
+func (o *TemplateServiceDB) InitTable() error <span class="cov8" title="1">{
+        return o.InitTemplateTable()
+}</span>
+
+// PingRedis Reids 통신 여부 체크
+func (o *TemplateServiceDB) PingRedis() (bool, error) <span class="cov8" title="1">{
+        return o.redisdb.Ping()
+}</span>
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package models
+
+import (
+        "encoding/json"
+        "errors"
+
+        "stove-gitlab.sginfra.net/amigo/amigoapp/v4/base"
+)
+
+// Template Template 정보
+type Template struct {
+        ID    int    `json:"id"`               // ID
+        Key   string `json:"key,omitempty"`    // KeyType
+        Value string `json:"value,omitempty"`  // KeyValue
+        RegAt string `json:"reg_at,omitempty"` // RegAt
+        UpdAt string `json:"upd_at,omitempty"` // UpdAt
+}
+
+// TemplateList TemplateList 요청/응답 정보
+type TemplateList struct {
+        // 요청 정보
+        Key        string `json:"key"`          // Key
+        Value      string `json:"value"`        // Value
+        PageIndex  int    `json:"page_index"`   // 페이지 번호
+        PageSize   int    `json:"page_size"`    // 한 페이지에 보여줄 갯수
+        SortOrder  string `json:"sort"`         // 정렬 방식 asc, desc
+        StartRegAt string `json:"start_reg_at"` // 생성일 시작 시간
+        EndRegAt   string `json:"end_reg_at"`   // 생성일 종료 시간
+
+        Properties []string `json:"properties"` // 조회할 필드 리스트
+
+        // 결과 값
+        Templates  []Template `json:"templates"`
+        TotalCount int        `json:"total_count"` // 요청 정보의 총 데이터 갯수.
+}
+
+// TemplateConvParam - Template 데이터 변환을 위한 파라미터 정보를 가진 구조체
+type TemplateConvParam struct {
+        Templates  *[]Template
+        Properties string
+        Data       *map[string]interface{}
+        Overwrite  bool
+        Props      *[]string
+}
+
+// NewTemplate Template 참조를 반환한다.
+func NewTemplate() *Template <span class="cov8" title="1">{
+        return &amp;Template{}
+}</span>
+
+// NewTemplateList TemplateList 참조를 반환한다.
+func NewTemplateList() *TemplateList <span class="cov8" title="1">{
+        return &amp;TemplateList{}
+}</span>
+
+// NewTemplateConvParam TemplateConvParam 생성 및 초기화
+func NewTemplateConvParam() *TemplateConvParam <span class="cov8" title="1">{
+        return &amp;TemplateConvParam{}
+}</span>
+
+// ConvertTemplateListTo Template List로 변환
+func ConvertTemplateListTo(templateConvParam *TemplateConvParam) error <span class="cov8" title="1">{
+        if err := json.Unmarshal([]byte(templateConvParam.Properties), &amp;templateConvParam.Props); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">list := make([]map[string]interface{}, len(*templateConvParam.Templates))
+
+        for i, v := range *templateConvParam.Templates </span><span class="cov8" title="1">{
+                list[i] = make(map[string]interface{}, len(*templateConvParam.Props))
+
+                tmpTemplateParam := NewTemplateConvParam()
+                tmpTemplateParam.Data = &amp;list[i]
+                tmpTemplateParam.Props = templateConvParam.Props
+                tmpTemplateParam.Overwrite = templateConvParam.Overwrite
+
+                v.ConvertToWithProps(tmpTemplateParam)
+        }</span>
+        <span class="cov8" title="1">(*templateConvParam.Data)["list"] = list
+        return nil</span>
+}
+
+// ConvertTo Template로 변환
+func (o *Template) ConvertTo(templateConvParam *TemplateConvParam) error <span class="cov8" title="1">{
+        if err := json.Unmarshal([]byte(templateConvParam.Properties), &amp;templateConvParam.Props); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">return o.ConvertToWithProps(templateConvParam)</span>
+}
+
+// ConvertTo TemplateList로 변환
+func (o *TemplateList) ConvertTo(templateConvParam *TemplateConvParam) error <span class="cov8" title="1">{
+        templateConvParam.Templates = &amp;o.Templates
+        return ConvertTemplateListTo(templateConvParam)
+}</span>
+
+// ConvertToWithProps Template로 변환
+func (o *Template) ConvertToWithProps(templateConvParam *TemplateConvParam) error <span class="cov8" title="1">{
+        for _, v := range *templateConvParam.Props </span><span class="cov8" title="1">{
+                if _, ok := (*templateConvParam.Data)[v]; ok </span><span class="cov0" title="0">{
+                        continue</span>
+                }
+
+                <span class="cov8" title="1">switch v </span>{
+                case "id":<span class="cov8" title="1">
+                        (*templateConvParam.Data)[v] = o.ID</span>
+                case "key":<span class="cov8" title="1">
+                        (*templateConvParam.Data)[v] = o.Key</span>
+                case "value":<span class="cov8" title="1">
+                        (*templateConvParam.Data)[v] = o.Value</span>
+                case "reg_at":<span class="cov8" title="1">
+                        (*templateConvParam.Data)[v] = o.RegAt</span>
+                case "upd_at":<span class="cov8" title="1">
+                        (*templateConvParam.Data)[v] = o.UpdAt</span>
+                }
+        }
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+func validTemplateParams(param []string, template *Template) error <span class="cov8" title="1">{
+        for i := 0; i &lt; len(param); i++ </span><span class="cov8" title="1">{
+                if err := validTemplateParam(param[i], template); err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+func validTemplateParam(param string, template *Template) error <span class="cov8" title="1">{
+        switch param </span>{
+        case "id":<span class="cov8" title="1">
+                if template.ID == 0 </span><span class="cov8" title="1">{
+                        return base.MakeError(base.ResultParameterIsInvalid, errors.New(param))
+                }</span>
+        case "key":<span class="cov8" title="1">
+                if template.Key == "" </span><span class="cov8" title="1">{
+                        return base.MakeError(base.ResultParameterIsInvalid, errors.New(param))
+                }</span>
+        case "value":<span class="cov8" title="1">
+                if template.Value == "" </span><span class="cov8" title="1">{
+                        return base.MakeError(base.ResultParameterIsInvalid, errors.New(param))
+                }</span>
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package models
+
+// CreateTemplate Template/01. Template Meta 생성
+func CreateTemplate(template *Template) error <span class="cov8" title="1">{
+        db := getDB()
+        return db.CreateTemplate(template)
+}</span>
+
+// UpdateTemplate Template/02. Template Meta 수정
+func UpdateTemplate(template *Template) error <span class="cov8" title="1">{
+        db := getDB()
+        return db.UpdateTemplate(template)
+}</span>
+
+// DeleteTemplate Template/03. Template Meta 삭제
+func DeleteTemplate(template *Template) error <span class="cov8" title="1">{
+        db := getDB()
+        return db.DeleteTemplate(template)
+}</span>
+
+// GetTemplate Template/04. Template Meta 조회
+func GetTemplate(template *Template) error <span class="cov8" title="1">{
+        db := getDB()
+        return db.GetTemplate(template)
+}</span>
+
+// GetTemplates Template/05. Template List 조회
+func GetTemplates(templateList *TemplateList) error <span class="cov8" title="1">{
+        db := getDB()
+        return db.GetTemplates(templateList)
+}</span>
+
+// SetTemplateRedis Set Template to Redis
+func SetTemplateRedis(template *Template) error <span class="cov8" title="1">{
+        db := getDB()
+        return db.SetTemplateRedis(template)
+}</span>
+
+// GetTemplateRedis Get Template to Redis
+func GetTemplateRedis(template *Template) error <span class="cov8" title="1">{
+        db := getDB()
+        return db.GetTemplateRedis(template)
+}</span>
+
+// RemoveTemplateRedis Remove Template to Redis
+func RemoveTemplateRedis(template *Template) error <span class="cov8" title="1">{
+        db := getDB()
+        return db.RemoveTemplateRedis(template)
+}</span>
+
+// RefreshRedis Redis Refresh
+func RefreshRedis(templateList *TemplateList) error <span class="cov8" title="1">{
+        db := getDB()
+        return db.RefreshRedis(templateList)
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package models
+
+import (
+        "errors"
+        "fmt"
+        "strconv"
+        "strings"
+
+        "stove-gitlab.sginfra.net/amigo/amigoapp/v4/base"
+        "stove-gitlab.sginfra.net/amigo/amigoutil/v3/log"
+        "stove-gitlab.sginfra.net/backend/template/utils"
+)
+
+// CreateTemplateTable Template Meta 테이블 생성
+func (o *TemplateServiceDB) CreateTemplateTable() error <span class="cov8" title="1">{
+        // Template Table 생성
+        query := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, `key` varchar(100) NOT NULL, `value` varchar(500), `reg_at` varchar(100), `upd_at` varchar(100))", getTemplateTable())
+        log.Debugf("CreateTemplateTable, query: %s", query)
+
+        _, err := o.mysqldb.Excute(query)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Errorf("CreateTemplateTable, query error: %s", query)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// CreateTemplateTable Template Meta 테이블 생성
+func (o *TemplateServiceDB) InitTemplateTable() error <span class="cov8" title="1">{
+        // Template Table 생성
+        query := fmt.Sprintf("DELETE FROM %s", getTemplateTable())
+        log.Debugf("InitTemplateTable, query: %s", query)
+
+        _, err := o.mysqldb.Excute(query)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Errorf("InitTemplateTable, query error: %s", query)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// CreateTemplate Template/01. Template Meta 생성
+func (o *TemplateServiceDB) CreateTemplate(template *Template) error <span class="cov8" title="1">{
+        // 유효성 검사
+        if err := validTemplateParams([]string{
+                "key",
+                "value",
+        }, template); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        // Template Meta 등록
+        <span class="cov8" title="1">template.RegAt = utils.GetMilliTimestamp()
+        template.UpdAt = template.RegAt
+
+        query := fmt.Sprintf("INSERT INTO %s "+
+                "(`key`, `value`, `reg_at`, `upd_at`)", getTemplateTable())
+        query = fmt.Sprintf("%v VALUES (%v)", query, strings.TrimSuffix(strings.Repeat("?,", strings.Count(query, ",")+1), ","))
+        log.Debugf("CreateTemplate, query: %s", query)
+
+        _, err := o.mysqldb.ExcuteWithArgs(query,
+                template.Key,
+                template.Value,
+                template.RegAt,
+                template.UpdAt,
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Errorf("CreateTemplate, query error: %s", query)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">go SetTemplateRedis(template)
+        return nil</span>
+}
+
+// UpdateTemplate Template/02. Template Meta 수정
+func (o *TemplateServiceDB) UpdateTemplate(template *Template) error <span class="cov8" title="1">{
+        // 유효성 검사
+        if err := validTemplateParams([]string{
+                "key",
+                "value",
+        }, template); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        // Template Meta 수정
+        <span class="cov8" title="1">template.UpdAt = utils.GetMilliTimestamp()
+
+        query := fmt.Sprintf("UPDATE %s SET "+
+                "`value`=?, `upd_at`=? WHERE `key`=?", getTemplateTable())
+
+        log.Debugf("UpdateTemplate, query: %s", query)
+
+        ret, err := o.mysqldb.ExcuteWithArgs(query,
+                template.Value,
+                template.UpdAt,
+                template.Key)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Errorf("UpdateTemplate, query error: %s", query)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">cnt, err := ret.RowsAffected()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if cnt == 0 </span><span class="cov0" title="0">{
+                return base.MakeError(base.ResultCannotFindData, errors.New(errTemplateNotFound))
+        }</span>
+
+        <span class="cov8" title="1">go SetTemplateRedis(template)
+
+        return nil</span>
+}
+
+// DeleteTemplate Template/03. Template Meta 삭제
+func (o *TemplateServiceDB) DeleteTemplate(template *Template) error <span class="cov8" title="1">{
+        // 유효성 검사
+        if err := validTemplateParams([]string{
+                "key",
+        }, template); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        // Template Meta 삭제
+        <span class="cov8" title="1">query := fmt.Sprintf("DELETE FROM %s WHERE `key`=?", getTemplateTable())
+
+        log.Debugf("DeleteTemplate, query: %s", query)
+
+        ret, err := o.mysqldb.ExcuteWithArgs(query, template.Key)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">cnt, err := ret.RowsAffected()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if cnt == 0 </span><span class="cov0" title="0">{
+                return base.MakeError(base.ResultCannotFindData, errors.New(errTemplateNotFound))
+        }</span>
+
+        <span class="cov8" title="1">go RemoveTemplateRedis(template)
+
+        return nil</span>
+}
+
+// GetTemplate Template/04. Template Meta 조회
+func (o *TemplateServiceDB) GetTemplate(template *Template) error <span class="cov8" title="1">{
+        // 유효성 검사
+        if err := validTemplateParams([]string{
+                "key",
+        }, template); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        // Redis 조회
+        <span class="cov8" title="1">if err := GetTemplateRedis(template); err != nil </span><span class="cov8" title="1">{
+                log.Warnf("redis hget error: %s, %s, %s", templateTable, template.Key, err)
+        }</span> else<span class="cov8" title="1"> {
+                return nil
+        }</span>
+
+        // Template Meta 검색
+        <span class="cov8" title="1">query := fmt.Sprintf("SELECT "+
+                "`id`, `key`, `value`, `reg_at`, `upd_at` "+
+                "FROM %s WHERE `key`='%s'", getTemplateTable(), template.Key)
+
+        log.Debugf("GetTemplate, query: %s", query)
+
+        if err := o.mysqldb.QueryRow(query,
+                &amp;template.ID,
+                &amp;template.Key,
+                &amp;template.Value,
+                &amp;template.RegAt,
+                &amp;template.UpdAt,
+        ); err != nil </span><span class="cov8" title="1">{
+                if strings.Contains(err.Error(), errNotFound) </span><span class="cov8" title="1">{
+                        return base.MakeError(base.ResultCannotFindData, errors.New(errTemplateNotFound))
+                }</span>
+                <span class="cov0" title="0">return err</span>
+        }
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// GetTemplates Template/05. Template List 조회
+func (o *TemplateServiceDB) GetTemplates(templateList *TemplateList) error <span class="cov8" title="1">{
+        // 검색 조건
+        pageSize := templateList.PageSize
+        pageOffset := (templateList.PageIndex - 1) * pageSize
+        sort := sortRegAtDesc
+        if templateList.SortOrder != "desc" </span><span class="cov8" title="1">{
+                sort = sortRegAtAsc
+        }</span>
+
+        <span class="cov8" title="1">var filter = ""
+        StartRegAt, _ := strconv.ParseInt(templateList.StartRegAt, 10, 64)
+        EndRegAt, _ := strconv.ParseInt(templateList.EndRegAt, 10, 64)
+        filter = utils.AddQueryFilterInt64(filter, "`reg_at` &gt;= ", StartRegAt)
+        filter = utils.AddQueryFilterInt64(filter, "`reg_at` &lt;= ", EndRegAt)
+        filter = utils.AddQueryFilterString(filter, "`key` = ", templateList.Key)
+        filter = utils.AddQueryFilterString(filter, "`value` = ", templateList.Value)
+
+        // 클라이언트 리스트 카운트 검색
+        queryCount := fmt.Sprintf("SELECT count(*) "+
+                "FROM %s", getTemplateTable())
+        if filter != "" </span><span class="cov8" title="1">{
+                queryCount = fmt.Sprintf("%s %s", queryCount, filter)
+        }</span>
+
+        <span class="cov8" title="1">log.Debugf("GetTemplates, query: %s", queryCount)
+
+        if err := o.mysqldb.QueryRow(queryCount, &amp;templateList.TotalCount); err != nil </span><span class="cov0" title="0">{
+                if strings.Contains(err.Error(), errNotFound) </span><span class="cov0" title="0">{
+                        return base.MakeError(base.ResultCannotFindData, errors.New(errTemplateNotFound))
+                }</span>
+                <span class="cov0" title="0">return err</span>
+        }
+
+        // 클라이언트 리스트 검색
+        <span class="cov8" title="1">query := fmt.Sprintf("SELECT * FROM %s", getTemplateTable())
+        if filter != "" </span><span class="cov8" title="1">{
+                query = fmt.Sprintf("%s %s", query, filter)
+        }</span>
+        <span class="cov8" title="1">query = fmt.Sprintf("%s order by %s limit %d, %d", query, sort, pageOffset, pageSize)
+
+        log.Debugf("GetTemplates, query: %s", query)
+
+        rows, err := o.mysqldb.Query(query)
+        if err != nil </span><span class="cov0" title="0">{
+                if strings.Contains(err.Error(), errNotFound) </span><span class="cov0" title="0">{
+                        return base.MakeError(base.ResultCannotFindData, errors.New(errTemplateNotFound))
+                }</span>
+                <span class="cov0" title="0">return err</span>
+        }
+        <span class="cov8" title="1">defer rows.Close()
+
+        template := NewTemplate()
+        for rows.Next() </span><span class="cov8" title="1">{
+                err := rows.Scan(
+                        &amp;template.ID,
+                        &amp;template.Key,
+                        &amp;template.Value,
+                        &amp;template.RegAt,
+                        &amp;template.UpdAt,
+                )
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov8" title="1">templateList.Templates = append(templateList.Templates, *template)</span>
+        }
+
+        //templateList.TotalCount = len(templateList.Templates)
+
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package models
+
+import "stove-gitlab.sginfra.net/amigo/amigoutil/v3/log"
+
+// SetTemplateRedis SetTemplateRedis
+func (o *TemplateServiceDB) SetTemplateRedis(template *Template) error <span class="cov8" title="1">{
+        // 유효성 검사
+        if err := validTemplateParams([]string{
+                "key",
+                "value",
+        }, template); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if err := o.redisdb.HSet(templateTable, template.Key, template.Value); err != nil </span><span class="cov0" title="0">{
+                log.Errorf("redis hset error: %s, %s, %s, %s", templateTable, template.Key, template.Value, err)
+                return err
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+// GetTemplateRedis GetTemplateRedis
+func (o *TemplateServiceDB) GetTemplateRedis(template *Template) error <span class="cov8" title="1">{
+        // 유효성 검사
+        if err := validTemplateParams([]string{
+                "key",
+        }, template); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">var err error
+        if template.Value, err = o.redisdb.HGet(templateTable, template.Key); err != nil </span><span class="cov8" title="1">{
+                log.Warnf("redis hget error: %s, %s, %s", templateTable, template.Key, err)
+                return err
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+// RemoveTemplateRedis RemoveTemplateRedis
+func (o *TemplateServiceDB) RemoveTemplateRedis(template *Template) error <span class="cov8" title="1">{
+        // 유효성 검사
+        if err := validTemplateParams([]string{
+                "key",
+        }, template); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if err := o.redisdb.HDel(templateTable, template.Key); err != nil </span><span class="cov0" title="0">{
+                log.Errorf("redis hdel error: %s, %s, %s", templateTable, template.Key, err)
+                return err
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+// RefreshRedis REDIS를 갱신한다.
+func (o *TemplateServiceDB) RefreshRedis(templateList *TemplateList) error <span class="cov8" title="1">{
+
+        if err := o.GetTemplates(templateList); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if len(templateList.Templates) == 0 </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">pipe := o.redisdb.Pipeline()
+
+        // Redis에 갱신 대상인 자식 리소스들을 삭제한다.
+        keys := make([]string, 0)
+        for _, v := range templateList.Templates </span><span class="cov8" title="1">{
+                keys = append(keys, v.Key)
+        }</span>
+        <span class="cov8" title="1">pipe.HDel(templateTable, keys...)
+
+        for _, v := range templateList.Templates </span><span class="cov8" title="1">{
+                pipe.HSet(templateTable, v.Key, v.Value)
+        }</span>
+
+        <span class="cov8" title="1">if _, err := pipe.Exec(); err != nil </span><span class="cov0" title="0">{
+                if err != nil &amp;&amp; err.Error() != errRedisPipeLineEmpty </span><span class="cov0" title="0">{
+                        pipe.Close()
+                        log.Errorf("redis refresh error: %s", err)
+                        return err
+                }</span>
+        }
+        <span class="cov8" title="1">pipe.Close()
+
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package utils
+
+import (
+        "encoding/json"
+        "fmt"
+        "regexp"
+        "strconv"
+        "strings"
+        "time"
+
+        uuid "github.com/satori/go.uuid"
+)
+
+// GetUUIDV4 UUID Version4를 얻는다. Randomic UUID &gt; ShardKey
+func GetUUIDV4() string <span class="cov8" title="1">{
+        return uuid.Must(uuid.NewV4(), nil).String()
+}</span>
+
+// GetUUIDV1 UUID Version1을 얻는다. Sequencial UUID &gt; Index
+func GetUUIDV1() string <span class="cov8" title="1">{
+        return uuid.Must(uuid.NewV1(), nil).String()
+}</span>
+
+// GetNanoTimestamp Nano Timestamp(19자리)를 얻는다.
+func GetNanoTimestamp() string <span class="cov8" title="1">{
+        return strconv.FormatInt(time.Now().UTC().UnixNano(), 10)
+}</span>
+
+// GetMilliTimestamp Milli Timestamp(13자리)를 얻는다.
+func GetMilliTimestamp() string <span class="cov8" title="1">{
+        return strconv.FormatInt(time.Now().UTC().UnixNano()/int64(time.Millisecond), 10)
+}</span>
+
+// GetTimestamp Timestamp(10자리)를 얻는다.
+func GetTimestamp() string <span class="cov8" title="1">{
+        return strconv.FormatInt(time.Now().UTC().Unix(), 10)
+}</span>
+
+// HasDuplicateArray Array의 중복값을 비교한다.
+func HasDuplicateArray(list, data []string) bool <span class="cov8" title="1">{
+        encountered := map[string]bool{}
+
+        for i := range data </span><span class="cov8" title="1">{
+                encountered[data[i]] = true
+        }</span>
+
+        <span class="cov8" title="1">for i := range list </span><span class="cov8" title="1">{
+                if _, ok := encountered[list[i]]; ok </span><span class="cov8" title="1">{
+                        return true
+                }</span>
+        }
+        <span class="cov0" title="0">return false</span>
+}
+
+// HasDuplicateString Array의 중복값을 비교한다.
+func HasDuplicateString(list []string, data string) bool <span class="cov8" title="1">{
+        encountered := map[string]bool{}
+        encountered[data] = true
+
+        for i := range list </span><span class="cov8" title="1">{
+                if _, ok := encountered[list[i]]; ok </span><span class="cov8" title="1">{
+                        return true
+                }</span>
+        }
+        <span class="cov0" title="0">return false</span>
+}
+
+// RemoveDuplicateArray Array의 중복값을 제거한다.
+func RemoveDuplicateArray(elements []string) []string <span class="cov8" title="1">{
+        encountered := map[string]bool{}
+
+        for i := range elements </span><span class="cov8" title="1">{
+                encountered[elements[i]] = true
+        }</span>
+
+        // Place all keys from the map into a slice.
+        <span class="cov8" title="1">result := []string{}
+        for i := range encountered </span><span class="cov8" title="1">{
+                result = append(result, i)
+        }</span>
+        <span class="cov8" title="1">return result</span>
+}
+
+// SubtractDuplicateArray returns the elements in `a` that aren't in `b`.
+func SubtractDuplicateArray(list, data []string) []string <span class="cov8" title="1">{
+        mb := make(map[string]struct{}, len(data))
+        for _, x := range data </span><span class="cov8" title="1">{
+                mb[x] = struct{}{}
+        }</span>
+        <span class="cov8" title="1">var diff []string
+        for _, x := range list </span><span class="cov8" title="1">{
+                if _, found := mb[x]; !found </span><span class="cov8" title="1">{
+                        diff = append(diff, x)
+                }</span>
+        }
+        <span class="cov8" title="1">return diff</span>
+}
+
+// GetPaths 계층형 지원을 위한 Path 리스트 조회
+func GetPaths(path, seperator string) []string <span class="cov8" title="1">{
+        if path == seperator </span><span class="cov8" title="1">{
+                return []string{path}
+        }</span>
+        <span class="cov8" title="1">pathList := strings.Split(path, seperator)
+        result := make([]string, len(pathList))
+        for i, v := range pathList </span><span class="cov8" title="1">{
+                result[i] = v
+                if i &gt; 0 </span><span class="cov8" title="1">{
+                        result[i] = result[i-1] + seperator + v
+                }</span>
+        }
+        <span class="cov8" title="1">if result[0] == "" </span><span class="cov8" title="1">{
+                result[0] = seperator
+        }</span>
+        <span class="cov8" title="1">return result</span>
+}
+
+// MergeStringArrayByInterfaceArray Interface Array의 요소를 String Array로 머지하고 중복값을 제거한다.
+func MergeStringArrayByInterfaceArray(elements []interface{}) ([]string, error) <span class="cov8" title="1">{
+        var result []string
+
+        for _, v := range elements </span><span class="cov8" title="1">{
+                if v == nil </span><span class="cov8" title="1">{
+                        v = "[]"
+                }</span>
+                <span class="cov8" title="1">var convertStringArray []string
+                if err := json.Unmarshal([]byte(v.(string)), &amp;convertStringArray); err != nil </span><span class="cov8" title="1">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">result = append(result, convertStringArray...)</span>
+        }
+        <span class="cov8" title="1">result = RemoveDuplicateArray(result)
+        return result, nil</span>
+}
+
+// AddQueryFilter query where 구문 생성 또는 추가
+func AddQueryFilter(query string, condition string) string <span class="cov8" title="1">{
+        if query == "" </span><span class="cov8" title="1">{
+                return fmt.Sprintf("where %s", condition)
+        }</span> else<span class="cov8" title="1"> {
+                return fmt.Sprintf("%s and %s", query, condition)
+        }</span>
+}
+
+// AddQueryFilterInt64 query where 구문 생성 또는 추가 (int64)
+func AddQueryFilterInt64(query string, condition string, value int64) string <span class="cov8" title="1">{
+        if value == 0 </span><span class="cov8" title="1">{
+                return query
+        }</span>
+
+        <span class="cov8" title="1">return AddQueryFilter(query, fmt.Sprintf("%s%d", condition, value))</span>
+}
+
+// AddQueryFilterString query where 구문 생성 또는 추가 (string)
+func AddQueryFilterString(query string, condition string, value string) string <span class="cov8" title="1">{
+        if value == "" </span><span class="cov8" title="1">{
+                return query
+        }</span>
+
+        <span class="cov8" title="1">return AddQueryFilter(query, fmt.Sprintf("%s'%s'", condition, value))</span>
+}
+
+// AddQueryFilterStringLike query where 구문 생성 또는 추가 (string like)
+func AddQueryFilterStringLike(query string, condition string, value string) string <span class="cov8" title="1">{
+        if value == "" </span><span class="cov8" title="1">{
+                return query
+        }</span>
+
+        <span class="cov8" title="1">return AddQueryFilter(query, fmt.Sprintf("%s like '%%%s%%'", condition, value))</span>
+}
+
+// 현재 요청들어온 API의 버전을 조회한다.
+func GetCurrentAPIVersion(path string) string <span class="cov8" title="1">{
+        // 정규 표현식으로 API 버전 확인
+        re := regexp.MustCompile(`^/((?:m|v)(?:1|2)\.\d+).*`)
+        // re := regexp.MustCompile(`^/(?:m|v)\(?:1|2).\d+).*`)
+        matches := re.FindStringSubmatch(path)
+
+        if len(matches) &gt; 1 </span><span class="cov8" title="1">{
+                return matches[1]
+        }</span>
+        <span class="cov8" title="1">return ""</span>
+}
+
+// API 버전 정보를 입력받아 메이저 버전을 조회한다.
+func GetCurrentMajorVersion(apiVersion string) int <span class="cov8" title="1">{
+        // 정규 표현식으로 API 버전 확인
+        re := regexp.MustCompile(`(?i)^[mv](\d)(?:\.\d+)?$`)
+        matches := re.FindStringSubmatch(apiVersion)
+
+        if len(matches) &gt; 1 </span><span class="cov8" title="1">{
+                versionInt, err := strconv.Atoi(matches[1])
+                if err == nil </span><span class="cov8" title="1">{
+                        return versionInt
+                }</span>
+        }
+        <span class="cov0" title="0">return 0</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

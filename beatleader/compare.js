@@ -255,10 +255,11 @@ function Compare(controlData) {
             }
         };
         $.fn.fmatter.convertTime = function (cellValue,rowObject,options) {
-			if (cellValue != "") {
-                return ConvertToString("timestamp", cellValue);
+			ts = cellValue.toString();
+            if (ts != "0" && ts != "") {
+                return ConvertToString("timestamp", ts);
             }
-            return cellValue;
+            return ts;
         };
         
         $.fn.fmatter.convertSSStars = function (cellValue,rowObject,options) {

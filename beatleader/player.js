@@ -280,6 +280,14 @@ function Player(controlData) {
 			var improve = (options.scoreImprovement.accRight == 0)? "" : "(" + options.scoreImprovement.accRight.toFixed(2) +")";
             return (cellValue == 0) ? "-" : cellValue.toFixed(2)+improve;
         };
+        $.fn.fmatter.convertMistakes = function (cellValue,rowObject,options) {
+            if (options.scoreImprovement.accLeft == 0 && options.scoreImprovement.accRight == 0) {
+                return cellValue;
+            }
+            var totalMistakes = options.scoreImprovement.badCuts + options.scoreImprovement.missedNotes + options.scoreImprovement.wallsHit;
+			var improve = cellValue - totalMistakes;
+            return cellValue + "(" + improve + ")";
+        };
         $.fn.fmatter.convertAccPoint = function (cellValue,rowObject,options) {
             return (cellValue == 0) ? "-" : cellValue.toFixed(2);
         };

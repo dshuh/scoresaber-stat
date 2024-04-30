@@ -2538,6 +2538,18 @@
                             "text": "mod"
                         },
                         { 
+                            "name": "pp", 
+                            "index": "pp", 
+                            "width": 70,
+                            "sorttype":"int",
+                            "searchoptions": {
+                                "searchOperators": true,
+                                "sopt": ["gt", "lt", "eq"]
+                            },
+                            "text": "PP",
+                            "formatter": "convertPP"
+                        },
+                        { 
                             "name": "accuracy", 
                             "index": "accuracy", 
                             "width": 100,
@@ -2574,6 +2586,14 @@
                             "formatter": "convertAccRight"
                         },
                         { 
+                            "name": "mistakes", 
+                            "index": "mistakes", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "miss",
+                            "formatter": "convertMistakes"
+                        },
+                        { 
                             "name": "accPoint", 
                             "index": "accPoint", 
                             "width": 60,
@@ -2587,16 +2607,11 @@
                             "hidden":true
                         },
                         { 
-                            "name": "pp", 
-                            "index": "pp", 
-                            "width": 70,
-                            "sorttype":"int",
-                            "searchoptions": {
-                                "searchOperators": true,
-                                "sopt": ["gt", "lt", "eq"]
-                            },
-                            "text": "PP",
-                            "formatter": "convertPP"
+                            "name": "timeset", 
+                            "index": "timeset", 
+                            "width": 120,
+                            "text": "Record Date(UTC)",
+                            "formatter": "convertTime"
                         },
                         { 
                             "name": "mypp", 
@@ -2702,13 +2717,6 @@
                             }
                         },
                         { 
-                            "name": "mistakes", 
-                            "index": "mistakes", 
-                            "width": 50,
-                            "sorttype":"int",
-                            "text": "miss"
-                        },
-                        { 
                             "name": "plays", 
                             "index": "plays", 
                             "width": 50,
@@ -2748,13 +2756,6 @@
                             "sorttype":"int",
                             "text": "leaderboardId",
                             "hidden": true
-                        },
-                        { 
-                            "name": "timeset", 
-                            "index": "timeset", 
-                            "width": 120,
-                            "text": "Record Date(UTC)",
-                            "formatter": "convertTime"
                         },
                         { 
                             "name": "summary", 

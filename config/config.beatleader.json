@@ -2574,6 +2574,14 @@
                             "formatter": "convertAccLeft"
                         },
                         { 
+                            "name": "mistakes", 
+                            "index": "mistakes", 
+                            "width": 50,
+                            "sorttype":"int",
+                            "text": "miss",
+                            "formatter": "convertMistakes"
+                        },
+                        { 
                             "name": "accRight", 
                             "index": "accRight", 
                             "width": 100,
@@ -2584,14 +2592,6 @@
                             },
                             "text": "AccRight",
                             "formatter": "convertAccRight"
-                        },
-                        { 
-                            "name": "mistakes", 
-                            "index": "mistakes", 
-                            "width": 50,
-                            "sorttype":"int",
-                            "text": "miss",
-                            "formatter": "convertMistakes"
                         },
                         { 
                             "name": "accPoint", 

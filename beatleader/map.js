@@ -249,8 +249,13 @@ function Map(controlData) {
             return Math.floor(min) + "m " + sec + "s";
         };
         $.fn.fmatter.convertTime = function (cellValue,rowObject,options) {
-			if (cellValue == "") return cellValue;
-            return ConvertToString("timestamp", cellValue);
+			// if (cellValue == "") return cellValue;
+            // return ConvertToString("timestamp", cellValue);
+            ts = cellValue.toString();
+            if (ts != "0" && ts != "") {
+                return ConvertToString("timestamp", ts);
+            }
+            return ts;
         };
         
         $.fn.fmatter.convertStars = function (cellValue,rowObject,options) {
